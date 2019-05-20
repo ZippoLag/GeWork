@@ -13,15 +13,94 @@
     <body class="h-100">
 
         <div class="container h-100">
-            <div class="row h-100">
+            <div class="row h-100 gework-intro collapse show" data-toggle="collapse" data-target=".gework-intro">
                 <div class="d-flex col-12 justify-content-center align-items-center">
                     <h1>GeWork</h1>
                 </div>
-            </div>            
+            </div>
+
+            <div class="row h-100 gework-intro gework-login-registro gework-reserva collapse">
+                <div class="btn-group" role="group" >
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target=".gework-login-registro">Iniciar Sesión</button>
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target=".gework-reserva">Reservar</button>
+                </div>
+            </div>
+
+            <div class="row h-100 gework-login-registro collapse">
+                <div class="d-flex col-12 justify-content-center align-items-center">
+                    <form onsubmit="return procesarLogin();" >
+                        <div class="form-group">
+                            <label for="login-email">e-mail</label>
+                            <input type="email" id="login-email" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="login-email">password</label>
+                            <input type="password" id="login-password" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row h-100 gework-reserva collapse">
+                <!-- TODO: en realidad esto debería ser un pop-up/overlay de settings que se debería poder mostrar/ocultar en (casi) cualquier momento -->
+                <div class="d-flex col-12 justify-content-center align-items-center">
+                    <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" autocomplete="off" checked>Puesto
+                        </label>
+                        <label class="btn btn-secondary" >
+                            <input type="radio" autocomplete="off" >Sala
+                        </label>
+                    </div>
+
+                    <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" autocomplete="off" checked>Cercanía
+                        </label>
+                        <label class="btn btn-secondary" >
+                            <input type="radio" autocomplete="off" >Puntaje
+                            <!-- TODO: lógica de pedir permiso de ubicación al seleccionar esta (fallback de ingresar dirección?) -->
+                        </label>
+                        <label class="btn btn-secondary" >
+                            <input type="radio" autocomplete="off" >Precio
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>        
 
         <!-- bootstrap -->
         <script src="jquery/jquery-3.3.1.slim.min.js"></script>
         <script src="popper/popper.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- proto -->
+        <script>
+            var mockDBUsuarios = [{"email":"cliente@mail.com", "password":"password"}];
+            var usuario = null;
+            function procesarLogin(evt) {
+                //TODO: ver que onda la exception que salta al triggerear esto
+                debugger;
+                evt.preventDefault();
+
+                var email = $("login-email").val();
+                var password = $("login-password").val();
+                
+                for(var i = 0; i<mockDBUsuarios.length; i++){
+                    if(email===mockDBUsuarios[i].email && password===mockDBUsuarios[i].password){
+                        usuario = mockDBUsuarios[i];
+                        console.log("éxito");
+                    }
+                }
+                
+                //TODO: navegar para un lado u otro con $("gework-login-registro").collapse('toggle') o un show y un hide (deberíamos recibir un parámetro de dónde estamos parados, si al final de una reserva o justo después de la intro)
+                //TODO: agregar cartel de error en caso de credenciales inválidas
+
+                return false;
+            }
+        </script>
     </body>
 </html>

@@ -10,27 +10,15 @@
 
         <title>GeWork</title>
     </head>
-
     <body class="h-100">
 
-        <div class="d-flex justify-content-end align-items-top disabled">
-            <!--TODO: el login debería deslizarse sobre el contenido sin causar una redirección-->
-            <a onclick="abrirPaginaConValores('login.html', 'index.html');" type="button" calss="btn btn-primary disabled">👤</a>
-        </div>
-
         <div class="container h-100">
-            <div class="row h-100 gework-intro collapse show" data-toggle="collapse" data-target=".gework-intro">
+            <div class="row h-100">
                 <div class="d-flex col-12 justify-content-center align-items-center">
                     <h1>GeWork</h1>
                 </div>
             </div>
 
-            <div class="row h-100 d-flex justify-content-center align-items-center gework-intro gework-login-registro gework-reserva collapse">
-                <div class="btn-group" role="group" >
-                    <a href="#" type="button" class="btn btn-primary disabled">Ofrecer</a>
-                    <a onclick="abrirPaginaConValores('reservar.html', 'index.html');" type="button" class="btn btn-primary">Reservar</a>
-                </div>
-            </div>
         </div>        
 
         <!-- bootstrap -->
@@ -40,9 +28,11 @@
 
         <!-- proto -->
         <script src="helpers.js"></script>
-        
+
         <script>
+            //la carga de toda página comienza tomando los valores pasados por la URL y cargandolos en globales
             cargarValores();
         </script>
+        
     </body>
 </html>

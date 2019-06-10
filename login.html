@@ -43,15 +43,15 @@
             function procesarLogin(evt) {
                 //TODO ver que está fallando acá (terminar de eliminar los restos de la prueba inicial con forms?).. la página también quedó media rota
 
-                debugger;
-                var email = $("login-email").val();
-                var password = $("login-password").val();
+                var email = $("#login-email").val();
+                var password = $("#login-password").val();
                 
                 if (email){
                     window.alert("Iniciado sesión como "+email);
+                    globales.nombreUsuario = email;
 
-                    if(globables.paginaAnterior){
-                        abrirPaginaConValores(globables.paginaAnterior);
+                    if(globales.paginaAnterior){
+                        abrirPaginaConValores(globales.paginaAnterior);
                     } else {
                         abrirPaginaConValores('index.html');
                     }

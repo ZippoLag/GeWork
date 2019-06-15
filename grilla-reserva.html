@@ -15,78 +15,86 @@
     </head>
     <body class="h-100">
         <div class="container h-100 m-0 p-0">
-                <div class="row justify-content-center parametros-reserva">
-                    <!-- TODO: mejorar alineamiento -->
-                    <div class="row h-100 d-flex justify-content-center align-items-center p-0 m-0">
-                        <div class="parametros-opcionales collapse">
-                            <div class="form-group col-12" role="group" >
-                                <label for="pais-select">País:</label>
-                                <select class="form-control disabled" disabled id="pais-select">
-                                    <option active selected>Argentina</option>
-                                    <option>Brasil</option>
-                                    <option>Chile</option>
-                                    <option>Uruguay</option>
-                                </select>
-                            </div>
-    
-                            <div class="form-group col-12" role="group" >
-                                <label for="provincia-select">Provincia:</label>
-                                <select class="form-control disabled" disabled id="provincia-select">
-                                    <option active selected>Santa Fe</option>
-                                    <option>Buenos Aires</option>
-                                    <option>Córdoba</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-12" role="group" >
-                                <label for="localidad-select">Localidad:</label>
-                                <select class="form-control disabled" disabled id="localidad-select">
-                                    <option active selected>Rosario</option>
-                                    <option>San Jerónimo Sud</option>
-                                    <option>Funes</option>
-                                </select>
-                            </div>
-                        </div>
-    
-                        <div class="row m-0 p-0">
-                            <div class="form-group col-5" role="group">
-                                <label for="fecha-select">Fecha:</label>
-                                <input id="fecha-select" class="disabled" disabled type="date" required />
-                            </div>
-                            
-                            <div class="form-group col-6" role="group">
-                                <label for="turno-select">Turno:</label>
-                                <select class="form-control disabled" disabled id="turno-select">
-                                    <option active selected>Cualquiera</option>
-                                    <option>Jornada Completa</option>
-                                    <option>Turno Mañana</option>
-                                    <option>Turno Tarde</option>
-                                </select>
-                            </div>
+            <div class="row justify-content-center parametros-reserva">
+                <!-- TODO: mejorar alineamiento -->
+                <div class="row h-100 d-flex justify-content-center align-items-center p-0 m-0">
+                    <div class="parametros-opcionales collapse">
+                        <div class="form-group col-12" role="group" >
+                            <label for="pais-select">País:</label>
+                            <select class="form-control disabled" disabled id="pais-select">
+                                <option active selected>Argentina</option>
+                                <option>Brasil</option>
+                                <option>Chile</option>
+                                <option>Uruguay</option>
+                            </select>
                         </div>
 
-                        <div class="row m-0 p-0 justify-content-center">
-                            <label for="collapse" id="colapsador-de-parametros" data-toggle="collapse" data-target=".parametros-opcionales">
-                                <i class="fa fa-chevron-down parametros-opcionales collapse show"></i>
-                                <i class="fa fa-chevron-up parametros-opcionales collapse"></i>
-                            </label>
+                        <div class="form-group col-12" role="group" >
+                            <label for="provincia-select">Provincia:</label>
+                            <select class="form-control disabled" disabled id="provincia-select">
+                                <option active selected>Santa Fe</option>
+                                <option>Buenos Aires</option>
+                                <option>Córdoba</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-12" role="group" >
+                            <label for="localidad-select">Localidad:</label>
+                            <select class="form-control disabled" disabled id="localidad-select">
+                                <option active selected>Rosario</option>
+                                <option>San Jerónimo Sud</option>
+                                <option>Funes</option>
+                            </select>
                         </div>
                     </div>
+
+                    <div class="row m-0 p-0">
+                        <div class="form-group col-5" role="group">
+                            <label for="fecha-select">Fecha:</label>
+                            <input id="fecha-select" class="disabled" disabled type="date" required />
+                        </div>
+                        
+                        <div class="form-group col-6" role="group">
+                            <label for="turno-select">Turno:</label>
+                            <select class="form-control disabled" disabled id="turno-select">
+                                <option active selected>Cualquiera</option>
+                                <option>Jornada Completa</option>
+                                <option>Turno Mañana</option>
+                                <option>Turno Tarde</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row m-0 p-0 justify-content-center">
+                        <label for="collapse" id="colapsador-de-parametros" data-toggle="collapse" data-target=".parametros-opcionales">
+                            <i class="fa fa-chevron-down parametros-opcionales collapse show"></i>
+                            <i class="fa fa-chevron-up parametros-opcionales collapse"></i>
+                        </label>
+                    </div>
                 </div>
+            </div>
 
-                <img src="img/mapa_con_globitos.png" alt="ubicaciones de CoWorks" usemap="#mapa-coworks"/>
-                <!-- TODO: mostrar el nombre del CoWork de alguna forma?-->
-                <!-- TODO: limitar ancho a ancho de pantalla (Scrollear) -->
-                <map name = "mapa-coworks">
-                    <area shape = "utn" coords = "212, 517, 256, 576"
-                        href = "/perl/index.htm" alt = "CoWork Uteniano" target = "_blank" />
-                    <area shape = "mccowork" coords = "395, 285, 445, 346"
-                        href = "/perl/index.htm" alt = "Mc Cowork" target = "_blank" />
-                    <area shape = "bandera" coords = "582, 351, 628, 408"
-                        href = "/perl/index.htm" alt = "CoWork de la Bandera" target = "_blank" />
-                </map>
+            <img src="img/mapa_con_globitos.png" alt="ubicaciones de CoWorks" usemap="#mapa-coworks"/>
+            <!-- TODO: mostrar el nombre del CoWork de alguna forma?-->
+            <!-- TODO: limitar ancho a ancho de pantalla (Scrollear) -->
+            <map name = "mapa-coworks">
+                <area shape = "utn" coords = "212, 517, 256, 576"
+                    href="#cowork-select" onclick="seleccionarCowork('utn')" alt = "CoWork Uteniano" />
+                <area shape = "mccowork" coords = "395, 285, 445, 346"
+                    href="#cowork-select" onclick="seleccionarCowork('mccowork')" alt = "Mc Cowork" />
+                <area shape = "bandera" coords = "582, 351, 628, 408"
+                    href="#cowork-select" onclick="seleccionarCowork('bandera')" alt = "CoWork de la Bandera" />
+            </map>
 
-                
+            <div class="row justify-content-center parametros-reserva">
+                <div class="form-group col-12" role="group">
+                    <select class="form-control" id="cowork-select">
+                        <option value="utn" >CoWork Uteniano</option>
+                        <option value="mccowork" >Mc Cowork</option>
+                        <option value="bandera" >CoWork de la Bandera</option>
+                    </select>
+                </div>
+            </div>
         </div>        
 
         <!-- bootstrap -->
@@ -112,6 +120,12 @@
             document.getElementById('localidad-select').value = globales['localidad'];
             document.getElementById('fecha-select').value = globales['fecha'];
             document.getElementById('turno-select').value = globales['turno'];
+        </script>
+
+        <script>
+            function seleccionarCowork(idCowork){
+                $('#cowork-select').val(idCowork)
+            }
         </script>
         
     </body>

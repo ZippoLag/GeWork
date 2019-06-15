@@ -13,19 +13,54 @@
     <body class="h-100">
 
         <div class="container h-100">
-            <div class="row h-100 d-flex justify-content-center align-items-between">
+            <div class="row h-100 justify-content-center align-items-between reserva-1 collapse show">
                 <div class="d-flex col-12 justify-content-center align-items-center">
                     <h1>¿Qué buscás?</h1>
                 </div>
 
-                <div class="row h-100 d-flex justify-content-center align-items-center gework-intro gework-login-registro gework-reserva collapse">
+                <div class="row h-100 d-flex justify-content-center align-items-center">
                     <div class="btn-group" role="group" >
-                        <a onclick="" type="button" class="btn btn-primary">Espacio de Trabajo</a>
+                        <a onclick="" type="button" class="btn btn-primary" data-toggle="collapse" data-target=".reserva-1" >Espacio de Trabajo</a>
                         <a href="#" type="button" class="btn btn-primary disabled">Sala de Reuniones</a>
                     </div>
                 </div>
             </div>
 
+            <div class="row h-100 justify-content-center align-items-between reserva-1 collapse">
+                <div class="d-flex col-12 justify-content-center align-items-center">
+                    <h1>¿Cuándo y dónde?</h1>
+                </div>
+
+                <div class="row h-100 d-flex justify-content-center align-items-center">
+                    <div class="form-group" role="group" >
+                        <label for="pais-select">País:</label>
+                        <select class="form-control disabled" disabled id="pais-select">
+                            <option active selected>Argentina</option>
+                            <option>Brasil</option>
+                            <option>Chile</option>
+                            <option>Uruguay</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" role="group" >
+                        <label for="provincia-select">País:</label>
+                        <select class="form-control disabled" disabled id="provincia-select">
+                            <option active selected>Santa Fe</option>
+                            <option>Buenos Aires</option>
+                            <option>Córdoba</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" role="group" >
+                        <label for="ciudad-select">País:</label>
+                        <select class="form-control disabled" disabled id="ciudad-select">
+                            <option active selected>Rosario</option>
+                            <option>San Jerónimo Sud</option>
+                            <option>Funes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>        
 
         <!-- bootstrap -->

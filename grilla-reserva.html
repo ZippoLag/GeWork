@@ -8,21 +8,85 @@
         <!-- bootstrap -->
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 
+        <!-- fontawesome TODO: impotar un pack con sólo los iconos que usamos-->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
         <title>GeWork</title>
     </head>
     <body class="h-100">
-
         <div class="container h-100 m-0 p-0">
-            <img src="img/mapa_con_globitos.png" alt="ubicaciones de CoWorks" usemap="#mapa-coworks"/>
-            <!-- TODO: mostrar el nombre del CoWork de alguna forma?-->
-            <map name = "mapa-coworks">
-                <area shape = "utn" coords = "212, 517, 256, 576"
-                    href = "/perl/index.htm" alt = "CoWork Uteniano" target = "_blank" />
-                <area shape = "mccowork" coords = "395, 285, 445, 346"
-                    href = "/perl/index.htm" alt = "Mc Cowork" target = "_blank" />
-                <area shape = "bandera" coords = "582, 351, 628, 408"
-                    href = "/perl/index.htm" alt = "CoWork de la Bandera" target = "_blank" />
-            </map>
+                <div class="row justify-content-center parametros-reserva">
+                    <!-- TODO: mejorar alineamiento -->
+                    <div class="row h-100 d-flex justify-content-center align-items-center p-0 m-0">
+                        <div class="parametros-opcionales collapse">
+                            <div class="form-group col-12" role="group" >
+                                <label for="pais-select">País:</label>
+                                <select class="form-control disabled" disabled id="pais-select">
+                                    <option active selected>Argentina</option>
+                                    <option>Brasil</option>
+                                    <option>Chile</option>
+                                    <option>Uruguay</option>
+                                </select>
+                            </div>
+    
+                            <div class="form-group col-12" role="group" >
+                                <label for="provincia-select">Provincia:</label>
+                                <select class="form-control disabled" disabled id="provincia-select">
+                                    <option active selected>Santa Fe</option>
+                                    <option>Buenos Aires</option>
+                                    <option>Córdoba</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-12" role="group" >
+                                <label for="localidad-select">Localidad:</label>
+                                <select class="form-control disabled" disabled id="localidad-select">
+                                    <option active selected>Rosario</option>
+                                    <option>San Jerónimo Sud</option>
+                                    <option>Funes</option>
+                                </select>
+                            </div>
+                        </div>
+    
+                        <div class="row m-0 p-0">
+                            <div class="form-group col-5" role="group">
+                                <label for="fecha-select">Fecha:</label>
+                                <input id="fecha-select" class="disabled" disabled type="date" required />
+                            </div>
+                            
+                            <div class="form-group col-6" role="group">
+                                <label for="turno-select">Turno:</label>
+                                <select class="form-control disabled" disabled id="turno-select">
+                                    <option active selected>Cualquiera</option>
+                                    <option>Jornada Completa</option>
+                                    <option>Turno Mañana</option>
+                                    <option>Turno Tarde</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row m-0 p-0 justify-content-center">
+                            <label for="collapse" id="colapsador-de-parametros" data-toggle="collapse" data-target=".parametros-opcionales">
+                                <i class="fa fa-chevron-down parametros-opcionales collapse show"></i>
+                                <i class="fa fa-chevron-up parametros-opcionales collapse"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <img src="img/mapa_con_globitos.png" alt="ubicaciones de CoWorks" usemap="#mapa-coworks"/>
+                <!-- TODO: mostrar el nombre del CoWork de alguna forma?-->
+                <!-- TODO: limitar ancho a ancho de pantalla (Scrollear) -->
+                <map name = "mapa-coworks">
+                    <area shape = "utn" coords = "212, 517, 256, 576"
+                        href = "/perl/index.htm" alt = "CoWork Uteniano" target = "_blank" />
+                    <area shape = "mccowork" coords = "395, 285, 445, 346"
+                        href = "/perl/index.htm" alt = "Mc Cowork" target = "_blank" />
+                    <area shape = "bandera" coords = "582, 351, 628, 408"
+                        href = "/perl/index.htm" alt = "CoWork de la Bandera" target = "_blank" />
+                </map>
+
+                
         </div>        
 
         <!-- bootstrap -->
@@ -36,6 +100,18 @@
         <script>
             //la carga de toda página comienza tomando los valores pasados por la URL y cargandolos en globales
             cargarValores();
+
+            //carga picker de fecha
+            var fechaReserva = document.getElementById('fecha-select');
+            fechaReserva.valueAsDate = new Date();  //TODO: hacer que tome la fecha de mañana por defecto
+            fechaReserva.min = fechaReserva.value;
+
+            //carga valores picker
+            document.getElementById('pais-select').value = globales['pais'];
+            document.getElementById('provincia-select').value = globales['provincia'];
+            document.getElementById('localidad-select').value = globales['localidad'];
+            document.getElementById('fecha-select').value = globales['fecha'];
+            document.getElementById('turno-select').value = globales['turno'];
         </script>
         
     </body>

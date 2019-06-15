@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es" class="h-100">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- bootstrap -->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+
+        <title>GeWork</title>
+    </head>
+    <body class="h-100">
+
+        <div class="container h-100 m-0 p-0">
+            <img src="img/mapa_con_globitos.png" alt="ubicaciones de CoWorks" usemap="#mapa-coworks"/>
+            <!-- TODO: mostrar el nombre del CoWork de alguna forma?-->
+            <map name = "mapa-coworks">
+                <area shape = "utn" coords = "212, 517, 256, 576"
+                    href = "/perl/index.htm" alt = "CoWork Uteniano" target = "_blank" />
+                <area shape = "mccowork" coords = "395, 285, 445, 346"
+                    href = "/perl/index.htm" alt = "Mc Cowork" target = "_blank" />
+                <area shape = "bandera" coords = "582, 351, 628, 408"
+                    href = "/perl/index.htm" alt = "CoWork de la Bandera" target = "_blank" />
+            </map>
+        </div>        
+
+        <!-- bootstrap -->
+        <script src="jquery/jquery-3.3.1.slim.min.js"></script>
+        <script src="popper/popper.min.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- proto -->
+        <script src="helpers.js"></script>
+
+        <script>
+            //la carga de toda página comienza tomando los valores pasados por la URL y cargandolos en globales
+            cargarValores();
+        </script>
+        
+    </body>
+</html>

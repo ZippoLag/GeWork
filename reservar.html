@@ -31,8 +31,8 @@
                     <h1>¿Cuándo y dónde?</h1>
                 </div>
 
-                <div class="row h-100 d-flex justify-content-center align-items-center">
-                    <div class="form-group" role="group" >
+                <div class="row h-100 d-flex justify-content-center align-items-center p-3">
+                    <div class="form-group col-12" role="group" >
                         <label for="pais-select">País:</label>
                         <select class="form-control disabled" disabled id="pais-select">
                             <option active selected>Argentina</option>
@@ -42,8 +42,8 @@
                         </select>
                     </div>
 
-                    <div class="form-group" role="group" >
-                        <label for="provincia-select">País:</label>
+                    <div class="form-group col-12" role="group" >
+                        <label for="provincia-select">Provincia:</label>
                         <select class="form-control disabled" disabled id="provincia-select">
                             <option active selected>Santa Fe</option>
                             <option>Buenos Aires</option>
@@ -51,13 +51,34 @@
                         </select>
                     </div>
 
-                    <div class="form-group" role="group" >
-                        <label for="ciudad-select">País:</label>
-                        <select class="form-control disabled" disabled id="ciudad-select">
+                    <div class="form-group col-12" role="group" >
+                        <label for="localidad-select">Localidad:</label>
+                        <select class="form-control disabled" disabled id="localidad-select">
                             <option active selected>Rosario</option>
                             <option>San Jerónimo Sud</option>
                             <option>Funes</option>
                         </select>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group col-12" role="group">
+                            <label for="fecha-select">Fecha:</label>
+                            <input id="fecha-select" type="date" required />
+                        </div>
+                        
+                        <div class="form-group col-12" role="group">
+                            <label for="turno-select">Turno:</label>
+                            <select class="form-control" id="turno-select">
+                                <option active selected>Cualquiera</option>
+                                <option>Jornada Completa</option>
+                                <option>Turno Mañana</option>
+                                <option>Turno Tarde</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="btn-group" role="group" >
+                        <a onclick="guardarValoresYRedirigirAGrilla();" type="button" class="btn btn-primary">Buscar</a>
                     </div>
                 </div>
             </div>
@@ -73,6 +94,22 @@
         
         <script>
             cargarValores();
+
+            var fechaReserva = document.getElementById('fecha-select');
+            fechaReserva.valueAsDate = new Date();  //TODO: hacer que tome la fecha de mañana por defecto
+            fechaReserva.min = fechaReserva.value;
+        </script>
+
+        <script>
+            function guardarValoresYRedirigirAGrilla(){
+                globales['pais'] = document.getElementById('pais-select').value;
+                globales['provincia'] = document.getElementById('provincia-select').value;
+                globales['localidad'] = document.getElementById('localidad-select').value;
+                globales['fecha'] = document.getElementById('fecha-select').value;
+                globales['turno'] = document.getElementById('turno-select').value;
+
+                abrirPaginaConValores('grilla-reserva.html', 'reservar.html');
+            }
         </script>
     </body>
 </html>

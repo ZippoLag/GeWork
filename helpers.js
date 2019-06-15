@@ -1,4 +1,4 @@
-var claves = ['nombreUsuario', 'paginaAnterior'];
+var claves = ['nombreUsuario', 'paginaAnterior', 'pais', 'provincia', 'localidad', 'fecha', 'turno'];
 var globales = {};
 
 /**

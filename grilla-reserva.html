@@ -88,13 +88,15 @@
 
             <div class="row justify-content-center parametros-reserva">
                 <div class="form-group col-12" role="group">
-                    <select class="form-control" id="cowork-select">
+                    <select class="form-control" id="cowork-select" onchange="mostrarEspacios(this);">
                         <option value="utn" >CoWork Uteniano</option>
                         <option value="mccowork" >Mc Cowork</option>
                         <option value="bandera" >CoWork de la Bandera</option>
                     </select>
                 </div>
             </div>
+
+            <div id="grilla-espacios" class="row"></div>
         </div>        
 
         <!-- bootstrap -->
@@ -124,9 +126,37 @@
 
         <script>
             function seleccionarCowork(idCowork){
-                $('#cowork-select').val(idCowork)
+                $('#cowork-select').val(idCowork);
+                mostrarEspacios({"value":idCowork});
             }
         </script>
         
+        <script>
+            function mostrarEspacios(esto){
+                var cowork = coworks[esto.value];
+
+                var $grillaEspacios = $('#grilla-espacios');
+                $grillaEspacios.empty();
+
+                var espaciosHTML = "";
+
+                cowork.espacios.forEach(function(espacio){
+                    espaciosHTML += "<div class='col-12'>";
+                    espaciosHTML += "    <h3>"+espacio.nombre+"</h3>";
+
+                    espaciosHTML += "    <div class='col-12'>"
+                    espacio.prestaciones.forEach(function(prestacion){
+                        espaciosHTML += "        <span>"
+                        espaciosHTML += "            <i class='fas "+prestacion.icono+"' alt='"+prestacion.nombre+"' hover='"+prestacion.descripcion+"'></i>";
+                        espaciosHTML += "        </span>"
+                    });
+                    espaciosHTML += "    </div>"
+
+                    espaciosHTML += "</div>";
+                });
+
+                $grillaEspacios.append(espaciosHTML);
+            }
+        </script>
     </body>
 </html>

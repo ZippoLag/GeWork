@@ -171,7 +171,7 @@
                         espaciosHTML += "            <div class='row col-12 col-xl-9 m-0 p-0'>";
                         if(puesto.disponibilidad[0]['TM'])
                         {
-                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigir(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"TM\", \"form-pago.html\");'>TURNO MAÑANA ($"+espacio.precioMedia+"ARS)</div>";
+                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigir(\""+espacio.id+"\", \""+puesto.id+"\", \"TM\", \"form-pago.html\");'>TURNO MAÑANA ($"+espacio.precioMedia+"ARS)</div>";
                         }
                         else
                         {
@@ -180,7 +180,7 @@
                         
                         if(puesto.disponibilidad[0]['TT'])
                         {
-                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigir(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"TT\", \"form-pago.html\");'>TURNO TARDE ($"+espacio.precioMedia+"ARS)</div>";
+                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigir(\""+espacio.id+"\", \""+puesto.id+"\", \"TT\", \"form-pago.html\");'>TURNO TARDE ($"+espacio.precioMedia+"ARS)</div>";
                         }
                         else
                         {
@@ -190,7 +190,7 @@
 
                         if(puesto.disponibilidad[0]['TM'] && puesto.disponibilidad[0]['TT'])
                         {
-                            espaciosHTML += "            <div class='col-12 col-xl-3 h-xl-100 btn btn-primary' type='button' onclick='guardarValoresYRedirigir(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"JC\", \"form-pago.html\");'>JORNADA COMPLETA ($"+espacio.precioCompleta+"ARS)</div>";
+                            espaciosHTML += "            <div class='col-12 col-xl-3 h-xl-100 btn btn-primary' type='button' onclick='guardarValoresYRedirigir(\""+espacio.id+"\", \""+puesto.id+"\", \"JC\", \"form-pago.html\");'>JORNADA COMPLETA ($"+espacio.precioCompleta+"ARS)</div>";
                         }
                         else
                         {

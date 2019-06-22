@@ -14,11 +14,11 @@
         <title>GeWork</title>
     </head>
     <body class="h-100">
-        <div class="container h-100 m-0 p-0">
+        <div class="container-fluid h-100 m-0 p-0">
             <div class="row justify-content-center parametros-reserva">
                 <!-- TODO: mejorar alineamiento -->
                 <div class="row h-100 d-flex justify-content-center align-items-center p-0 m-0">
-                    <div class="parametros-opcionales collapse">
+                    <div class="parametros-opcionales col-12 collapse">
                         <div class="form-group col-12" role="group" >
                             <label for="pais-select">País:</label>
                             <select class="form-control disabled" disabled id="pais-select">
@@ -48,7 +48,7 @@
                         </div>
                     </div>
 
-                    <div class="row m-0 p-0">
+                    <div class="row m-0 p-0 justify-content-center">
                         <div class="form-group col-5" role="group">
                             <label for="fecha-select">Fecha:</label>
                             <input id="fecha-select" class="disabled" disabled type="date" required />
@@ -74,9 +74,12 @@
                 </div>
             </div>
 
-            <img src="img/mapa_con_globitos.png" alt="ubicaciones de CoWorks" usemap="#mapa-coworks"/>
-            <!-- TODO: mostrar el nombre del CoWork de alguna forma?-->
-            <!-- TODO: limitar ancho a ancho de pantalla (Scrollear) -->
+            <div class="row">
+                <div class="col-12" style="overflow-x:auto;">
+                    <img src="img/mapa_con_globitos.png" alt="ubicaciones de CoWorks" usemap="#mapa-coworks"/>
+                </div>
+            </div>
+
             <map name = "mapa-coworks">
                 <area shape = "utn" coords = "212, 517, 256, 576"
                     href="#cowork-select" onclick="seleccionarCowork('utn')" alt = "CoWork Uteniano" />
@@ -89,6 +92,7 @@
             <div class="row justify-content-center parametros-reserva">
                 <div class="form-group col-12" role="group">
                     <select class="form-control" id="cowork-select" onchange="mostrarEspacios(this);">
+                        <option value="">Seleccionar Espacio</option>
                         <option value="utn" >CoWork Uteniano</option>
                         <option value="mccowork" >Mc Cowork</option>
                         <option value="bandera" >CoWork de la Bandera</option>
@@ -96,7 +100,7 @@
                 </div>
             </div>
 
-            <div id="grilla-espacios" class="row"></div>
+            <div id="grilla-espacios" class="row justify-content-around"></div>
         </div>        
 
         <!-- bootstrap -->
@@ -117,11 +121,11 @@
             fechaReserva.min = fechaReserva.value;
 
             //carga valores picker
-            document.getElementById('pais-select').value = globales['pais'];
-            document.getElementById('provincia-select').value = globales['provincia'];
-            document.getElementById('localidad-select').value = globales['localidad'];
-            document.getElementById('fecha-select').value = globales['fecha'];
-            document.getElementById('turno-select').value = globales['turno'];
+            if(globales['pais']){document.getElementById('pais-select').value = globales['pais'];}
+            if(globales['provincia']){document.getElementById('provincia-select').value = globales['provincia'];}
+            if(globales['localidad']){document.getElementById('localidad-select').value = globales['localidad'];}
+            if(globales['fecha']){document.getElementById('fecha-select').value = globales['fecha'];}
+            if(globales['turno']){document.getElementById('turno-select').value = globales['turno'];}
         </script>
 
         <script>
@@ -141,21 +145,70 @@
                 var espaciosHTML = "";
 
                 cowork.espacios.forEach(function(espacio){
-                    espaciosHTML += "<div class='col-12'>";
+                    espaciosHTML += "<div class='col-11 col-xl-5 p-2 m-1 m-xl-0' style='background-color:#dee2e6; border-radius:20px;'>";
                     espaciosHTML += "    <h3>"+espacio.nombre+"</h3>";
+                    espaciosHTML += "    <p>"+espacio.ubicacion+"</p>";
 
-                    espaciosHTML += "    <div class='col-12'>"
+                    espaciosHTML += "    <div class='col-12'>";
                     espacio.prestaciones.forEach(function(prestacion){
                         espaciosHTML += "        <span>"
                         espaciosHTML += "            <i class='fas "+prestacion.icono+"' alt='"+prestacion.nombre+"' hover='"+prestacion.descripcion+"'></i>";
                         espaciosHTML += "        </span>"
                     });
-                    espaciosHTML += "    </div>"
+                    espaciosHTML += "    </div>";
+                
+                    espaciosHTML += "    <div class='row m-0 p-0 justify-content-center'>";
+                    espacio.puestos.forEach(function(puesto){
+                        espaciosHTML += "        <div class='row col-12 p-1'>";
+                        
+                        espaciosHTML += "            <div class='row col-12 col-xl-9 m-0 p-0'>";
+                        if(puesto.disponibilidad[0]['TM'])
+                        {
+                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigirAPago(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"TM\");'>TURNO MAÑANA ($"+espacio.precioMedia+"ARS)</div>";
+                        }
+                        else
+                        {
+                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary disabled' type='button' disabled>TURNO MAÑANA</div>";
+                        }
+                        
+                        if(puesto.disponibilidad[0]['TT'])
+                        {
+                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigirAPago(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"TT\");'>TURNO TARDE ($"+espacio.precioMedia+"ARS)</div>";
+                        }
+                        else
+                        {
+                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary disabled' type='button' disabled>TURNO TARDE</div>";
+                        }
+                        espaciosHTML += "                </div>";
+
+                        if(puesto.disponibilidad[0]['TM'] && puesto.disponibilidad[0]['TT'])
+                        {
+                            espaciosHTML += "            <div class='col-12 col-xl-3 h-xl-100 btn btn-primary' type='button' onclick='guardarValoresYRedirigirAPago(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"JC\");'>JORNADA COMPLETA ($"+espacio.precioCompleta+"ARS)</div>";
+                        }
+                        else
+                        {
+                            espaciosHTML += "            <div class='col-12 col-xl-3 h-xl-100 btn btn-primary disabled' type='button' disabled>JORNADA COMPLETA</div>";
+                        }
+
+                        espaciosHTML += "        </div>";
+                    });
+                    espaciosHTML += "    </div>";
 
                     espaciosHTML += "</div>";
                 });
 
                 $grillaEspacios.append(espaciosHTML);
+            }
+        </script>
+
+        <script>
+            function guardarValoresYRedirigirAPago(idCowork, idEspacio, idPuesto, turno){
+                globales['idCowork'] = idCowork;
+                globales['idEspacio'] = idEspacio;
+                globales['idPuesto'] = idPuesto;
+                globales['turno'] = turno;
+
+                abrirPaginaConValores('form-pago.html', 'grilla-reserva.html');
             }
         </script>
     </body>

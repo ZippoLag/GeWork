@@ -1,13 +1,15 @@
-var claves = ['nombreUsuario', 'paginaAnterior', 'pais', 'provincia', 'localidad', 'fecha', 'turno'];
+var claves = ['nombreUsuario', 'paginaAnterior', 'pais', 'provincia', 'localidad', 'fecha', 'turno', 'idCowork', 'idEspacio', 'idPuesto', 'turno'];
 var globales = {};
 
 var coworks = {
     "utn":{
+        "id":"utn",
         "nombre":"CoWork Uteniano",
         "direccion":"Zeballos 14XX",
         "url":"http://google.com/",
         "espacios":[
             {
+                "id":0,
                 "nombre":"Sala Java",
                 "precioMedia":20,
                 "precioCompleta":35,
@@ -27,7 +29,33 @@ var coworks = {
                 "puestos":[
                     {
                         "id": 0,
-                        "ubicacion":"Rincón noroeste"
+                        "ubicacion":"Rincón noroeste",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": true
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "ubicacion":"Rincón sudeste",
+                        "disponibilidad":[
+                            {
+                                "TM": false,
+                                "TT": true
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "ubicacion":"Rincón sudoeste",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": false
+                            }
+                        ]
                     }
                 ]
             },
@@ -51,11 +79,23 @@ var coworks = {
                 "puestos":[
                     {
                         "id": 0,
-                        "ubicacion":"Junto a la entrada"
+                        "ubicacion":"Junto a la entrada",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": true
+                            }
+                        ]
                     },
                     {
                         "id": 1,
-                        "ubicacion":"Junto al escritorio frontal"
+                        "ubicacion":"Junto al escritorio frontal",
+                        "disponibilidad":[
+                            {
+                                "TM": false,
+                                "TT": true
+                            }
+                        ]
                     }
                 ]
             }

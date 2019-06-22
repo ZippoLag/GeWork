@@ -12,6 +12,10 @@
     </head>
     <body class="h-100">
 
+        <div class="zindex-tooltip" style="position: absolute; top: 0; right: 0;">
+            <div id="login"></div>
+        </div>
+
         <div class="container h-100">
             <div class="row h-100 justify-content-center align-items-between reserva-1 collapse show">
                 <div class="d-flex col-12 justify-content-center align-items-center">
@@ -38,15 +42,12 @@
         <script>
             cargarValores();
 
-            //carga picker de fecha
-            var fechaReserva = document.getElementById('fecha-select');
-            fechaReserva.valueAsDate = new Date();  //TODO: hacer que tome la fecha *de mañana* por defecto
-            fechaReserva.min = fechaReserva.value;
+            actualizarLogin();
         </script>
 
         <script>
             function guardarValoresYRedirigirAGrilla(){
-                abrirPaginaConValores('grilla-reserva.html', 'reservar.html');
+                abrirPaginaConValores('grilla-reserva.html');
             }
         </script>
     </body>

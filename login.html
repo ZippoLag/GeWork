@@ -12,6 +12,7 @@
     </head>
     <body class="h-100">
         <div class="row h-100">
+            <!-- TODO: mejorar estilos de página -->
             <div class="d-flex col-12 justify-content-center align-items-center">
                 <div class="form-group">
                     <label for="login-email">e-mail</label>
@@ -23,7 +24,7 @@
                     <input type="password" id="login-password" />
                 </div>
 
-                <a onclick="procesarLogin();" type="button" class="btn btn-primary">Login</button>
+                <a onclick="procesarLogin();" type="button" class="btn btn-primary">Login</a>
             </div>
         </div>
 
@@ -41,20 +42,19 @@
 
         <script>
             function procesarLogin(evt) {
-                //TODO ver que está fallando acá (terminar de eliminar los restos de la prueba inicial con forms?).. la página también quedó media rota
-
                 var email = $("#login-email").val();
                 var password = $("#login-password").val();
                 
-                if (email){
-                    window.alert("Iniciado sesión como "+email);
+                var usuario = usuarios[email];
+
+                if (usuario){
                     globales.nombreUsuario = email;
 
-                    if(globales.paginaAnterior){
-                        abrirPaginaConValores(globales.paginaAnterior);
-                    } else {
-                        abrirPaginaConValores('index.html');
-                    }
+                    volverAPaginaAnteriorConValores();
+                }
+                else
+                {
+                    alert("Por favor introduzca el email de un usuario registrado en el sistema. El único usuario registrado en este prototipo es enrique.juan.porta@gmail.com");
                 }
             }
         </script>

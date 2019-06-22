@@ -14,6 +14,10 @@
         <title>GeWork</title>
     </head>
     <body class="h-100">
+        <div class="zindex-tooltip" style="position: absolute; top: 0; right: 0;">
+            <div id="login"></div>
+        </div>
+
         <div class="container-fluid h-100 m-0 p-0">
             <div class="row justify-content-center parametros-reserva">
                 <!-- TODO: mejorar alineamiento -->
@@ -115,6 +119,8 @@
             //la carga de toda página comienza tomando los valores pasados por la URL y cargandolos en globales
             cargarValores();
 
+            actualizarLogin();
+
             //carga picker de fecha
             var fechaReserva = document.getElementById('fecha-select');
             fechaReserva.valueAsDate = new Date();  //TODO: hacer que tome la fecha de mañana por defecto
@@ -126,16 +132,17 @@
             if(globales['localidad']){document.getElementById('localidad-select').value = globales['localidad'];}
             if(globales['fecha']){document.getElementById('fecha-select').value = globales['fecha'];}
             if(globales['turno']){document.getElementById('turno-select').value = globales['turno'];}
-        </script>
 
-        <script>
+            //Si ya habíamos seleccionado cowork y navegamos a otra página, mostrarlo directamente:
+            if(globales.idCowork){
+                seleccionarCowork(globales.idCowork);
+            }
+
             function seleccionarCowork(idCowork){
                 $('#cowork-select').val(idCowork);
                 mostrarEspacios({"value":idCowork});
             }
-        </script>
-        
-        <script>
+
             function mostrarEspacios(esto){
                 var cowork = coworks[esto.value];
 
@@ -164,7 +171,7 @@
                         espaciosHTML += "            <div class='row col-12 col-xl-9 m-0 p-0'>";
                         if(puesto.disponibilidad[0]['TM'])
                         {
-                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigirAPago(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"TM\");'>TURNO MAÑANA ($"+espacio.precioMedia+"ARS)</div>";
+                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigir(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"TM\", \"form-pago.html\");'>TURNO MAÑANA ($"+espacio.precioMedia+"ARS)</div>";
                         }
                         else
                         {
@@ -173,7 +180,7 @@
                         
                         if(puesto.disponibilidad[0]['TT'])
                         {
-                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigirAPago(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"TT\");'>TURNO TARDE ($"+espacio.precioMedia+"ARS)</div>";
+                            espaciosHTML += "                <div class='col-6 col-xl-12 btn btn-primary' type='button' onclick='guardarValoresYRedirigir(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"TT\", \"form-pago.html\");'>TURNO TARDE ($"+espacio.precioMedia+"ARS)</div>";
                         }
                         else
                         {
@@ -183,7 +190,7 @@
 
                         if(puesto.disponibilidad[0]['TM'] && puesto.disponibilidad[0]['TT'])
                         {
-                            espaciosHTML += "            <div class='col-12 col-xl-3 h-xl-100 btn btn-primary' type='button' onclick='guardarValoresYRedirigirAPago(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"JC\");'>JORNADA COMPLETA ($"+espacio.precioCompleta+"ARS)</div>";
+                            espaciosHTML += "            <div class='col-12 col-xl-3 h-xl-100 btn btn-primary' type='button' onclick='guardarValoresYRedirigir(\""+cowork.id+"\", \""+espacio.id+"\", \""+puesto.id+"\", \"JC\", \"form-pago.html\");'>JORNADA COMPLETA ($"+espacio.precioCompleta+"ARS)</div>";
                         }
                         else
                         {
@@ -199,16 +206,23 @@
 
                 $grillaEspacios.append(espaciosHTML);
             }
-        </script>
 
-        <script>
-            function guardarValoresYRedirigirAPago(idCowork, idEspacio, idPuesto, turno){
-                globales['idCowork'] = idCowork;
+            function guardarValores(){
+                globales['idCowork'] = document.getElementById('cowork-select').value;                
+
+                globales['pais'] = document.getElementById('pais-select').value;
+                globales['provincia'] = document.getElementById('provincia-select').value;
+                globales['localidad'] = document.getElementById('localidad-select').value;
+                globales['fecha'] = document.getElementById('fecha-select').value;
+                globales['turno'] = document.getElementById('turno-select').value;
+            }
+
+            function guardarValoresYRedirigir(idEspacio, idPuesto, turno, pagina){
                 globales['idEspacio'] = idEspacio;
                 globales['idPuesto'] = idPuesto;
                 globales['turno'] = turno;
 
-                abrirPaginaConValores('form-pago.html', 'grilla-reserva.html');
+                abrirPaginaConValores(pagina);
             }
         </script>
     </body>

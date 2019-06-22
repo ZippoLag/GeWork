@@ -11,6 +11,9 @@
         <title>GeWork</title>
     </head>
     <body class="h-100">
+        <div class="zindex-tooltip" style="position: absolute; top: 0; right: 0;">
+            <div id="login"></div>
+        </div>
 
         <div class="container h-100">
             <div class="row h-100">
@@ -32,6 +35,22 @@
         <script>
             //la carga de toda página comienza tomando los valores pasados por la URL y cargandolos en globales
             cargarValores();
+
+            actualizarLogin();
+        </script>
+
+        <script>
+            //Toda página que tenga controles de los cuales necesitemos valores deben implementar esta funcion (la misma es llamada dentro de abrirPaginaConValores y volverAPaginaAnteriorConValores, no necesita ser llamada aparte)
+            function guardarValores(){
+                globales['coso'] = document.getElementById('coso-select').value;  
+            }
+
+            //Si una página tiene valores que no se cargan de controles en guardarValores sino que necesita procesarlos con un evento debería implementar métodos que los guarden en globales y luego llamen a abrirPaginaConValores(destino)
+            function guardarValoresYRedirigir(coso, pagina){
+                globales['coso'] = coso;
+
+                abrirPaginaConValores(pagina);
+            }
         </script>
         
     </body>

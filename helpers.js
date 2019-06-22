@@ -1,6 +1,14 @@
 var claves = ['nombreUsuario', 'paginaAnterior', 'pais', 'provincia', 'localidad', 'fecha', 'turno', 'idCowork', 'idEspacio', 'idPuesto', 'turno'];
 var globales = {};
 
+usuarios = {
+    "enrique.juan.porta@gmail.com":{
+        email:"enrique.juan.porta@gmail.com",
+        nombre:"Enrique",
+        apellido:"Porta"
+    }
+};
+
 var coworks = {
     "utn":{
         "id":"utn",
@@ -109,11 +117,42 @@ var coworks = {
 * Toma todos los valores en "globales", los inserta en la URL pasada como parámetro y abre la misma en el navegador
 */
 function abrirPaginaConValores(link, paginaAnterior){
+    if(typeof guardarValores !== "undefined")
+    {
+        guardarValores();
+    }
+
     link += "?";
 
-    if(paginaAnterior){
-        globales.paginaAnterior = paginaAnterior;
+    if(!paginaAnterior){
+        paginaAnterior = window.location.pathname.split('/').pop();
     }
+
+    globales.paginaAnterior = paginaAnterior;
+
+    Object.keys(globales).forEach(function(key,index) {
+        if(index>0){
+            link += "&";
+        }
+
+        link += key + "=" + globales[key];
+    });
+
+    window.open(link, "_top");
+}
+
+/**
+* @param String name
+* @return null
+* Toma todos los valores en "globales" y los utiliza para navegar a la página anterior
+*/
+function volverAPaginaAnteriorConValores(paginaAnterior){
+    if(typeof guardarValores !== "undefined")
+    {
+        guardarValores();
+    }
+    
+    var link = globales.paginaAnterior + "?";
 
     Object.keys(globales).forEach(function(key,index) {
         if(index>0){
@@ -148,3 +187,16 @@ function getParameterByName(name) {
     return url.searchParams.get(name);
 }
 
+//
+function actualizarLogin() {
+    var $login = $('#login');
+
+    if(globales.nombreUsuario)
+    {
+        $login.append("<a>👤"+usuarios[globales.nombreUsuario].nombre+"</a>");
+    }
+    else
+    {
+        $login.append("<a onclick=\"abrirPaginaConValores('login.html');\" type='button' class='btn btn-primary p-0'>👤Login</a>");
+    }
+}

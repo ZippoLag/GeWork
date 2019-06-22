@@ -19,39 +19,99 @@
                         <div class="panel panel-default" >                         
                             <div class="panel-heading">
                                 <div class="row form-group col-12" role="group" >                                  
+                                    <legend>Confirmación de la Reserva</legend>
+                                </div>
+
+                                <div class="row form-group col-12" role="group" >                                  
+                                    <div class="col-12">                                               
+                                        <span class="help-block text-muted small-font" id="descripcionReserva"></span>
+                                        <span class="help-block text-muted small-font" id="prestaciones"></span>
+                                    </div>                                    
+                                </div>        
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default panel-usuario-login collapse" >                         
+                            <div class="panel-heading">
+                                <div class="row form-group col-12" role="group" >                                  
+                                    <legend>Datos del Cliente</legend>
+                                </div>
+
+                                <div class="row form-group col-12" role="group" >    
+                                    <div class="col-6">
+                                        <span class="help-block text-muted small-font"> Apellido</span>
+                                        <input id="apellido" type="text" class="form-control disabled" disabled placeholder="Apellido" />
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="help-block text-muted small-font"> Nombre</span>
+                                        <input id="nombre" type="text" class="form-control disabled" disabled placeholder="Nombre" />
+                                    </div>
+                                </div>
+
+                                <div class="row form-group col-12" role="group" >    
+                                    <div class="col-12">
+                                        <span class="help-block text-muted small-font"> E-mail</span>
+                                        <input id="email" type="text" class="form-control disabled" disabled placeholder="E-mail" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default panel-usuario-login collapse show" >                         
+                                <div class="panel-heading">
+                                    <div class="row form-group col-12" role="group" >                                  
+                                        <legend>Inicie sesión para continuar:</legend>
+                                    </div>
+    
+                                    <div class="row form-group col-12" role="group" >                                  
+                                        <div class="col-12">                                               
+                                            <div id="login"></div>
+                                        </div>                                    
+                                    </div>        
+                                </div>
+                            </div>
+                        
+                        <div class="panel panel-default panel-usuario-login collapse" >                         
+                            <div class="panel-heading">
+                                <div class="row form-group col-12" role="group" >                                  
                                     <legend>Datos de Pago</legend>
                                 </div>
+
                                 <div class="row form-group col-12" role="group" >                                  
                                     <div class="col-12">
-                                        <input type="text" class="form-control disabled" disabled placeholder="Ingrese Numero de Tarjeta" />
+                                        <input type="text" class="form-control disabled" disabled placeholder="4321 8765 9821 6543" />
                                     </div>                                    
                                 </div>
+
                                 <div class="row form-group col-12" role="group" >    
                                     <div class="col-6">
                                         <span class="help-block text-muted small-font" > Mes Expiración</span>
-                                        <input type="text" class="form-control disabled" disabled placeholder="MM" />
+                                        <input type="text" class="form-control disabled" disabled placeholder="04" />
                                     </div>
                                     <div class="col-6">
                                         <span class="help-block text-muted small-font" >  Año Expiración</span>
-                                        <input type="text" class="form-control disabled" disabled placeholder="AA" />
+                                        <input type="text" class="form-control disabled" disabled placeholder="25" />
                                     </div>
                                 </div>
+
                                 <div class="row form-group col-12">    
                                     <div class="col-6">
                                         <span class="help-block text-muted small-font" >  CCV</span>
-                                        <input type="text" class="form-control disabled" disabled placeholder="CCV" />
+                                        <input type="text" class="form-control disabled" disabled placeholder="123" />
                                     </div>
                                 </div>
+
                                 <div class="row form-group col-12" role="group" >        
                                     <div class="col-12 pad-adjust">
                                         <input type="text" class="form-control disabled" disabled placeholder="Ingrese Nombre en la Tarjeta" />
                                     </div>
                                 </div>
+
                                 <div class="row form-group col-12" role="group" >        
                                     <div class="col-12 pad-adjust">
                                         <div class="checkbox">
                                             <label>
-                                            <input type="checkbox" checked class="text-muted disabled" disabled> Guardar datos para futuros pagos
+                                                <input type="checkbox" checked class="text-muted disabled" disabled> Guardar datos para futuros pagos
                                             </label>
                                         </div>
                                     </div>
@@ -60,10 +120,11 @@
                                 <div class="row form-group col-12" role="group" >    
                                     <div class="col-6 pad-adjust">
                                         <input type="submit"  class="btn btn-danger" value="< Volver" 
-                                        onclick="volverAPaginaAnteriorConValores();"/>
+                                        onclick="event.preventDefault(); abrirPaginaConValores('grilla-reserva.html');"/>
                                     </div>
+
                                     <div class="col-6 pad-adjust">
-                                        <input type="submit"  class="btn btn-primary" value="Confirmar" onclick="confirmar()" />
+                                        <input type="submit"  class="btn btn-primary" value="Confirmar" onclick="confirmar(event)" />
                                     </div>
                                 </div>    
                             </div>
@@ -82,13 +143,39 @@
         <script src="helpers.js"></script>
 
         <script>
-            //la carga de toda página comienza tomando los valores pasados por la URL y cargandolos en globales
             cargarValores();
-        </script>
 
-        <script>
-            function confirmar(){
-                alert('Su reserva ha sido realizada. Revise su casilla de correo para confirmar la misma.');
+            actualizarLogin();
+
+            //Populando controles
+
+            if(globales['nombreUsuario']){
+                $('.panel-usuario-login').collapse()
+            }
+
+            var cowork = coworks[globales['idCowork']];
+            var espacio = cowork.espacios[globales['idEspacio']];
+            var puesto = espacio.puestos[globales['idPuesto']];
+
+            var codigoTurno = globales['turno'];
+            var turnoCowork = cowork.turnos[codigoTurno];
+
+            document.getElementById('descripcionReserva').innerHTML = "El puesto reservado el <b>"+globales['fecha']+"</b> de <b>"+turnoCowork.inicio+" a "+turnoCowork.fin+" ("+turnos[codigoTurno]+")</b> se encuentra en <b>"+cowork.nombre+"</b>, con dirección <b>"+cowork.direccion+"</b>. Allí busque <b>"+espacio.nombre+"</b> en <b>"+espacio.ubicacion+"</b> y entonces verá el puesto en <b>"+puesto.ubicacion+"</b>.";
+            
+            var prestaciones = espacio.prestaciones.map(p => p.nombre).join(", ").replace(/, ([^, ]*)$/,' y $1');
+            document.getElementById('prestaciones').innerHTML = "El mismo cuenta con <b>"+prestaciones+"</b>.";
+
+            var usuario = usuarios[globales.nombreUsuario];
+            //TODO: refactorear en función aparte (usada dentro de cargarValorEnControlSiExiste(...))
+            if(usuario['apellido']){document.getElementById('apellido').value = usuario['apellido'];}
+            if(usuario['nombre']){document.getElementById('nombre').value = usuario['nombre'];}
+            if(usuario['email']){document.getElementById('email').value = usuario['email'];}
+
+            function confirmar(evt){
+                evt.preventDefault();
+                alert("Su reserva ha sido realizada, una confirmación de la misma se envió a "+usuario.email+"");
+
+                abrirPaginaConValores('index.html');
             }
         </script>
         

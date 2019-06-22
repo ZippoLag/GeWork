@@ -1,7 +1,7 @@
 var claves = ['nombreUsuario', 'paginaAnterior', 'pais', 'provincia', 'localidad', 'fecha', 'turno', 'idCowork', 'idEspacio', 'idPuesto', 'turno'];
 var globales = {};
 
-usuarios = {
+var usuarios = {
     "enrique.juan.porta@gmail.com":{
         email:"enrique.juan.porta@gmail.com",
         nombre:"Enrique",
@@ -9,12 +9,23 @@ usuarios = {
     }
 };
 
+var turnos = {
+    "TM":"Turno Mañana",
+    "TT":"Turno Tarde",
+    "JC":"JornadaCompleta"
+};
+
 var coworks = {
     "utn":{
         "id":"utn",
         "nombre":"CoWork Uteniano",
-        "direccion":"Zeballos 14XX",
+        "direccion":"Zeballos 1341, S2000 Rosario, Santa Fe, Argentina",
         "url":"http://google.com/",
+        "turnos": {
+            "TM":{"inicio":"8", "fin":"14"},
+            "TT":{"inicio":"14", "fin":"22"},
+            "JC":{"inicio":"14", "fin":"22"}
+        },
         "espacios":[
             {
                 "id":0,
@@ -29,7 +40,7 @@ var coworks = {
                         "icono":"fa-wifi"
                     },
                     {
-                        "nombre":"proyector",
+                        "nombre":"Proyector",
                         "descripcion":"Proyector y pantalla", //TODO: encontrar ícono de verdad
                         "icono":"fa-eye"
                     }
@@ -187,7 +198,7 @@ function getParameterByName(name) {
     return url.searchParams.get(name);
 }
 
-//
+//Inserta el botón de iniciar sesión o el nombre del usuario en caso de estar loggeado
 function actualizarLogin() {
     var $login = $('#login');
 
@@ -199,4 +210,11 @@ function actualizarLogin() {
     {
         $login.append("<a onclick=\"abrirPaginaConValores('login.html');\" type='button' class='btn btn-primary p-0'>👤Login</a>");
     }
+}
+
+//
+function cargarValorEnControlSiExiste(claveGlobal, idControl)
+{
+    //carga valores picker
+    if(globales[claveGlobal]){document.getElementById(idControl).value = globales[claveGlobal];}
 }

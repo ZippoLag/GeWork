@@ -127,11 +127,11 @@
             fechaReserva.min = fechaReserva.value;
 
             //carga valores picker
-            if(globales['pais']){document.getElementById('pais-select').value = globales['pais'];}
-            if(globales['provincia']){document.getElementById('provincia-select').value = globales['provincia'];}
-            if(globales['localidad']){document.getElementById('localidad-select').value = globales['localidad'];}
-            if(globales['fecha']){document.getElementById('fecha-select').value = globales['fecha'];}
-            if(globales['turno']){document.getElementById('turno-select').value = globales['turno'];}
+            cargarValorEnControlSiExiste('pais', 'pais-select');
+            cargarValorEnControlSiExiste('provincia', 'provincia-select');
+            cargarValorEnControlSiExiste('localidad', 'localidad-select');
+            cargarValorEnControlSiExiste('fecha', 'fecha-select');
+            cargarValorEnControlSiExiste('turno', 'turno-select');
 
             //Si ya habíamos seleccionado cowork y navegamos a otra página, mostrarlo directamente:
             if(globales.idCowork){
@@ -214,7 +214,6 @@
                 globales['provincia'] = document.getElementById('provincia-select').value;
                 globales['localidad'] = document.getElementById('localidad-select').value;
                 globales['fecha'] = document.getElementById('fecha-select').value;
-                globales['turno'] = document.getElementById('turno-select').value;
             }
 
             function guardarValoresYRedirigir(idEspacio, idPuesto, turno, pagina){

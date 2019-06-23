@@ -235,6 +235,121 @@ var coworks = {
                 ]
             }
         ]
+    },
+    /* Cowork del McDonalds */
+    "mccowork":{
+        "id":"mccowork",
+        "nombre":"CoWork Mc",
+        "direccion":"San Martín 600, S2000 Rosario, Santa Fe, Argentina",
+        "url":"http://google.com/",
+        "turnos": {
+            "TM":{"inicio":"8", "fin":"14"},
+            "TT":{"inicio":"14", "fin":"22"},
+            "JC":{"inicio":"14", "fin":"22"}
+        },
+        "espacios":[
+            {
+                "id":0,
+                "nombre":"Sala Verde",
+                "precioMedia":18,
+                "precioCompleta":30,
+                "ubicacion":"3º piso. Piso completo.",
+                "prestaciones":[
+                    {
+                        "nombre":"Wi-Fi",
+                        "descripcion":"Conexión inalámbrica segura",
+                        "icono":"fa-wifi"
+                    },
+                    {
+                        "nombre":"Proyector",
+                        "descripcion":"Proyector y pantalla", //TODO: encontrar ícono de verdad
+                        "icono":"fa-eye"
+                    }
+                ],
+                "puestos":[
+                    {
+                        "id": 0,
+                        "ubicacion":"Sector derecho saliendo del ascensor",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "ubicacion":"Sector central saliendo del ascensor",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": true
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "ubicacion":"Sector izquierdo saliendo del ascensor",
+                        "disponibilidad":[
+                            {
+                                "TM": false,
+                                "TT": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "nombre":"Sala Azul",
+                "precioMedia":20,
+                "precioCompleta":35,
+                "ubicacion":"4º piso. Piso completo.",
+                "prestaciones":[
+                    {
+                        "nombre":"Wi-Fi",
+                        "descripcion":"Conexión inalámbrica segura",
+                        "icono":"fa-wifi"
+                    },
+                    {
+                        "nombre":"pizarron",
+                        "descripcion":"Pizarrón",
+                        "icono":"fa-chalkboard"
+                    }
+                ],
+                "puestos":[
+                    {
+                        "id": 0,
+                        "ubicacion":"Sector derecho saliendo del ascensor",
+                        "disponibilidad":[
+                            {
+                                "TM": false,
+                                "TT": true
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "ubicacion":"Sector central saliendo del ascensor",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "ubicacion":"Sector izquierdo saliendo del ascensor",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": true
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
     }
 };
 

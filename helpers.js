@@ -16,6 +16,7 @@ var turnos = {
 };
 
 var coworks = {
+    /* Cowork de la UTN */
     "utn":{
         "id":"utn",
         "nombre":"CoWork Uteniano",
@@ -113,6 +114,121 @@ var coworks = {
                             {
                                 "TM": false,
                                 "TT": true
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    /* Cowork del Monumento a la Bandera */
+    "bandera":{
+        "id":"bandera",
+        "nombre":"CoWork Bandera",
+        "direccion":"Sta Fe 581, S2000 Rosario, Santa Fe, Argentina",
+        "url":"http://google.com/",
+        "turnos": {
+            "TM":{"inicio":"8", "fin":"14"},
+            "TT":{"inicio":"14", "fin":"22"},
+            "JC":{"inicio":"14", "fin":"22"}
+        },
+        "espacios":[
+            {
+                "id":0,
+                "nombre":"Sala Norte",
+                "precioMedia":25,
+                "precioCompleta":40,
+                "ubicacion":"1º piso, ala norte.",
+                "prestaciones":[
+                    {
+                        "nombre":"Wi-Fi",
+                        "descripcion":"Conexión inalámbrica segura",
+                        "icono":"fa-wifi"
+                    },
+                    {
+                        "nombre":"Proyector",
+                        "descripcion":"Proyector y pantalla", //TODO: encontrar ícono de verdad
+                        "icono":"fa-eye"
+                    }
+                ],
+                "puestos":[
+                    {
+                        "id": 0,
+                        "ubicacion":"Rincón oeste",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": true
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "ubicacion":"Centro",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "ubicacion":"Rincón este",
+                        "disponibilidad":[
+                            {
+                                "TM": false,
+                                "TT": false
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "nombre":"Sala Sur",
+                "precioMedia":35,
+                "precioCompleta":55,
+                "ubicacion":"1º piso, ala sur.",
+                "prestaciones":[
+                    {
+                        "nombre":"Wi-Fi",
+                        "descripcion":"Conexión inalámbrica segura",
+                        "icono":"fa-wifi"
+                    },
+                    {
+                        "nombre":"pizarron",
+                        "descripcion":"Pizarrón",
+                        "icono":"fa-chalkboard"
+                    }
+                ],
+                "puestos":[
+                    {
+                        "id": 0,
+                        "ubicacion":"Rincón oeste",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": false
+                            }
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "ubicacion":"Centro",
+                        "disponibilidad":[
+                            {
+                                "TM": true,
+                                "TT": true
+                            }
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "ubicacion":"Rincón este",
+                        "disponibilidad":[
+                            {
+                                "TM": false,
+                                "TT": false
                             }
                         ]
                     }

@@ -439,7 +439,7 @@ function getParameterByName(name) {
 }
 
 //Inserta el botón de iniciar sesión o el nombre del usuario en caso de estar loggeado
-function actualizarLogin() {
+function actualizarLogin(paginaAnterior) {
     var $login = $('#login');
 
     if(globales.nombreUsuario)
@@ -448,7 +448,12 @@ function actualizarLogin() {
     }
     else
     {
-        $login.append("<a onclick=\"abrirPaginaConValores('login.html');\" type='button' class='btn btn-primary p-0'>👤Login</a>");
+        if(paginaAnterior){
+            $login.append("<a onclick=\"abrirPaginaConValores('login.html', '"+paginaAnterior+"');\" type='button' class='btn btn-primary p-0'>👤Login</a>");   
+        }
+        else{
+            $login.append("<a onclick=\"abrirPaginaConValores('login.html');\" type='button' class='btn btn-primary p-0'>👤Login</a>");
+        }
     }
 }
 

@@ -21,11 +21,11 @@ var coworks = {
         "id":"utn",
         "nombre":"CoWork Uteniano",
         "direccion":"Zeballos 1341, S2000 Rosario, Santa Fe, Argentina",
-        "url":"http://google.com/",
+        "url":"https://www.frro.utn.edu.ar/",
         "turnos": {
             "TM":{"inicio":"8", "fin":"14"},
             "TT":{"inicio":"14", "fin":"22"},
-            "JC":{"inicio":"14", "fin":"22"}
+            "JC":{"inicio":"8", "fin":"22"}
         },
         "espacios":[
             {
@@ -80,6 +80,7 @@ var coworks = {
                 ]
             },
             {
+                "id":1,
                 "nombre":"Sala .Net",
                 "precioMedia":30,
                 "precioCompleta":50,
@@ -125,12 +126,12 @@ var coworks = {
     "bandera":{
         "id":"bandera",
         "nombre":"CoWork Bandera",
-        "direccion":"Sta Fe 581, S2000 Rosario, Santa Fe, Argentina",
-        "url":"http://google.com/",
+        "direccion":"Santa Fe 581, S2000 Rosario, Santa Fe, Argentina",
+        "url":"https://www.monumentoalabandera.gob.ar/",
         "turnos": {
-            "TM":{"inicio":"8", "fin":"14"},
-            "TT":{"inicio":"14", "fin":"22"},
-            "JC":{"inicio":"14", "fin":"22"}
+            "TM":{"inicio":"9", "fin":"14"},
+            "TT":{"inicio":"14", "fin":"20"},
+            "JC":{"inicio":"9", "fin":"20"}
         },
         "espacios":[
             {
@@ -144,11 +145,6 @@ var coworks = {
                         "nombre":"Wi-Fi",
                         "descripcion":"Conexión inalámbrica segura",
                         "icono":"fa-wifi"
-                    },
-                    {
-                        "nombre":"Proyector",
-                        "descripcion":"Proyector y pantalla", //TODO: encontrar ícono de verdad
-                        "icono":"fa-eye"
                     }
                 ],
                 "puestos":[
@@ -171,20 +167,11 @@ var coworks = {
                                 "TT": false
                             }
                         ]
-                    },
-                    {
-                        "id": 2,
-                        "ubicacion":"Rincón este",
-                        "disponibilidad":[
-                            {
-                                "TM": false,
-                                "TT": false
-                            }
-                        ]
                     }
                 ]
             },
             {
+                "id":1,
                 "nombre":"Sala Sur",
                 "precioMedia":35,
                 "precioCompleta":55,
@@ -221,16 +208,6 @@ var coworks = {
                                 "TT": true
                             }
                         ]
-                    },
-                    {
-                        "id": 2,
-                        "ubicacion":"Rincón este",
-                        "disponibilidad":[
-                            {
-                                "TM": false,
-                                "TT": false
-                            }
-                        ]
                     }
                 ]
             }
@@ -241,11 +218,11 @@ var coworks = {
         "id":"mccowork",
         "nombre":"CoWork Mc",
         "direccion":"San Martín 600, S2000 Rosario, Santa Fe, Argentina",
-        "url":"http://google.com/",
+        "url":"https://www.mcdonalds.com.ar/locales",
         "turnos": {
-            "TM":{"inicio":"8", "fin":"14"},
-            "TT":{"inicio":"14", "fin":"22"},
-            "JC":{"inicio":"14", "fin":"22"}
+            "TM":{"inicio":"9", "fin":"13"},
+            "TT":{"inicio":"13", "fin":"18"},
+            "JC":{"inicio":"9", "fin":"18"}
         },
         "espacios":[
             {
@@ -300,6 +277,7 @@ var coworks = {
                 ]
             },
             {
+                "id":1,
                 "nombre":"Sala Azul",
                 "precioMedia":20,
                 "precioCompleta":35,
@@ -350,6 +328,7 @@ var coworks = {
                 ]
             },
             {
+                "id":2,
                 "nombre":"Sala Roja",
                 "precioMedia":25,
                 "precioCompleta":45,
@@ -374,26 +353,6 @@ var coworks = {
                             {
                                 "TM": false,
                                 "TT": true
-                            }
-                        ]
-                    },
-                    {
-                        "id": 1,
-                        "ubicacion":"Sector central saliendo del ascensor",
-                        "disponibilidad":[
-                            {
-                                "TM": false,
-                                "TT": false
-                            }
-                        ]
-                    },
-                    {
-                        "id": 2,
-                        "ubicacion":"Sector izquierdo saliendo del ascensor",
-                        "disponibilidad":[
-                            {
-                                "TM": false,
-                                "TT": false
                             }
                         ]
                     }

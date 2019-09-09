@@ -2,3 +2,5 @@ desktop.ini
 
 venv
 backend/gework/settings/local_settings.py
+__pycache__
+backend/gework/db.sqlite3

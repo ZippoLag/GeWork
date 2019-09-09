@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "knox",
     "gework",
-    "frontend_bundle",
+    "espacios",
+    "frontend_bundle"
 ]
 
 MIDDLEWARE = [
@@ -46,12 +47,10 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "admin_reorder.middleware.ModelAdminReorder",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware"
 ]
 
 AUTHENTICATION_BACKENDS = (
-    "irc_auth.authentication.IRC_AD_Authentication",
     "django.contrib.auth.backends.ModelBackend",
 )
 

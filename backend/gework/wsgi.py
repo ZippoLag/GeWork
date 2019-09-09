@@ -17,9 +17,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', os.environ.get(
     ))
 
 print(
-    f"La aplicación ha iniciado con settings obtenidas desde '{os.environ.get('DJANGO_SETTINGS_MODULE', '?!')}', si
-    debieran ser otras, por favor observá el valor de tus variables de entorno 'GEWORK_DJANGO_SETTINGS_MODULE' y
-    'DJANGO_SETTINGS_MODULE'."
+    f"La aplicación ha iniciado con settings obtenidas desde '{os.environ.get('DJANGO_SETTINGS_MODULE', '?!')}', si debieran ser otras, por favor observá  valor de tus variables de entorno 'GEWORK_DJANGO_SETTINGS_MODULE' y 'DJANGO_SETTINGS_MODULE'."
 )
 
 application = get_wsgi_application()

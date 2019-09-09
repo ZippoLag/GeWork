@@ -163,7 +163,7 @@
             document.getElementById('descripcionReserva').innerHTML = "El puesto reservado el <b>"+globales['fecha']+"</b> de <b>"+turnoCowork.inicio+" a "+turnoCowork.fin+" ("+turnos[codigoTurno]+")</b> se encuentra en <b>"+cowork.nombre+"</b>, con dirección <b>"+cowork.direccion+"</b>. Allí busque <b>"+espacio.nombre+"</b> en <b>"+espacio.ubicacion+"</b> y entonces verá el puesto en <b>"+puesto.ubicacion+"</b>.";
             
             var prestaciones = espacio.prestaciones.map(p => p.nombre).join(", ").replace(/, ([^, ]*)$/,' y $1');
-            document.getElementById('prestaciones').innerHTML = "El mismo cuenta con <b>"+prestaciones+"</b>.";
+            document.getElementById('prestaciones').innerHTML = "El mismo cuenta con <b>"+prestaciones+"</b>.  El total que se descontará de su tarjeta es de <b>$"+(codigoTurno==='TM'||codigoTurno==='TT'?espacio.precioMedia:espacio.precioCompleta)+"(ARS)</b>."; //TODO: emprolijar a dónde se ponen los textos
 
             var usuario = usuarios[globales.nombreUsuario];
             //TODO: refactorear en función aparte (usada dentro de cargarValorEnControlSiExiste(...))

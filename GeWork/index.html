@@ -13,7 +13,7 @@
 
     <body class="h-100">
 
-        <div class="zindex-tooltip" style="position: absolute; top: 0; right: 0;">
+        <div style="z-index:10000; position: absolute; top: 0; right: 0;">
             <div id="login"></div>
         </div>
 
@@ -27,7 +27,7 @@
             <div class="row h-100 justify-content-center align-items-center gework-intro gework-login-registro gework-reserva collapse">
                 <div class="btn-group" role="group" >
                     <a href="#" type="button" class="btn btn-primary disabled">Ofrecer</a>
-                    <a onclick="abrirPaginaConValores('reservar.html');" type="button" class="btn btn-primary">Reservar</a>
+                    <a onclick="abrirPaginaConValores('reservar.html', 'index.html');" type="button" class="btn btn-primary">Reservar</a>
                 </div>
             </div>
         </div>        
@@ -43,7 +43,7 @@
         <script>
             cargarValores();
 
-            actualizarLogin();
+            actualizarLogin('index.html');
         </script>
     </body>
 </html>

@@ -1,0 +1,45 @@
+# Usar este archivo como plantilla para crear tu propio local_settings.py y completarlo con todos los valores puntuales para el ambiente en cuestión. local_settings.py no es controlado por git, su contenido debería ser secreto
+
+import os
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'p&gkwq#ba4n6)u#13me&$=p1iwmrs=1=kofvdavrmq3+w6^-@f'  # TODO: definir, this is just a development key
+
+
+# Database
+# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+
+DATABASES = {
+    'mysql': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME', ''),
+        'USER': os.environ.get('DB_USER', ''),
+        'PASSWORD': os.environ.get('DB_PASS', ''),
+        'HOST': os.environ.get('DB_HOST', ''),
+        'PORT': 3306,
+    },
+    'sql_server': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME':  os.environ.get('DB_NAME', ''),   # database name!
+        'USER': os.environ.get('DB_USER', ''),
+        'PASSWORD': os.environ.get('DB_PASS', ''),
+        'OPTIONS': {
+            'dsn': 'os.environ.get('DB_DSN', '')',  # Name that you used in etc/odbc.ini file or ODBC context menu in windows
+            'driver': 'FreeTDS',
+            'host_in_server': True,
+            'unicode_results': True,
+            'extra_params': 'TDS_VERSION=8.0',  # For QALinux2 use 7.4
+            'use_legacy_datetime': True
+        }
+    },
+    'local': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}  #TODO: define
+
+ALLOWED_HOSTS = []  # TODO: define

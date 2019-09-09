@@ -14,7 +14,7 @@ El proyecto se encuentra dividido en 2 carpetas: `backend` contiene el código d
 
 Siendo que el proyecto se ha desarrollado en máquinas corriendo Windows, las instrucciones contienen utilización de scripts de Powershell. Se asume que las últimas versiones de Python 3.x, Powershell y NPM se encuentran ya instaladas antes de proseguir, así como una mínima familiaridad con ellas.
 
-Tras realizar un `git clone` por primera vez, hemos de abrir una consola y navegar hasta el directorio de `backend`, donde hemos de ejecutarel scrip `configurar_dev_venv.ps1` (el cual creará un entorno virtual de python, lo _activará_, actualizará `pip` e instalará todas las dependencias del proyecto backend). Es importante _no_ abrir la consola en el root del proyecto y ejectuar `backend/configurar_dev_venv.psq` desde allí, pues esto creará el venv en el root y complicará otras configuraciones y el mantenimiento del proyecto.
+Tras realizar un `git clone` por primera vez, hemos de abrir una consola y navegar hasta el directorio de `backend`, donde hemos de ejecutarel scrip `crear_dev_venv.ps1` (el cual creará un entorno virtual de python, lo _activará_, actualizará `pip` e instalará todas las dependencias del proyecto backend). Es importante _no_ abrir la consola en el root del proyecto y ejectuar `backend/crear_dev_venv.psq` desde allí, pues esto creará el venv en el root y complicará otras configuraciones y el mantenimiento del proyecto.
 
 Así mismo, se deberá navegar a la carpeta `frontend` del proyecto y ejecutar `npm install`, lo cual instalará todas las dependencias detalladas en el archivo `package.json`.
 

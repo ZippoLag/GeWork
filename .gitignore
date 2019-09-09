@@ -1,1 +1,4 @@
 desktop.ini
+
+venv
+backend/gework/settings/local_settings.py

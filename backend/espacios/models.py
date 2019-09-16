@@ -10,6 +10,10 @@ class Cowork(models.Model):
     id_cowork = models.AutoField(primary_key=True)
     nombre_cowork = models.CharField(max_length=50)
     direccion_cowork = models.CharField(max_length=50)
+    inicioTM_cowork = models.CharField(max_length=8)
+    finTM_cowork = models.CharField(max_length=8)
+    inicioTT_cowork = models.CharField(max_length=8)
+    finTT_cowork = models.CharField(max_length=8)
     urlGoogleMaps = models.URLField()
 
 class Prestacion(models.Model):
@@ -30,6 +34,8 @@ class Espacio(models.Model):
 class Puesto(models.Model):
     id_puesto = models.AutoField(primary_key=True)
     ubicacion_puesto = models.CharField(max_length=100)
+    disponibilidadTM_puesto = models.BooleanField()
+    disponibilidadTT_puesto = models.BooleanField()
     id_espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
 
 class Usuario(models.Model):

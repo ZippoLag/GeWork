@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
 
-import httpClient from '../fetchWrapper';
-
-import getCookie from '../utils';
+//import httpClient from '../fetchWrapper';
 
 import './App.css';
 
@@ -14,39 +11,25 @@ class App extends Component {
   }
 
   componentDidMount(){
-    let instance = this;
-
-    //Si hay un token de autenticación en las cookies del navegador, significa que ya inició sesión un usuario, por lo que podemos obtener sus detalles desde el backend
-    if(getCookie('csrftoken')){
-      httpClient
-        .get(`api/get_detalles_usuario`)
-        .then((data) => {
-          instance.setState({
-            usuario: data
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    //let instance = this;
   }
+
+  //TODO: agregar history al router
 
   render() {
     return (
-      <Container>
-          <h1>GeWork</h1>
-        <Router>
-          <Route
-            exact
-            path={['/']}
-            component={() => (
-              <div>
-                {this.state.usuario ? `Bienvenidx ${this.state.usuario.username}!` : `Nadie inició sesión aún (o estamos ejecutando mediante 'npm start' por lo que la autenticación de django no nos provée el token)`}
-              </div>
-            )}
-          />
-        </Router>
-      </Container>
+      <Router>
+        <Route
+          exact
+          path={['/']}
+          component={() => (
+            <div>
+              {this.state.usuario ? `Bienvenidx ${this.state.usuario.username}!` : `Nadie inició sesión aún (o estamos ejecutando mediante 'npm start' por lo que la autenticación de django no nos provée el token)`}
+              <span>Dicho sea de paso, este div debería ser un componente en un .js aparte, si bien no hace falta que implementemos redux, tendríamos que poner toda la data (y los métodos para llamar a la API) en el componente de index y su state y pasarlos como parámetros a los demás; App debería encargarse del routing más que nada</span>
+            </div>
+          )}
+        />
+      </Router>
     );
   }
 }

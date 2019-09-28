@@ -11,4 +11,4 @@ Write-Output "Activando venv.."
 backend/venv/scripts/activate | Out-Default
 Write-Output "Corriendo collectstatic.."
 python backend/manage.py collectstatic --noinput --clear | Out-Null
-Write-Output "backend/frontend_bundle debería estar listo para ser servido (con'python backend/manage.py runserver')! (y/o commiteado)"
+Write-Output "backend/frontend_bundle debería estar listo para ser servido (con 'python backend/manage.py runserver')! (y/o commiteado)"

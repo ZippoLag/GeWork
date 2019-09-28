@@ -5,5 +5,9 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path("api/espacios/", views.EspacioListCreate.as_view()),
+    path('api/espacios/',
+         views.EspacioListCreate.as_view()),
+    path('api/get_detalles_usuario',
+         login_required(views.get_detalles_usuario),
+         name='get_detalles_usuario'),
 ]

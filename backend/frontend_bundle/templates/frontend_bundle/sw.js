@@ -27,11 +27,11 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "asset-manifest.json",
-    "revision": "e3f3d58577404abff963b7453cca6c49"
+    "revision": "9f9474dcd36ccabe8273e1b829e9413e"
   },
   {
     "url": "index.html",
-    "revision": "5c4de1f66058bddb4832779a719930b6"
+    "revision": "8f7c076dba24f04442b9321c64d13e4e"
   },
   {
     "url": "static/css/main.2cce8147.chunk.css",
@@ -42,12 +42,12 @@ self.__precacheManifest = [
     "revision": "c92b85a5b907c70211f4ec25e29a8c4a"
   },
   {
-    "url": "static/js/2.a7061a18.chunk.js",
-    "revision": "6a53a04417e35738a85a6bd8025dc9bd"
+    "url": "static/js/2.18a0b839.chunk.js",
+    "revision": "f801c8c5465ebf16756544884d98df6c"
   },
   {
-    "url": "static/js/main.a4b43249.chunk.js",
-    "revision": "da476b8d4542cc56cf79e42388933dd3"
+    "url": "static/js/main.8b59579b.chunk.js",
+    "revision": "ac9f334eead1a34d06299cf067227ff4"
   },
   {
     "url": "static/js/runtime~main.760faad6.js",

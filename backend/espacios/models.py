@@ -2,11 +2,12 @@ from itertools import chain
 from django.db import models
 from django.utils import timezone
 
-# TODO: crear modelos de datos
-# CLM: creado modelo de datos en base a DCML
-# Duda: los niveles dentro de la clase Permiso, deberían estar tipificados?
+# TODO: definir manejo de permisos
+# CLM: los niveles dentro de la clase Permiso, deberían estar tipificados?
+# SRV: depende de cómo querramos hacerlo, otra alternativa es usar las clases que ya trae Django para manejar permisos y perfiles. De momento asumamos que todos los admins pueden hacer todo y ya y cuando nos juntemos lo revemos. Dejo comentada esa clase de momento
+
 class Cowork(models.Model):
-    #id_cowork = models.AutoField(primary_key=True)
+    id_cowork = models.AutoField(primary_key=True)
     nombre_cowork = models.CharField(max_length=50)
     direccion_cowork = models.CharField(max_length=50)
     inicioTM_cowork = models.CharField(max_length=8)
@@ -18,7 +19,7 @@ class Cowork(models.Model):
         return self.nombre_cowork
 
 class Prestacion(models.Model):
-    #id_prestacion = models.AutoField(primary_key=True)
+    id_prestacion = models.AutoField(primary_key=True)
     nombre_prestacion = models.CharField(max_length=50)
     desc_prestacion = models.CharField(max_length=200)
     icono_prestacion = models.CharField(max_length=200)
@@ -26,18 +27,18 @@ class Prestacion(models.Model):
         return self.nombre_prestacion
 
 class Espacio(models.Model):
-    #id_espacio = models.AutoField(primary_key=True)
+    id_espacio = models.AutoField(primary_key=True)
     nombre_espacio = models.CharField(max_length=50)
     precioMJ_espacio = models.DecimalField(max_digits=10, decimal_places=3)
     precioJC_espacio = models.DecimalField(max_digits=10, decimal_places=3)
     ubicacion_espacio = models.CharField(max_length=100)
-    cowork = models.ForeignKey(Cowork, on_delete=models.CASCADE, default="")
+    cowork = models.ForeignKey(Cowork, on_delete=models.CASCADE)
     prestaciones = models.ManyToManyField(Prestacion)
     def __str__(self):
         return self.nombre_espacio
 
 class Puesto(models.Model):
-    #id_puesto = models.AutoField(primary_key=True)
+    id_puesto = models.AutoField(primary_key=True)
     ubicacion_puesto = models.CharField(max_length=100)
     disponibilidadTM_puesto = models.BooleanField()
     disponibilidadTT_puesto = models.BooleanField()
@@ -46,30 +47,30 @@ class Puesto(models.Model):
         return self.ubicacion_puesto
 
 class Usuario(models.Model):
-    #id_usuario = models.AutoField(primary_key=True)
-    dni_usuario = models.IntegerField(unique=True, blank=False)
+    id_usuario = models.AutoField(primary_key=True)
+    dni_usuario = models.IntegerField(unique=True)
     nombre_usuario = models.CharField(max_length=50)
     apellido_usuario = models.CharField(max_length=50)
     email_usuario = models.EmailField(max_length=70)
-    pass_usuario = models.CharField(max_length=30, blank=False)
+    pass_usuario = models.CharField(max_length=30)
     linkedin_usuario = models.URLField()
-    alta_usuario = models.DateTimeField(auto_now_add=True)
+    alta_usuario = models.DateTimeField(default=timezone.now)
     inactivo_usuario = models.DateTimeField()
     def __str__(self):
         return self.nombre_usuario
 
-class Permiso(models.Model):
-    #id_permiso = models.AutoField(primary_key=True)
+"""class Permiso(models.Model):
+    id_permiso = models.AutoField(primary_key=True)
     desc_permiso = models.CharField(max_length=50)
     nivel_permiso = models.IntegerField()
-    cowork = models.ForeignKey(Cowork, on_delete=models.CASCADE)   
+    cowork = models.ForeignKey(Cowork, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     def __str__(self):
-        return self.desc_permiso
+        return self.desc_permiso"""
 
 class Contrato(models.Model):
-    #id_contrato = models.AutoField(primary_key=True)
-    fecha_contrato = models.DateTimeField(auto_now_add=True)
+    id_contrato = models.AutoField(primary_key=True)
+    fecha_contrato = models.DateTimeField(default=timezone.now)
     inicio_contrato = models.DateTimeField()
     fin_contrato = models.DateTimeField()
     importe_contrato = models.DecimalField(max_digits=10, decimal_places=3)
@@ -81,8 +82,8 @@ class Contrato(models.Model):
         return self.fecha_contrato
 
 class Pago(models.Model):
-    #id_pago = models.AutoField(primary_key=True)
-    fecha_pago = models.DateTimeField(auto_now_add=True)
+    id_pago = models.AutoField(primary_key=True)
+    fecha_pago = models.DateTimeField(default=timezone.now)
     medio_pago = models.CharField(max_length=100)
     idext_pago = models.CharField(max_length=100)
     importe_pago = models.DecimalField(max_digits=10, decimal_places=3)

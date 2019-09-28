@@ -31,3 +31,7 @@ Tanto los puertos `3000` como `5000` han sido habilitados en las configuraciones
 ### Subiendo código al repositorio
 
 Es importante recordar que _siempre que se modifique el código en `frontend` será necesario actualizar el `frontend_bundle` en el proyecto `backend`_. Esto puede realizarse sencillamente ejecutando el script `empaquetar_y_organizar.ps1` ubicado en el root del proyecto.
+
+### Después de cada pull
+
+Para asegurar estar con la última versión funcionando tras un `git pull`, será buena idea ejecutar un `pip install -r backend/requirements.txt`, `python backend/manage.py migrate` y `frontend/npm install`.

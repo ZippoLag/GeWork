@@ -1,0 +1,51 @@
+{
+  "python.pythonPath": "backend\\venv\\Scripts\\python.exe",
+
+  "editor.tabSize": 2, //Para que el código muy anidado no te ocupe media pantalla sólo por espacios
+  "editor.wordWrap": "on", //Para no tener que scrollear a la derecha
+  "files.exclude": {
+    "**/.idea": true //Para ignorar la carpeta con cosas de pycharm, que es otro editor que uso para python a veces
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true //Para ignorar problemas irrelevantes en el código de node
+  },
+  "editor.minimap.renderCharacters": false, //en el mapa de código de la derecha, a mi al menos me sirve ver más claro la estructura del código así
+  "[python]": {
+    "editor.tabSize": 4, //Python necesita 4 espacios en los tabs
+    "editor.insertSpaces": true,
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.rulers": [120]
+  },
+  "python.linting.pylintEnabled": true,
+  "workbench.colorCustomizations": {},
+  "python.linting.pylintArgs": [
+    "--load-plugins=pylint_django",
+    "--max-line-length=120"
+  ],
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["--max-line-length=120"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode", //Requiere instalar la extensión "Prettier"
+  "editor.formatOnSave": true, //Auto formatea el archivo al guardar
+  "editor.renderWhitespace": "boundary",
+  "workbench.tree.indent": 16, //Ayuda a ver el anidamiento de carpetas en el filetree de la izquierda
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact", //Activa el autocompletado de elementos HTML en archivos de JS
+    "django-html": "html"
+  },
+  "files.associations": {
+    "**/templates/*.html": "django-html",
+    "**/templates/*": "django-txt",
+    "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "explorer.confirmDelete": false,
+  "prettier.arrowParens": "always",
+  "prettier.jsxSingleQuote": true,
+  "prettier.singleQuote": true,
+  "[css]": {
+    "editor.defaultFormatter": "HookyQR.beautify"
+  },
+  "editor.detectIndentation": false
+}

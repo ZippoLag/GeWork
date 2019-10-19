@@ -33,9 +33,7 @@ class Index extends Component {
     }
   }
 
-  //TODO: agregar history al router
-
-  render() {
+    render() {
     return (
       <Container>
         <Cabecera usuario={this.state.usuario} />

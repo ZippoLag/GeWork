@@ -1,5 +1,5 @@
 {
-  "python.pythonPath": "backend\\venv\\Scripts\\python.exe",
+  "python.pythonPath": "venv\\Scripts\\python.exe",
 
   "editor.tabSize": 2, //Para que el código muy anidado no te ocupe media pantalla sólo por espacios
   "editor.wordWrap": "on", //Para no tener que scrollear a la derecha

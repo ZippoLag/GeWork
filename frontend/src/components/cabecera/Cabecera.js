@@ -1,26 +1,22 @@
 import React, { Component } from 'react';
 import Row from 'react-bootstrap/Row';
+import PropTypes from "prop-types";
 
-//TODO: usar Navbar?
-//TODO: revisar que onda los links para react router
+import './Cabecera.css';
 
 class Cabecera extends Component {
-  state = {
-    usuario: null
-  }
-
-  componentDidMount(){
-    //let instance = this;
-  }
-
-  //TODO: agregar history al router
+  static propTypes = {
+    usuario: PropTypes.object
+  };
 
   render() {
     return (
-      <Row className='justify-content-between'>
-        <div><h1>GeWork</h1></div>
-        <div>{this.props.usuario ? this.props.usuario.username : "Login"}</div>
-      </Row>
+      <header>
+        <Row className='justify-content-between'>
+          <div><h1>GeWork</h1></div>
+          <div>{this.props.usuario ? this.props.usuario.username : "Login"}</div>
+        </Row>
+      </header>
     );
   }
 }

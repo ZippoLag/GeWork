@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 
 import App from './components/App';
 import Cabecera from './components/cabecera/Cabecera'
+import Pie from './components/pie/Pie'
 
 import httpClient from './fetchWrapper';
 import getCookie from './utils';
@@ -38,6 +39,7 @@ class Index extends Component {
       <Container>
         <Cabecera usuario={this.state.usuario} />
         <App usuario={this.state.usuario} />
+        <Pie />
       </Container>
     );
   }

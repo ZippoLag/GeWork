@@ -4,6 +4,14 @@ from django.utils import timezone
 from django.contrib import admin
 from django.contrib.auth.models import User
 
+# CLM: creada clase para auditoria. Como se aplica?
+class MyModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.CharField(max_length=255, blank=True, editable=False)
+    modified_at = models.DateTimeField(auto_now=True)
+    modified_by = models.CharField(max_length=255, blank=True, editable=False)
+
+
 # DONE CLM: enlazar a la clase User interna de django (los campos comentados deberían obtenerse de instancias de ésa, hay diversos tutoriales sobre cómo hacer esto, la mayoría recomiendan nombrar a la clase custom "Profile", pero llamarle "Usuario" o "Perfil" en español sería igual de válido)
 
 class UserProfile(models.Model):

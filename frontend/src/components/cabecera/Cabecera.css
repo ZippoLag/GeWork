@@ -1,0 +1,71 @@
+.gework-bg-primario {
+  background-color: #2fa0fd;
+  /* TODO: ver que sea el mismo que en el manifest*/
+}
+
+.gework-bg-secundario {
+  background-color: rgba(7, 54, 66, 0.25);
+}
+
+header {
+  height: auto;
+  min-height: 5em;
+  position: sticky;
+  top: 0px;
+}
+
+h1 {
+  color: white;
+}
+
+.header-logo {
+  font-weight: normal;
+  color: black;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.header-logo img {
+  margin-right: 24px;
+}
+
+.header-logo:link {
+  text-decoration: none;
+  color: black;
+}
+
+.header-logo:visited {
+  text-decoration: none;
+  color: black;
+}
+
+.header-logo:hover {
+  text-decoration: none;
+  color: #555555;
+}
+
+.header-logo:active {
+  text-decoration: none;
+  color: #555555;
+}
+
+.username-circle {
+  height: 55px;
+  width: 55px;
+  border-radius: 50%;
+  font-family: Arial;
+  font-weight: bold;
+  font-size: 20px;
+  color: #B35900;
+  cursor: pointer;
+}
+
+.username-circle::after {
+  content: none !important;
+}
+
+.menu-usuario-style {
+  box-shadow: none !important;
+}

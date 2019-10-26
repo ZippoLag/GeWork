@@ -1,6 +1,5 @@
 import React, { Suspense , Component} from 'react';
 import ReactDOM from 'react-dom';
-import Container from 'react-bootstrap/Container';
 
 import App from './components/App';
 import Cabecera from './components/cabecera/Cabecera'
@@ -13,7 +12,7 @@ import './index.css';
 
 class Index extends Component {
   state = {
-    usuario: null
+    usuario: {}
   }
 
   componentDidMount(){
@@ -36,11 +35,11 @@ class Index extends Component {
 
     render() {
     return (
-      <Container>
+      <div className="principal">
         <Cabecera usuario={this.state.usuario} />
         <App usuario={this.state.usuario} />
         <Pie />
-      </Container>
+      </div>
     );
   }
 }

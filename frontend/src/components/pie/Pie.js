@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import Row from 'react-bootstrap/Row';
 
 import './Pie.css';
@@ -8,11 +9,11 @@ class Pie extends Component {
 
   render() {
     return (
-      <footer>
-        <Row className='justify-content-between'>
-          Copyright GeWork 2019 (?)
-        </Row>
-      </footer>
+        <footer>
+          <Row className="w-100 d-flex justify-content-end align-items-end">
+            Cindi L. Martín - Sebastián R. Vansteenkiste
+          </Row>
+        </footer>
     );
   }
 }

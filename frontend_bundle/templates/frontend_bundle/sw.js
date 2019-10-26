@@ -27,27 +27,27 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "asset-manifest.json",
-    "revision": "3d35cf7f4027d39c89e04214485d7266"
+    "revision": "4e227c97f3223b96226804dddb8efbfc"
   },
   {
     "url": "index.html",
-    "revision": "0cd7f056a1a920bb0ee084670b526554"
+    "revision": "96eea0c02994d712ac429040e0971392"
   },
   {
-    "url": "static/css/main.94ad8322.chunk.css",
-    "revision": "9bd3f0d056df25965f0ed4de7500cfb0"
+    "url": "static/css/main.34e9f10f.chunk.css",
+    "revision": "80f130ca63c81b1acf79f9137dd4e9ff"
   },
   {
     "url": "static/favicon.ico",
     "revision": "c92b85a5b907c70211f4ec25e29a8c4a"
   },
   {
-    "url": "static/js/2.0dbab6a9.chunk.js",
-    "revision": "04800f9d7b9f59bf45a23f4303cdbae3"
+    "url": "static/js/2.b9bad26d.chunk.js",
+    "revision": "b97c0afab1aa09dcea3bb7b1dcb85611"
   },
   {
-    "url": "static/js/main.074e7de7.chunk.js",
-    "revision": "8c9c1a1fb14a8b9d33cdf289a86c3787"
+    "url": "static/js/main.0b67e530.chunk.js",
+    "revision": "a08221309bda7b6d63f885ad641ced99"
   },
   {
     "url": "static/js/runtime~main.760faad6.js",

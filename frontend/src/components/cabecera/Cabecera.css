@@ -1,10 +1,10 @@
-.brand-primary-bg {
+.gework-bg-primario {
   background-color: #2fa0fd;
   /* TODO: ver que sea el mismo que en el manifest*/
 }
 
-.brand-secondary-bg {
-  background-color: #0f809d;
+.gework-bg-secundario {
+  background-color: rgba(7, 54, 66, 0.25);
 }
 
 header {
@@ -12,6 +12,10 @@ header {
   min-height: 5em;
   position: sticky;
   top: 0px;
+}
+
+h1 {
+  color: white;
 }
 
 .header-logo {

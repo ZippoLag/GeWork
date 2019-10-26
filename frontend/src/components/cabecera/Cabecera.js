@@ -7,6 +7,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 import Spinner from 'react-bootstrap/Spinner';
 
+//TODO: mover el router a index.js y usar los Links de ese componente con className="nav-link" (en lugar del componente Nav.Link de react-bootstrap)
+
 import './Cabecera.css';
 
 export class Cabecera extends Component {
@@ -18,9 +20,9 @@ export class Cabecera extends Component {
 
   render() {
     return (
-      <header className="row w-100 m-0 p-0 d-flex justify-content-between align-items-center brand-primary-bg">
-        <Col className="col-12 col-md-4 d-flex justify-content-center">
-          <a href="/" className="d-flex justify-content-center Cabecera-logo">
+      <header className="row w-100 m-0 p-0 d-flex justify-content-between align-items-center gework-bg-primario bg-primary">
+        <Col className="col-12 col-md-4 d-flex justify-content-center navbar-brand">
+          <a href="/" className="d-flex justify-content-center">
             {/* TODO: agregar logo: <img
               src="/static/logo.png"
               width="33px"
@@ -30,7 +32,7 @@ export class Cabecera extends Component {
             <h1>GeWork</h1>
           </a>
         </Col>
-        <Col className="col-12 col-md-6 d-flex justify-content-end justify-content-md-center">
+        <Col className="col-12 col-md-4 d-flex justify-content-end justify-content-md-center">
             <Dropdown>
               <Dropdown.Toggle
                 drop="none"
@@ -39,7 +41,7 @@ export class Cabecera extends Component {
                 variant="none"
               >
                 <span
-                  className="d-flex justify-content-center align-items-center dropdown-toggle username-circle brand-secondary-bg"
+                  className="d-flex justify-content-center align-items-center dropdown-toggle username-circle gework-bg-secundario"
                   data-toggle="dropdown-menu"
                   aria-expanded="false"
                 >

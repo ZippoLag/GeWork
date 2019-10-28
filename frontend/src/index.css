@@ -1,3 +1,9 @@
 .principal {
   overflow: hidden;
 }
+
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: default;
+}

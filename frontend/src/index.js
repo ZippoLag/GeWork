@@ -1,9 +1,12 @@
 import React, { Suspense , Component} from 'react';
 import ReactDOM from 'react-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 
-import App from './components/App';
 import Cabecera from './components/cabecera/Cabecera'
 import Pie from './components/pie/Pie'
+
+import IniciarReserva from './components/iniciarReserva/IniciarReserva';
+import ReservarPuesto from './components/reservarPuesto/ReservarPuesto';
 
 import httpClient from './fetchWrapper';
 import getCookie from './utils';
@@ -36,9 +39,24 @@ class Index extends Component {
     render() {
     return (
       <div className="principal">
-        <Cabecera usuario={this.state.usuario} />
-        <App usuario={this.state.usuario} />
-        <Pie />
+        <Router>
+          <Cabecera usuario={this.state.usuario} />
+          <Route
+            exact
+            path={['/', '/iniciar-reserva']}
+            component={() => (
+              <IniciarReserva usuario={this.state.usuario} />
+            )}
+          />
+          <Route
+            exact
+            path={['/reservar-puesto']}
+            component={() => (
+              <ReservarPuesto usuario={this.state.usuario} />
+            )}
+          />
+          <Pie />
+        </Router>
       </div>
     );
   }

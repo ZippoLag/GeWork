@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %} {% load staticfiles %} {% block extrastyle %}
+<style type="text/css">
+  #header {
+    background-color: #fdc82f;
+  }
+  .site-name a {
+    color: black;
+  }
+  .submit-row input,
+  a.button {
+    background: black;
+  }
+  .module h2,
+  .module caption,
+  .inline-group h2 {
+    background: black;
+  }
+</style>
+
+{% endblock %} {% block branding %}
+<h1 id="site-name">
+  <a href="{% url 'admin:index' %}" style="color:black">
+    <!--img src="{% static '/logo.png' %}" height="40px" /-->
+    GeWork
+  </a>
+</h1>
+{% endblock %} {% block nav-global %}{% endblock %}

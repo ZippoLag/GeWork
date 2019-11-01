@@ -1,19 +1,39 @@
 {% extends "admin/base.html" %} {% load staticfiles %} {% block extrastyle %}
 <style type="text/css">
+  body {
+    background: #073642;
+  }
   #header {
     background-color: #fdc82f;
+  }
+  #header a:hover {
+    color: #2aa198;
   }
   .site-name a {
     color: black;
   }
   .submit-row input,
   a.button {
-    background: black;
+    background: #073642;
   }
   .module h2,
   .module caption,
   .inline-group h2 {
-    background: black;
+    background-color: #073642;
+  }
+  tbody {
+    background-color: #073642;
+    color: #839496;
+  }
+  tr a:link,
+  a:visited {
+    color: #2aa198;
+  }
+  #content-related {
+    background-color: #073642;
+  }
+  #content-related .module h2 {
+    color: #fff;
   }
 </style>
 

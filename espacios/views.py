@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
-from .models import Espacio, Prestacion, Cowork
+from .models import Espacio, Prestacion, Cowork, Puesto
 from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer
 from django.shortcuts import get_object_or_404, render
 
@@ -13,6 +13,18 @@ from django.shortcuts import get_object_or_404, render
 class EspacioListCreate(generics.ListCreateAPIView):
     queryset = Espacio.objects.all()
     serializer_class = EspacioSerializer
+
+# Devuelve lista de Espacios pertenecientes a un Cowork.
+# Las Prestaciones de cada Espacio.
+# Los Puestos de cada Espacio.
+def load_espacios(request, id):
+    cowork_id = Cowork.objects.get(pk=id)
+    espacios = Espacio.objects.filter(cowork=cowork_id)
+
+    for espacio in espacios:
+        puestos = Puesto.objects.all().filter(espacio=espacio.pk)
+
+    return render(request, 'frontend_bundle/espacios_de_cowork.html', {'espacios': espacios, 'puestos': puestos})
 
 # Devuelve detalles de Usuario Logueado
 def get_detalles_usuario(request):

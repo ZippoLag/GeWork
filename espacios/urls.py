@@ -8,6 +8,9 @@ urlpatterns = [
     # Devuelve lista de Espacios
     path('api/espacios/',
          views.EspacioListCreate.as_view()),
+    # Devuelve lista de Espacios de un Cowork, Prestaciones y Puestos de cada Espacio.
+    path('api/espacios/<int:id>/espacios',
+    views.load_espacios),
     # Devuelve detalles de Usuario Logueado
     path('api/get_detalles_usuario',
          login_required(views.get_detalles_usuario),

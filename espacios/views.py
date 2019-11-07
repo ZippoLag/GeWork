@@ -21,8 +21,11 @@ def load_espacios(request, id):
     cowork_id = Cowork.objects.get(pk=id)
     espacios = Espacio.objects.filter(cowork=cowork_id)
 
+    ids_espacios = []
     for espacio in espacios:
-        puestos = Puesto.objects.all().filter(espacio=espacio.pk)
+        ids_espacios.append(espacio.pk)
+
+    puestos = Puesto.objects.filter(espacio__in=ids_espacios)
 
     return render(request, 'frontend_bundle/espacios_de_cowork.html', {'espacios': espacios, 'puestos': puestos})
 

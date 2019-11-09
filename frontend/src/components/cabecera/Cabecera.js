@@ -34,8 +34,7 @@ export class Cabecera extends Component {
             <h1>GeWork</h1>
           </Link>
           {/* TODO: mejorar responsividad partiendo título y links en rows */}
-          <Link className="nav-link" to="/iniciar-reserva">Reservar</Link>
-          <div className="nav-link" disabled>Ofrecer</div>
+          <Link className="nav-link" to="/reservar-puesto">Reservar puesto</Link>
         </Col>
         <Col className="col-12 col-md-4 d-flex justify-content-end justify-content-md-center">
             <Dropdown>

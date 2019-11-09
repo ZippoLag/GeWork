@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import './IniciarReserva.css';
+import './ElegirAccion.css';
 
-export class IniciarReserva extends Component {
+export class ElegirAccion extends Component {
   static propTypes = {
   };
 
@@ -38,4 +38,4 @@ export class IniciarReserva extends Component {
   }
 }
 
-export default IniciarReserva;
+export default ElegirAccion;

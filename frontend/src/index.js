@@ -5,7 +5,7 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 import Cabecera from './components/cabecera/Cabecera'
 import Pie from './components/pie/Pie'
 
-import IniciarReserva from './components/iniciarReserva/IniciarReserva';
+import ElegirAccion from './components/elegirAccion/ElegirAccion';
 import ReservarPuesto from './components/reservarPuesto/ReservarPuesto';
 
 import httpClient from './fetchWrapper';
@@ -43,9 +43,9 @@ class Index extends Component {
           <Cabecera usuario={this.state.usuario} />
           <Route
             exact
-            path={['/', '/iniciar-reserva']}
+            path={['/', '/elegir-accion']}
             component={() => (
-              <IniciarReserva usuario={this.state.usuario} />
+              <ElegirAccion usuario={this.state.usuario} />
             )}
           />
           <Route

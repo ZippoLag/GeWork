@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { Link } from 'react-router-dom';
+
 import Col from 'react-bootstrap/Col';
 
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -21,8 +23,8 @@ export class Cabecera extends Component {
   render() {
     return (
       <header className="row w-100 m-0 p-0 d-flex justify-content-between align-items-center gework-bg-primario bg-primary">
-        <Col className="col-12 col-md-4 d-flex justify-content-center navbar-brand">
-          <a href="/" className="d-flex justify-content-center">
+        <Col className="col-12 col-md-6 d-flex justify-content-center navbar-brand">
+          <Link to="/">
             {/* TODO: agregar logo: <img
               src="/static/logo.png"
               width="33px"
@@ -30,7 +32,10 @@ export class Cabecera extends Component {
               alt={"Logo GeWork"}
             /> */}
             <h1>GeWork</h1>
-          </a>
+          </Link>
+          {/* TODO: mejorar responsividad partiendo título y links en rows */}
+          <Link className="nav-link" to="/iniciar-reserva">Reservar</Link>
+          <div className="nav-link" disabled>Ofrecer</div>
         </Col>
         <Col className="col-12 col-md-4 d-flex justify-content-end justify-content-md-center">
             <Dropdown>

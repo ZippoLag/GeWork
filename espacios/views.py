@@ -3,8 +3,8 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
-from .models import Espacio, Prestacion, Cowork, Puesto
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer
+from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad
+from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer
 from django.shortcuts import get_object_or_404, render
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
@@ -71,3 +71,18 @@ def CoworkDetail(request, id):
     except Cowork.DoesNotExist:
         raise Http404("Cowork does not exist")
     return render(request, 'frontend_bundle/detail-cowork.html', { 'cowork': cowork })
+
+# Devuelve lista de Paises
+class PaisListCreate(generics.ListCreateAPIView):
+    queryset = Pais.objects.all()
+    serializer_class = PaisSerializer
+
+# Devuelve lista de Provincias
+class ProvinciaListCreate(generics.ListCreateAPIView):
+    queryset = Provincia.objects.all()
+    serializer_class = ProvinciaSerializer
+
+# Devuelve lista de Localidades
+class LocalidadListCreate(generics.ListCreateAPIView):
+    queryset = Localidad.objects.all()
+    serializer_class = LocalidadSerializer

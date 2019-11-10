@@ -25,4 +25,10 @@ urlpatterns = [
     path('api/coworks/', views.CoworkListCreate.as_view()),
     # Devuelve un Cowork
     path('api/coworks/<int:id>/', views.CoworkDetail),
+    # Devuelve lista de Paises
+    path('api/paises/', views.PaisListCreate.as_view()),
+    # Devuelve lista de Provincias
+    path('api/provincias/', views.ProvinciaListCreate.as_view()),
+    # Devuelve lista de Localidades
+    path('api/localidades/', views.LocalidadListCreate.as_view()),
 ]

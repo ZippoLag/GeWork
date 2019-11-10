@@ -31,6 +31,34 @@ admin.site.register(UserProfile)
 
 # TODO: mover registers a admin.py a medida que hagan falta formularios personalizados para las diversas clases en el admin (por ejemplo, para definir campos y entidades readonly)
 
+class Pais(MyModel):
+    id_pais = models.AutoField(primary_key=True)
+    nombre_pais = models.CharField(max_length=50)
+    siglas = models.CharField(max_length=3)
+    def __str__(self):
+        return self.nombre_pais
+
+admin.site.register(Pais)
+
+class Provincia(MyModel):
+    id_provincia = models.AutoField(primary_key=True)
+    nombre_provincia = models.CharField(max_length=50)
+    pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.nombre_provincia
+
+admin.site.register(Provincia)
+
+class Localidad(MyModel):
+    id_localidad = models.AutoField(primary_key=True)
+    nombre_localidad = models.CharField(max_length=50)
+    codpos = models.IntegerField(blank=False, unique=True)
+    provincia = models.ForeignKey(Provincia, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.nombre_localidad
+
+admin.site.register(Localidad)
+
 class Cowork(MyModel):
     id_cowork = models.AutoField(primary_key=True)
     nombre_cowork = models.CharField(max_length=50)
@@ -40,6 +68,7 @@ class Cowork(MyModel):
     inicioTT_cowork = models.CharField(max_length=8)
     finTT_cowork = models.CharField(max_length=8)
     urlGoogleMaps = models.URLField()
+    localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
     def __str__(self):
         return self.nombre_cowork
 

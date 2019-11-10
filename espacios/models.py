@@ -4,17 +4,18 @@ from django.utils import timezone
 from django.contrib import admin
 from django.contrib.auth.models import User
 
-# CLM: creada clase para auditoria. Como se aplica?
+# CLM: creada clase para auditoria.
 class MyModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.CharField(max_length=255, blank=True, editable=False)
     modified_at = models.DateTimeField(auto_now=True)
     modified_by = models.CharField(max_length=255, blank=True, editable=False)
-
+    class Meta:
+        abstract = True
 
 # DONE CLM: enlazar a la clase User interna de django (los campos comentados deberían obtenerse de instancias de ésa, hay diversos tutoriales sobre cómo hacer esto, la mayoría recomiendan nombrar a la clase custom "Profile", pero llamarle "Usuario" o "Perfil" en español sería igual de válido)
 
-class UserProfile(models.Model):
+class UserProfile(MyModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     id_usuario = models.AutoField(primary_key=True)
     dni_usuario = models.IntegerField(unique=True)
@@ -30,7 +31,35 @@ admin.site.register(UserProfile)
 
 # TODO: mover registers a admin.py a medida que hagan falta formularios personalizados para las diversas clases en el admin (por ejemplo, para definir campos y entidades readonly)
 
-class Cowork(models.Model):
+class Pais(MyModel):
+    id_pais = models.AutoField(primary_key=True)
+    nombre_pais = models.CharField(max_length=50)
+    siglas = models.CharField(max_length=3)
+    def __str__(self):
+        return self.nombre_pais
+
+admin.site.register(Pais)
+
+class Provincia(MyModel):
+    id_provincia = models.AutoField(primary_key=True)
+    nombre_provincia = models.CharField(max_length=50)
+    pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.nombre_provincia
+
+admin.site.register(Provincia)
+
+class Localidad(MyModel):
+    id_localidad = models.AutoField(primary_key=True)
+    nombre_localidad = models.CharField(max_length=50)
+    codpos = models.IntegerField(blank=False, unique=True)
+    provincia = models.ForeignKey(Provincia, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.nombre_localidad
+
+admin.site.register(Localidad)
+
+class Cowork(MyModel):
     id_cowork = models.AutoField(primary_key=True)
     nombre_cowork = models.CharField(max_length=50)
     direccion_cowork = models.CharField(max_length=50)
@@ -39,12 +68,13 @@ class Cowork(models.Model):
     inicioTT_cowork = models.CharField(max_length=8)
     finTT_cowork = models.CharField(max_length=8)
     urlGoogleMaps = models.URLField()
+    localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
     def __str__(self):
         return self.nombre_cowork
 
 admin.site.register(Cowork)
 
-class Prestacion(models.Model):
+class Prestacion(MyModel):
     id_prestacion = models.AutoField(primary_key=True)
     nombre_prestacion = models.CharField(max_length=50)
     desc_prestacion = models.CharField(max_length=200)
@@ -54,7 +84,7 @@ class Prestacion(models.Model):
 
 admin.site.register(Prestacion)
 
-class Espacio(models.Model):
+class Espacio(MyModel):
     id_espacio = models.AutoField(primary_key=True)
     nombre_espacio = models.CharField(max_length=50)
     precioMJ_espacio = models.DecimalField(max_digits=10, decimal_places=3)
@@ -67,7 +97,7 @@ class Espacio(models.Model):
 
 admin.site.register(Espacio)
 
-class Puesto(models.Model):
+class Puesto(MyModel):
     id_puesto = models.AutoField(primary_key=True)
     ubicacion_puesto = models.CharField(max_length=100)
     disponibilidadTM_puesto = models.BooleanField()
@@ -87,7 +117,7 @@ admin.site.register(Puesto)
     def __str__(self):
         return self.desc_permiso"""
 
-class Contrato(models.Model):
+class Contrato(MyModel):
     id_contrato = models.AutoField(primary_key=True)
     fecha_contrato = models.DateTimeField(default=timezone.now)
     inicio_contrato = models.DateTimeField()
@@ -103,7 +133,7 @@ class Contrato(models.Model):
 
 admin.site.register(Contrato)
 
-class Pago(models.Model):
+class Pago(MyModel):
     id_pago = models.AutoField(primary_key=True)
     fecha_pago = models.DateTimeField(default=timezone.now)
     medio_pago = models.CharField(max_length=100)

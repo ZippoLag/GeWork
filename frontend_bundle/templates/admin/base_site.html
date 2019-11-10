@@ -1,0 +1,47 @@
+{% extends "admin/base.html" %} {% load staticfiles %} {% block extrastyle %}
+<style type="text/css">
+  body {
+    background: #073642;
+  }
+  #header {
+    background-color: #fdc82f;
+  }
+  #header a:hover {
+    color: #2aa198;
+  }
+  .site-name a {
+    color: black;
+  }
+  .submit-row input,
+  a.button {
+    background: #073642;
+  }
+  .module h2,
+  .module caption,
+  .inline-group h2 {
+    background-color: #073642;
+  }
+  tbody {
+    background-color: #073642;
+    color: #839496;
+  }
+  tr a:link,
+  a:visited {
+    color: #2aa198;
+  }
+  #content-related {
+    background-color: #073642;
+  }
+  #content-related .module h2 {
+    color: #fff;
+  }
+</style>
+
+{% endblock %} {% block branding %}
+<h1 id="site-name">
+  <a href="{% url 'admin:index' %}" style="color:black">
+    <!--img src="{% static '/logo.png' %}" height="40px" /-->
+    GeWork
+  </a>
+</h1>
+{% endblock %} {% block nav-global %}{% endblock %}

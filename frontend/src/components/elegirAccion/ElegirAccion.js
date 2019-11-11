@@ -27,7 +27,7 @@ export class ElegirAccion extends Component {
         </Row>
         <Row className="d-flex justify-content-around align-items-center">
           <Col className="col-10 col-md-4 pt-5">
-            <Link className="w-100 btn btn-primary btn-disabled" disabled>Ofrecer Puesto</Link>
+            <div className="w-100 btn btn-primary btn-disabled" disabled>Ofrecer Puesto</div>
           </Col>
           <Col className="col-10 col-md-4 pt-5">
             <div className="w-100 btn btn-primary btn-disabled" disabled>Ofrecer Sala</div>

@@ -27,15 +27,15 @@ export class SelectorUbicacion extends Component {
     return (
       <Row className="d-flex justify-content-around align-items-center">
         <Col className="form-group col-12 col-md-3" role="group" >
-          <label for="pais-select">País:</label>
+          <label htmlFor="pais-select">País:</label>
           {/* TODO: onSelect debería actualizar y limpiar el selector de provincias (y localidades, y limpiar mapa?) */}
           <select className="from-control" id="pais-select" >
             {this.props.paises.map(pais => (
               <option
               key={pais.id_pais}
               active={
-                this.state.id_pais === pais.id_pais ||
-                (this.state.id_pais === 0 && this.props.id_pais_default === pais.id_pais)
+                (this.state.id_pais === pais.id_pais ||
+                (this.state.id_pais === 0 && this.props.id_pais_default === pais.id_pais)).toString()
               }
               >
                 {pais.nombre_pais}
@@ -45,15 +45,15 @@ export class SelectorUbicacion extends Component {
         </Col>
 
         <Col className="form-group col-12 col-md-3" role="group" >
-          <label for="provincia-select">Provincia:</label>
+          <label htmlFor="provincia-select">Provincia:</label>
           {/* TODO: onSelect debería actualizar y limpiar el selector de localidades (y limpiar mapa?) */}
           <select className="from-control" id="provincia-select" >
             {this.props.provincias.map(provincia => (
               <option
               key={provincia.id_provincia}
               active={
-                this.state.id_provincia === provincia.id_provincia ||
-                (this.state.id_provincia === 0 && this.props.id_provincia_default === provincia.id_provincia)
+                (this.state.id_provincia === provincia.id_provincia ||
+                (this.state.id_provincia === 0 && this.props.id_provincia_default === provincia.id_provincia)).toString()
               }
               >
                 {provincia.nombre_provincia}
@@ -63,15 +63,15 @@ export class SelectorUbicacion extends Component {
         </Col>
 
         <Col className="form-group col-12 col-md-3" role="group" >
-          <label for="localidad-select">Localidad:</label>
+          <label htmlFor="localidad-select">Localidad:</label>
           {/* TODO: onSelect debería actualizar y limpiar el mapa */}
           <select className="from-control" id="localidad-select" >
             {this.props.localidades.map(localidad => (
               <option
               key={localidad.id_localidad}
               active={
-                this.state.id_localidad === localidad.id_localidad ||
-                (this.state.id_localidad === 0 && this.props.id_localidad_default === localidad.id_localidad)
+                (this.state.id_localidad === localidad.id_localidad ||
+                (this.state.id_localidad === 0 && this.props.id_localidad_default === localidad.id_localidad)).toString()
               }
               >
                 {localidad.nombre_localidad}

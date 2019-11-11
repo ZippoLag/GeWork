@@ -6,6 +6,7 @@ from rest_framework import generics
 from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad
 from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer
 from django.shortcuts import get_object_or_404, render
+from django.conf import settings
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
 
@@ -32,8 +33,13 @@ def load_espacios(request, id):
 # Devuelve detalles de Usuario Logueado
 def get_detalles_usuario(request):
     # TODO: obtener la instancia de Usuario (o Perfil, o como le llamemos) relacionada al usuario autenticado por django y enviar _sólo_ los datos que necesitemos en el frontend
+
+    user = request.user
+    if settings.DEBUG and not request.user:
+        user = {username:"N/A"}
+
     response = JsonResponse({
-        'username': request.user.username
+        'username': user.username
     })
 
     return response

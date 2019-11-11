@@ -3,18 +3,16 @@ from . import views
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
+def require_login_if_not_debug(view):
+    return view if settings.DEBUG else login_required(view)
 
 urlpatterns = [
     # Devuelve lista de Espacios
-    path('api/espacios/',
-         views.EspacioListCreate.as_view()),
+    path('api/espacios/', views.EspacioListCreate.as_view()),
     # Devuelve lista de Espacios de un Cowork, Prestaciones y Puestos de cada Espacio.
-    path('api/espacios/<int:id>/espacios',
-    views.load_espacios),
+    path('api/espacios/<int:id>/espacios', views.load_espacios),
     # Devuelve detalles de Usuario Logueado
-    path('api/get_detalles_usuario',
-         login_required(views.get_detalles_usuario),
-         name='get_detalles_usuario'),
+    path('api/get_detalles_usuario/', require_login_if_not_debug(views.get_detalles_usuario)),
     # Devuelve un Espacio
     path('api/espacios/<int:id>/', views.EspacioDetail),
     # Devuelve lista de Prestaciones

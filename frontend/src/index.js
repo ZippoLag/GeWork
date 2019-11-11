@@ -22,25 +22,59 @@ class Index extends Component {
     paises: []
   }
 
-  getInformacionGeografica(){
-    this.getPaises();
+  getLocalidadGeo(){
+    let localidad;
+
+    if (this.state.localidades.length > 0){
+      //TODO: usar API de ubicación para obtener localidad más cercana a la actual como default
+      localidad = this.state.localidades[0];
+      if(Number.isInteger(localidad.provincia)){
+        localidad.provincia = {
+          id_provincia: localidad.provincia,
+          nombre_provincia: "Cargando...",
+          pais:{
+            id_pais: 0,
+            nombre_pais: "Cargando..."
+          }
+        };
+      }
+    } else {
+      localidad = {
+        id_localidad:0,
+        nombre_localidad: 'Cargando...',
+        provincia:{
+          id_provincia:0,
+          nombre_provincia: 'Cargando...',
+          pais:{
+            id_pais: 0,
+            nombre_pais: 'Cargando...'
+          }
+        }
+      }
+    }
+
+    return localidad;
   }
 
-  getPaises(){
+  fetchInformacionGeografica(){
+    this.fetchPaises();
+  }
+
+  fetchPaises(){
     httpClient.get(`api/paises/`)
     .then((data) => this.setState({paises: data}))
-    .then(this.getProvincias())
+    .then(this.fetchProvincias())
     .catch((error) => console.log(error));
   }
 
-  getProvincias(){
+  fetchProvincias(){
     httpClient.get(`api/provincias/`)
     .then((data) => this.setState({provincias: data.map(provincia => this.completarProvincia(provincia))}))
-    .then(this.getLocalidades())
+    .then(this.fetchLocalidades())
     .catch((error) => console.log(error));
   }
 
-  getLocalidades(){
+  fetchLocalidades(){
     httpClient.get(`api/localidades/`)
     .then((data) => this.setState({localidades: data.map(localidad => this.completarLocalidad(localidad))}))
     .catch((error) => console.log(error));
@@ -53,7 +87,7 @@ class Index extends Component {
   };
 
   completarLocalidad = (localidad) => {
-    localidad.provincia = this.state.paises.find(provincia => provincia.id_provincia === localidad.provincia) || localidad.provincia;
+    localidad.provincia = this.state.provincias.find(provincia => provincia.id_provincia === localidad.provincia) || localidad.provincia;
 
     return localidad;
   };
@@ -67,7 +101,7 @@ class Index extends Component {
         .catch((error) => console.log(error));
     }
 
-    this.getInformacionGeografica();
+    this.fetchInformacionGeografica();
   }
 
     render() {
@@ -86,7 +120,14 @@ class Index extends Component {
             exact
             path={['/reservar-puesto']}
             component={() => (
-              <ReservarPuesto usuario={this.state.usuario} />
+              <ReservarPuesto
+              usuario={this.state.usuario}
+              paises={this.state.paises}
+              provincias={this.state.provincias}
+              localidades={this.state.localidades}
+              id_pais_default={this.getLocalidadGeo().provincia.pais.id_pais}
+              id_provincia_default={this.getLocalidadGeo().provincia.id_provincia}
+              id_localidad_default={this.getLocalidadGeo().id_localidad} />
             )}
           />
           <Pie />

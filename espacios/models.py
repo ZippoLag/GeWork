@@ -92,6 +92,7 @@ class Espacio(MyModel):
     ubicacion_espacio = models.CharField(max_length=100)
     cowork = models.ForeignKey(Cowork, on_delete=models.CASCADE)
     prestaciones = models.ManyToManyField(Prestacion)
+    es_sala = models.BooleanField()
     def __str__(self):
         return self.nombre_espacio
 
@@ -103,6 +104,7 @@ class Puesto(MyModel):
     disponibilidadTM_puesto = models.BooleanField()
     disponibilidadTT_puesto = models.BooleanField()
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
+    capacidad = models.IntegerField(blank=False)
     def __str__(self):
         return self.ubicacion_puesto
 

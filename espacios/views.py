@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
 from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer
+from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer
 from django.shortcuts import get_object_or_404, render
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
@@ -13,21 +13,6 @@ from django.shortcuts import get_object_or_404, render
 class EspacioListCreate(generics.ListCreateAPIView):
     queryset = Espacio.objects.all()
     serializer_class = EspacioSerializer
-
-# Devuelve lista de Espacios pertenecientes a un Cowork.
-# Las Prestaciones de cada Espacio.
-# Los Puestos de cada Espacio.
-def load_espacios(request, id):
-    cowork_id = Cowork.objects.get(pk=id)
-    espacios = Espacio.objects.filter(cowork=cowork_id)
-
-    ids_espacios = []
-    for espacio in espacios:
-        ids_espacios.append(espacio.pk)
-
-    puestos = Puesto.objects.filter(espacio__in=ids_espacios)
-
-    return render(request, 'frontend_bundle/espacios_de_cowork.html', {'espacios': espacios, 'puestos': puestos})
 
 # Devuelve detalles de Usuario Logueado
 def get_detalles_usuario(request):
@@ -38,13 +23,11 @@ def get_detalles_usuario(request):
 
     return response
 
-# Devuelve un Espacio
-def EspacioDetail(request, id):
-    try:
-        espacio = Espacio.objects.get(pk=id)
-    except Espacio.DoesNotExist:
-        raise Http404("Espacio does not exist")
-    return render(request, 'frontend_bundle/detail-espacio.html', { 'espacio': espacio })
+# Devuelve un Espacio y sus Prestaciones
+def espacioDetail(request, id):
+    espacio = Espacio.objects.filter(pk=id)
+    data = EspacioSerializer(espacio, many=True).data
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Prestaciones
 class PrestacionListCreate(generics.ListCreateAPIView):
@@ -52,12 +35,10 @@ class PrestacionListCreate(generics.ListCreateAPIView):
     serializer_class = PrestacionSerializer
 
 # Devuelve una Prestacion
-def PrestacionDetail(request, id):
-    try:
-        prestacion = Prestacion.objects.get(pk=id)
-    except Prestacion.DoesNotExist:
-        raise Http404("Prestacion does not exist")
-    return render(request, 'frontend_bundle/detail-prestacion.html', { 'prestacion': prestacion })
+def prestacionDetail(request, id):
+    prestacion = Prestacion.objects.filter(pk=id)
+    data = PrestacionSerializer(prestacion, many=True).data
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Coworks
 class CoworkListCreate(generics.ListCreateAPIView):
@@ -65,12 +46,10 @@ class CoworkListCreate(generics.ListCreateAPIView):
     serializer_class = CoworkSerializer
 
 # Devuelve un Cowork
-def CoworkDetail(request, id):
-    try:
-        cowork = Cowork.objects.get(pk=id)
-    except Cowork.DoesNotExist:
-        raise Http404("Cowork does not exist")
-    return render(request, 'frontend_bundle/detail-cowork.html', { 'cowork': cowork })
+def coworkDetail(request, id):
+    cowork = Cowork.objects.filter(pk=id)
+    data = CoworkSerializer(cowork, many=True).data
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Paises
 class PaisListCreate(generics.ListCreateAPIView):
@@ -86,3 +65,10 @@ class ProvinciaListCreate(generics.ListCreateAPIView):
 class LocalidadListCreate(generics.ListCreateAPIView):
     queryset = Localidad.objects.all()
     serializer_class = LocalidadSerializer
+
+# Devuelve un Puesto y datos del Espacio al que pertenece el mismo, incluyendo Prestaciones y datos del Cowork al que pertenece
+def puestoDetail(request, id):
+    puesto = Puesto.objects.filter(pk=id)
+    data = PuestoSerializer(puesto, many=True).data
+    return JsonResponse(data, safe=False)
+

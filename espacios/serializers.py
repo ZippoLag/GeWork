@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato
+from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
 
 # TODO: crear serializers para servir los modelos mediante la API REST:
 
@@ -49,4 +49,11 @@ class ContratoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contrato
+        fields = '__all__'
+
+class PagoSerializer(serializers.ModelSerializer):
+    contrato = ContratoSerializer(read_only=True, many=False)
+
+    class Meta:
+        model = Pago
         fields = '__all__'

@@ -3,8 +3,8 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
-from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer
+from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
+from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer
 from django.shortcuts import get_object_or_404, render
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
@@ -79,3 +79,10 @@ def contratosUsuario(request):
     data = ContratoSerializer(contratos, many=True).data
     return JsonResponse(data, safe=False)
 
+# Devuelve Pago de un Contrato de un Usuario
+def contratoUsuario(request, id):
+    usr = request.user.pk
+    cont = Contrato.objects.filter(usuario_id=usr, pk=id)
+    pagos = Pago.objects.filter(contrato=cont[0])
+    data = PagoSerializer(pagos, many=True).data
+    return JsonResponse(data, safe=False)

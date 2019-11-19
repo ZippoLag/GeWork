@@ -51,9 +51,10 @@ class ContratoSerializer(serializers.ModelSerializer):
         model = Contrato
         fields = '__all__'
 
+
 class PagoSerializer(serializers.ModelSerializer):
     contrato = ContratoSerializer(read_only=True, many=False)
 
     class Meta:
         model = Pago
-        fields = '__all__'
+        fields = ('id_pago', 'fecha_pago', 'medio_pago', 'idext_pago', 'importe_pago', 'contrato')

@@ -32,7 +32,8 @@ urlpatterns = [
     path('api/puesto/<int:id>/', views.puestoDetail),
     # Devuelve lista de Contratos de un Usuario
     path('api/contratos/', login_required(views.contratosUsuario)),
-    # Devuelve un Contrato y detalle de Pago de un Usuario
+    # Devuelve Pago de un Contrato de un Usuario
+    path('api/contrato/<int:id>/', login_required(views.contratoUsuario)),
     # Graba puntuacion y reseña de Contrato
     # Graba Contrato y Pago
 ]

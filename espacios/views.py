@@ -3,8 +3,8 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
-from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer
+from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato
+from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer
 from django.shortcuts import get_object_or_404, render
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
@@ -70,5 +70,12 @@ class LocalidadListCreate(generics.ListCreateAPIView):
 def puestoDetail(request, id):
     puesto = Puesto.objects.filter(pk=id)
     data = PuestoSerializer(puesto, many=True).data
+    return JsonResponse(data, safe=False)
+
+# Devuelve lista de Contratos de un Usuario
+def contratosUsuario(request):
+    usr = request.user.pk
+    contratos = Contrato.objects.filter(usuario_id=usr)
+    data = ContratoSerializer(contratos, many=True).data
     return JsonResponse(data, safe=False)
 

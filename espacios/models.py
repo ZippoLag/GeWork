@@ -131,7 +131,7 @@ class Contrato(MyModel):
     puesto = models.ForeignKey(Puesto, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return self.fecha_contrato
+        return str(self.fecha_contrato)
 
 admin.site.register(Contrato)
 
@@ -144,6 +144,6 @@ class Pago(MyModel):
     contrato = models.ForeignKey(Contrato, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return self.fecha_pago
+        return str(self.fecha_pago)
 
 admin.site.register(Pago)

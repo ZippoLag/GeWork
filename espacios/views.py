@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
 from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer
+from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer
 from django.shortcuts import get_object_or_404, render
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
@@ -66,6 +66,12 @@ class LocalidadListCreate(generics.ListCreateAPIView):
     queryset = Localidad.objects.all()
     serializer_class = LocalidadSerializer
 
+# Devuelve una Localidad
+class LocalidadDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Localidad.objects.all()
+    serializer_class = LocalidadSerializer
+
+
 # Devuelve un Puesto y datos del Espacio al que pertenece el mismo, incluyendo Prestaciones y datos del Cowork al que pertenece
 def puestoDetail(request, id):
     puesto = Puesto.objects.filter(pk=id)
@@ -86,3 +92,8 @@ def contratoUsuario(request, id):
     pagos = Pago.objects.filter(contrato=cont[0])
     data = PagoSerializer(pagos, many=True).data
     return JsonResponse(data, safe=False)
+
+# Graba puntuacion y reseña de Contrato
+class ContratoEvaluacion(generics.UpdateAPIView):
+    queryset = Contrato.objects.all()
+    serializer_class = ContratoEvaluacionSerializer

@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/provincias/', views.ProvinciaListCreate.as_view()),
     # Devuelve lista de Localidades
     path('api/localidades/', views.LocalidadListCreate.as_view()),
+    # Devuelve una Localidad
+    path('api/localidad/<int:pk>/', views.LocalidadDetail.as_view()),
     # Devuelve un Puesto y datos del Espacio al que pertenece el mismo, incluyendo Prestaciones y datos del Cowork al que pertenece
     path('api/puesto/<int:id>/', views.puestoDetail),
     # Devuelve lista de Contratos de un Usuario
@@ -35,5 +37,6 @@ urlpatterns = [
     # Devuelve Pago de un Contrato de un Usuario
     path('api/contrato/<int:id>/', login_required(views.contratoUsuario)),
     # Graba puntuacion y reseña de Contrato
+    path('api/contratoevaluacion/<int:pk>/', login_required(views.ContratoEvaluacion.as_view())),
     # Graba Contrato y Pago
 ]

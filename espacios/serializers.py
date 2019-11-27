@@ -58,3 +58,9 @@ class PagoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pago
         fields = ('id_pago', 'fecha_pago', 'medio_pago', 'idext_pago', 'importe_pago', 'contrato')
+
+class ContratoEvaluacionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Contrato
+        fields = ('id_contrato', 'estrellas_contrato', 'resenia_contrato')

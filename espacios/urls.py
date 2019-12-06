@@ -38,5 +38,6 @@ urlpatterns = [
     path('api/contrato/<int:id>/', login_required(views.contratoUsuario)),
     # Graba puntuacion y reseña de Contrato
     path('api/contratoevaluacion/<int:pk>/', login_required(views.ContratoEvaluacion.as_view())),
-    # Graba Contrato y Pago
+    # Crea nuevo Contrato
+    path('api/contratocreate/', login_required(views.ContratoCreate.as_view())),
 ]

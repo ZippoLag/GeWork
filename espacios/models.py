@@ -2,6 +2,7 @@ from itertools import chain
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
+from django.conf import settings
 from django.contrib.auth.models import User
 
 # CLM: creada clase para auditoria.

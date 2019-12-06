@@ -4,8 +4,9 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
 from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer
+from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer
 from django.shortcuts import get_object_or_404, render
+from rest_framework.generics import CreateAPIView
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
 
@@ -97,3 +98,31 @@ def contratoUsuario(request, id):
 class ContratoEvaluacion(generics.UpdateAPIView):
     queryset = Contrato.objects.all()
     serializer_class = ContratoEvaluacionSerializer
+
+# Crea nuevo Contrato
+class ContratoCreate(CreateAPIView):
+    queryset = Contrato.objects.all()
+    serializer_class = ContratoCreateSerializer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

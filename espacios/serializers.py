@@ -51,7 +51,6 @@ class ContratoSerializer(serializers.ModelSerializer):
         model = Contrato
         fields = '__all__'
 
-
 class PagoSerializer(serializers.ModelSerializer):
     contrato = ContratoSerializer(read_only=True, many=False)
 
@@ -64,3 +63,9 @@ class ContratoEvaluacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contrato
         fields = ('id_contrato', 'estrellas_contrato', 'resenia_contrato')
+
+class ContratoCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Contrato
+        fields = ('inicio_contrato', 'fin_contrato', 'importe_contrato', 'usuario', 'puesto')

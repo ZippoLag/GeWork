@@ -40,4 +40,6 @@ urlpatterns = [
     path('api/contratoevaluacion/<int:pk>/', login_required(views.ContratoEvaluacion.as_view())),
     # Crea nuevo Contrato
     path('api/contratocreate/', login_required(views.ContratoCreate.as_view())),
+    # Crea nuevo Pago
+    path('api/pagocreate/', login_required(views.PagoCreate.as_view())),
 ]

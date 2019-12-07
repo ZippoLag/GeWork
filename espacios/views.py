@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
 from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer
+from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer
 from django.shortcuts import get_object_or_404, render
 from rest_framework.generics import CreateAPIView
 
@@ -104,10 +104,10 @@ class ContratoCreate(CreateAPIView):
     queryset = Contrato.objects.all()
     serializer_class = ContratoCreateSerializer
 
-
-
-
-
+# Crea nuevo Pago
+class PagoCreate(CreateAPIView):
+    queryset = Pago.objects.all()
+    serializer_class = PagoCreateSerializer
 
 
 

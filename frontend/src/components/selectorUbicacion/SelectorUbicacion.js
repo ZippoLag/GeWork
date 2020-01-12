@@ -30,7 +30,6 @@ export class SelectorUbicacion extends Component {
   handleCambioPais(evento) {
     let nuevaIdSeleccionada =
       evento.target.selectedOptions[0].attributes.id_pais.value;
-    console.log(`Cambiando Id Pais Seleccionado a '${nuevaIdSeleccionada}'`);
     this.props.actualizarMapa({
       id_pais: Number.parseInt(nuevaIdSeleccionada)
     });
@@ -39,9 +38,6 @@ export class SelectorUbicacion extends Component {
   handleCambioProvincia(evento) {
     let nuevaIdSeleccionada =
       evento.target.selectedOptions[0].attributes.id_provincia.value;
-    console.log(
-      `Cambiando Id Provincia Seleccionada a '${nuevaIdSeleccionada}'`
-    );
     this.props.actualizarMapa({
       id_provincia: Number.parseInt(nuevaIdSeleccionada)
     });
@@ -50,9 +46,6 @@ export class SelectorUbicacion extends Component {
   handleCambioLocalidad(evento) {
     let nuevaIdSeleccionada =
       evento.target.selectedOptions[0].attributes.id_localidad.value;
-    console.log(
-      `Cambiando Id Localidad Seleccionada a '${nuevaIdSeleccionada}'`
-    );
     this.props.actualizarMapa({
       id_localidad: Number.parseInt(nuevaIdSeleccionada)
     });
@@ -70,12 +63,13 @@ export class SelectorUbicacion extends Component {
             className='from-control'
             id='pais-select'
             onChange={this.handleCambioPais}
+            value={this.props.id_pais}
           >
             {this.props.paises.map((pais) => (
               <option
                 key={pais.id_pais}
                 id_pais={pais.id_pais}
-                selected={this.props.id_pais === pais.id_pais}
+                value={pais.id_pais}
               >
                 {pais.nombre_pais}
               </option>
@@ -90,12 +84,13 @@ export class SelectorUbicacion extends Component {
             id='provincia-select'
             disabled={this.props.id_pais === 0}
             onChange={this.handleCambioProvincia}
+            value={this.props.id_provincia}
           >
             {this.props.provincias.map((provincia) => (
               <option
                 key={provincia.id_provincia}
                 id_provincia={provincia.id_provincia}
-                selected={this.props.id_provincia === provincia.id_provincia}
+                value={provincia.id_provincia}
               >
                 {provincia.nombre_provincia}
               </option>
@@ -109,13 +104,14 @@ export class SelectorUbicacion extends Component {
             className='from-control'
             id='localidad-select'
             disabled={this.props.id_provincia === 0}
+            value={this.props.id_localidad}
             onChange={this.handleCambioLocalidad}
           >
             {this.props.localidades.map((localidad) => (
               <option
                 key={localidad.id_localidad}
                 id_localidad={localidad.id_localidad}
-                selected={this.props.id_localidad === localidad.id_localidad}
+                value={localidad.id_localidad}
               >
                 {localidad.nombre_localidad}
               </option>

@@ -2,6 +2,8 @@ import React, { Suspense, Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
+import moment from 'moment';
+
 import Cabecera from './components/cabecera/Cabecera';
 import Pie from './components/pie/Pie';
 
@@ -14,46 +16,72 @@ import getCookie from './utils';
 import './index.css';
 
 class Index extends Component {
+  constructor(props) {
+    super();
+
+    this.actualizarMapa = this.actualizarMapa.bind(this);
+  }
+
   state = {
     usuario: {},
     espacios: [],
-    localidades: [],
-    provincias: [],
-    paises: []
+    localidades: [{ id_localidad: 0, nombre_localidad: 'Cargando..' }],
+    provincias: [{ id_provincia: 0, nombre_localidad: 'Cargando..' }],
+    paises: [{ id_pais: 0, nombre_localidad: 'Cargando..' }],
+    id_pais: 0,
+    id_provincia: 0,
+    id_localidad: 0,
+    fechaReserva: moment(new Date())
   };
 
-  getLocalidadGeo() {
-    let localidad;
+  getProvinciasDelPais() {
+    let provincias = [];
 
-    if (this.state.localidades.length > 0) {
-      //TODO: usar API de ubicación para obtener localidad más cercana a la actual como default
-      localidad = this.state.localidades[0];
-      if (Number.isInteger(localidad.provincia)) {
-        localidad.provincia = {
-          id_provincia: localidad.provincia,
-          nombre_provincia: 'Cargando...',
-          pais: {
-            id_pais: 0,
-            nombre_pais: 'Cargando...'
-          }
-        };
-      }
+    if (this.state.id_pais === 0) {
+      provincias = [{ id_provincia: 0, nombre_provincia: 'Seleccione Pais..' }];
     } else {
-      localidad = {
-        id_localidad: 0,
-        nombre_localidad: 'Cargando...',
-        provincia: {
-          id_provincia: 0,
-          nombre_provincia: 'Cargando...',
-          pais: {
-            id_pais: 0,
-            nombre_pais: 'Cargando...'
-          }
-        }
-      };
+      provincias = [
+        { id_provincia: 0, nombre_provincia: 'Seleccione Provincia..' }
+      ];
     }
 
-    return localidad;
+    if (this.state.id_pais) {
+      provincias.push(
+        ...this.state.provincias.filter((provincia) =>
+          Number.isInteger(provincia.pais)
+            ? provincia.pais === this.state.id_pais
+            : provincia.pais.id_pais === this.state.id_pais
+        )
+      );
+    }
+
+    return provincias;
+  }
+
+  getLocalidadesDeLaProvincia() {
+    let localidades = [];
+
+    if (this.state.id_provincia === 0) {
+      localidades = [
+        { id_localidad: 0, nombre_localidad: 'Seleccione Provincia..' }
+      ];
+    } else {
+      localidades = [
+        { id_localidad: 0, nombre_localidad: 'Seleccione Localidad..' }
+      ];
+    }
+
+    if (this.state.id_provincia) {
+      localidades.push(
+        ...this.state.localidades.filter((localidad) =>
+          Number.isInteger(localidad.provincia)
+            ? localidad.provincia === this.state.id_localidad
+            : localidad.provincia.id_provincia === this.state.id_provincia
+        )
+      );
+    }
+
+    return localidades;
   }
 
   fetchInformacionGeografica() {
@@ -63,7 +91,11 @@ class Index extends Component {
   fetchPaises() {
     httpClient
       .get(`api/paises/`)
-      .then((data) => this.setState({ paises: data }))
+      .then((data) =>
+        this.setState({
+          paises: [{ id_pais: 0, nombre_pais: 'Seleccione Pais..' }, ...data]
+        })
+      )
       .then(this.fetchProvincias())
       .catch((error) => console.log(error));
   }
@@ -124,6 +156,27 @@ class Index extends Component {
     this.fetchInformacionGeografica();
   }
 
+  actualizarMapa(props) {
+    if (props.fechaReserva) {
+      this.setState({ fechaReserva: props.fechaReserva });
+    } else if (typeof props.id_pais !== typeof undefined) {
+      this.setState({
+        id_pais: props.id_pais,
+        id_provincia: 0,
+        id_localidad: 0
+      });
+    } else if (typeof props.id_provincia !== typeof undefined) {
+      this.setState({
+        id_provincia: props.id_provincia,
+        id_localidad: 0
+      });
+    } else if (typeof props.id_localidad !== typeof undefined) {
+      this.setState({
+        id_localidad: props.id_localidad
+      });
+    }
+  }
+
   render() {
     return (
       <div className='principal'>
@@ -141,13 +194,13 @@ class Index extends Component {
               <ReservarPuesto
                 usuario={this.state.usuario}
                 paises={this.state.paises}
-                provincias={this.state.provincias}
-                localidades={this.state.localidades}
-                id_pais_default={this.getLocalidadGeo().provincia.pais.id_pais}
-                id_provincia_default={
-                  this.getLocalidadGeo().provincia.id_provincia
-                }
-                id_localidad_default={this.getLocalidadGeo().id_localidad}
+                provincias={this.getProvinciasDelPais()}
+                localidades={this.getLocalidadesDeLaProvincia()}
+                id_pais={this.state.id_pais}
+                id_provincia={this.state.id_provincia}
+                id_localidad={this.state.id_localidad}
+                actualizarMapa={this.actualizarMapa}
+                fechaReserva={this.state.fechaReserva}
               />
             )}
           />

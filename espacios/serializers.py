@@ -68,7 +68,7 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contrato
-        fields = ('inicio_contrato', 'fin_contrato', 'importe_contrato', 'usuario', 'puesto')
+        fields = ('turno', 'inicio_contrato', 'fin_contrato', 'importe_contrato', 'usuario', 'puesto')
 
 class PagoCreateSerializer(serializers.ModelSerializer):
 

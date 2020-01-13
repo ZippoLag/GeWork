@@ -42,4 +42,6 @@ urlpatterns = [
     path('api/contratocreate/', login_required(views.ContratoCreate.as_view())),
     # Crea nuevo Pago
     path('api/pagocreate/', login_required(views.PagoCreate.as_view())),
+    # Devuelve lista de puestos sin Contrato
+    path('api/sincontrato/<int:id_localidad>/<int:anio>/<int:mes>/<int:dia>/<slug:turno>/', views.coworksEspaciosDisponibles),
 ]

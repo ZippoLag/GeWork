@@ -102,8 +102,11 @@ admin.site.register(Espacio)
 class Puesto(MyModel):
     id_puesto = models.AutoField(primary_key=True)
     ubicacion_puesto = models.CharField(max_length=100)
+    """
+    CLM: No se puede guardar acá porque la disponibilidad depende de la fecha.
     disponibilidadTM_puesto = models.BooleanField()
     disponibilidadTT_puesto = models.BooleanField()
+    """
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
     capacidad = models.IntegerField(blank=False)
     def __str__(self):
@@ -123,6 +126,14 @@ admin.site.register(Puesto)
 class Contrato(MyModel):
     id_contrato = models.AutoField(primary_key=True)
     fecha_contrato = models.DateTimeField(default=timezone.now)
+
+    TURNO = (
+        ('m', 'Mañana'),
+        ('t', 'Tarde'),
+        ('c', 'Completo'),
+    )
+
+    turno = models.CharField(max_length=1, choices=TURNO, blank=True, default='c', help_text='Turno del Contrato')
     inicio_contrato = models.DateTimeField()
     fin_contrato = models.DateTimeField()
     importe_contrato = models.DecimalField(max_digits=10, decimal_places=3)

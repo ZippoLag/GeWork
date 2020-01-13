@@ -7,6 +7,7 @@ from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Locali
 from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer
 from django.shortcuts import get_object_or_404, render
 from rest_framework.generics import CreateAPIView
+from datetime import datetime
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
 
@@ -109,20 +110,29 @@ class PagoCreate(CreateAPIView):
     queryset = Pago.objects.all()
     serializer_class = PagoCreateSerializer
 
+# Devuelve lista de Coworks con Espacios Disponibles
+# Donde:    Espacio.es_sala = false
+#           Espacio.cowork.localidad = localidad
+#           Barrer todos los Contratos de los Coworks
+#           de la localidad, fecha y turno ingresados.
+#           Considerar que si se seleccionó turno Tarde,
+#           por ejemplo, también se deben considerar los
+#           Contratos con turno Completo para esa fecha.
+# Guardar:  Lista de Puestos sin Contratos.
+# Retornar: Datos de Coworks.
+def coworksEspaciosDisponibles(request, id_localidad, anio, mes, dia, turno):
+    fecha = datetime(anio, mes, dia, 8, 0, 0)
+    loc = get_object_or_404(Localidad, pk=id_localidad)
+    coworks = Cowork.objects.filter(localidad=loc)
+    espacios = Espacio.objects.filter(cowork__in=coworks.all()).filter(es_sala=False)
+    puestos = Puesto.objects.filter(espacio__in=espacios.all())
+    con_contrato = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno=turno).filter(inicio_contrato=fecha)
+    for c_contrato in con_contrato:
+        pue_contratados = Puesto.objects.filter(pk=c_contrato.puesto.pk)
+    for p_contratado in pue_contratados:
+        pue_sincontrato = Puesto.objects.exclude(pk=p_contratado.pk)
+    data = PuestoSerializer(pue_sincontrato, many=True).data
 
+    return JsonResponse(data, safe=False)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Devuelve lista de Coworks con Salas Disponibles

@@ -3,10 +3,12 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
-from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer
+from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
+from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
+from rest_framework.generics import CreateAPIView
+from datetime import datetime
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
 
@@ -14,21 +16,6 @@ from django.conf import settings
 class EspacioListCreate(generics.ListCreateAPIView):
     queryset = Espacio.objects.all()
     serializer_class = EspacioSerializer
-
-# Devuelve lista de Espacios pertenecientes a un Cowork.
-# Las Prestaciones de cada Espacio.
-# Los Puestos de cada Espacio.
-def load_espacios(request, id):
-    cowork_id = Cowork.objects.get(pk=id)
-    espacios = Espacio.objects.filter(cowork=cowork_id)
-
-    ids_espacios = []
-    for espacio in espacios:
-        ids_espacios.append(espacio.pk)
-
-    puestos = Puesto.objects.filter(espacio__in=ids_espacios)
-
-    return render(request, 'frontend_bundle/espacios_de_cowork.html', {'espacios': espacios, 'puestos': puestos})
 
 # Devuelve detalles de Usuario Logueado
 def get_detalles_usuario(request):
@@ -44,13 +31,11 @@ def get_detalles_usuario(request):
 
     return response
 
-# Devuelve un Espacio
-def EspacioDetail(request, id):
-    try:
-        espacio = Espacio.objects.get(pk=id)
-    except Espacio.DoesNotExist:
-        raise Http404("Espacio does not exist")
-    return render(request, 'frontend_bundle/detail-espacio.html', { 'espacio': espacio })
+# Devuelve un Espacio y sus Prestaciones
+def espacioDetail(request, id):
+    espacio = Espacio.objects.filter(pk=id)
+    data = EspacioSerializer(espacio, many=True).data
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Prestaciones
 class PrestacionListCreate(generics.ListCreateAPIView):
@@ -58,12 +43,10 @@ class PrestacionListCreate(generics.ListCreateAPIView):
     serializer_class = PrestacionSerializer
 
 # Devuelve una Prestacion
-def PrestacionDetail(request, id):
-    try:
-        prestacion = Prestacion.objects.get(pk=id)
-    except Prestacion.DoesNotExist:
-        raise Http404("Prestacion does not exist")
-    return render(request, 'frontend_bundle/detail-prestacion.html', { 'prestacion': prestacion })
+def prestacionDetail(request, id):
+    prestacion = Prestacion.objects.filter(pk=id)
+    data = PrestacionSerializer(prestacion, many=True).data
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Coworks
 class CoworkListCreate(generics.ListCreateAPIView):
@@ -71,12 +54,10 @@ class CoworkListCreate(generics.ListCreateAPIView):
     serializer_class = CoworkSerializer
 
 # Devuelve un Cowork
-def CoworkDetail(request, id):
-    try:
-        cowork = Cowork.objects.get(pk=id)
-    except Cowork.DoesNotExist:
-        raise Http404("Cowork does not exist")
-    return render(request, 'frontend_bundle/detail-cowork.html', { 'cowork': cowork })
+def coworkDetail(request, id):
+    cowork = Cowork.objects.filter(pk=id)
+    data = CoworkSerializer(cowork, many=True).data
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Paises
 class PaisListCreate(generics.ListCreateAPIView):
@@ -92,3 +73,72 @@ class ProvinciaListCreate(generics.ListCreateAPIView):
 class LocalidadListCreate(generics.ListCreateAPIView):
     queryset = Localidad.objects.all()
     serializer_class = LocalidadSerializer
+
+# Devuelve una Localidad
+class LocalidadDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Localidad.objects.all()
+    serializer_class = LocalidadSerializer
+
+
+# Devuelve un Puesto y datos del Espacio al que pertenece el mismo, incluyendo Prestaciones y datos del Cowork al que pertenece
+def puestoDetail(request, id):
+    puesto = Puesto.objects.filter(pk=id)
+    data = PuestoSerializer(puesto, many=True).data
+    return JsonResponse(data, safe=False)
+
+# Devuelve lista de Contratos de un Usuario
+def contratosUsuario(request):
+    usr = request.user.pk
+    contratos = Contrato.objects.filter(usuario_id=usr)
+    data = ContratoSerializer(contratos, many=True).data
+    return JsonResponse(data, safe=False)
+
+# Devuelve Pago de un Contrato de un Usuario
+def contratoUsuario(request, id):
+    usr = request.user.pk
+    cont = Contrato.objects.filter(usuario_id=usr, pk=id)
+    pagos = Pago.objects.filter(contrato=cont[0])
+    data = PagoSerializer(pagos, many=True).data
+    return JsonResponse(data, safe=False)
+
+# Graba puntuacion y reseña de Contrato
+class ContratoEvaluacion(generics.UpdateAPIView):
+    queryset = Contrato.objects.all()
+    serializer_class = ContratoEvaluacionSerializer
+
+# Crea nuevo Contrato
+class ContratoCreate(CreateAPIView):
+    queryset = Contrato.objects.all()
+    serializer_class = ContratoCreateSerializer
+
+# Crea nuevo Pago
+class PagoCreate(CreateAPIView):
+    queryset = Pago.objects.all()
+    serializer_class = PagoCreateSerializer
+
+# Devuelve lista de Coworks con Espacios Disponibles
+# Donde:    Espacio.es_sala = false
+#           Espacio.cowork.localidad = localidad
+#           Barrer todos los Contratos de los Coworks
+#           de la localidad, fecha y turno ingresados.
+#           Considerar que si se seleccionó turno Tarde,
+#           por ejemplo, también se deben considerar los
+#           Contratos con turno Completo para esa fecha.
+# Guardar:  Lista de Puestos sin Contratos.
+# Retornar: Datos de Coworks.
+def coworksEspaciosDisponibles(request, id_localidad, anio, mes, dia, turno):
+    fecha = datetime(anio, mes, dia, 8, 0, 0)
+    loc = get_object_or_404(Localidad, pk=id_localidad)
+    coworks = Cowork.objects.filter(localidad=loc)
+    espacios = Espacio.objects.filter(cowork__in=coworks.all()).filter(es_sala=False)
+    puestos = Puesto.objects.filter(espacio__in=espacios.all())
+    con_contrato = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno=turno).filter(inicio_contrato=fecha)
+    for c_contrato in con_contrato:
+        pue_contratados = Puesto.objects.filter(pk=c_contrato.puesto.pk)
+    for p_contratado in pue_contratados:
+        pue_sincontrato = Puesto.objects.exclude(pk=p_contratado.pk)
+    data = PuestoSerializer(pue_sincontrato, many=True).data
+
+    return JsonResponse(data, safe=False)
+
+# Devuelve lista de Coworks con Salas Disponibles

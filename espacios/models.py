@@ -2,6 +2,7 @@ from itertools import chain
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
+from django.conf import settings
 from django.contrib.auth.models import User
 
 # CLM: creada clase para auditoria.
@@ -92,6 +93,7 @@ class Espacio(MyModel):
     ubicacion_espacio = models.CharField(max_length=100)
     cowork = models.ForeignKey(Cowork, on_delete=models.CASCADE)
     prestaciones = models.ManyToManyField(Prestacion)
+    es_sala = models.BooleanField()
     def __str__(self):
         return self.nombre_espacio
 
@@ -100,9 +102,13 @@ admin.site.register(Espacio)
 class Puesto(MyModel):
     id_puesto = models.AutoField(primary_key=True)
     ubicacion_puesto = models.CharField(max_length=100)
+    """
+    CLM: No se puede guardar acá porque la disponibilidad depende de la fecha.
     disponibilidadTM_puesto = models.BooleanField()
     disponibilidadTT_puesto = models.BooleanField()
+    """
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
+    capacidad = models.IntegerField(blank=False)
     def __str__(self):
         return self.ubicacion_puesto
 
@@ -120,6 +126,14 @@ admin.site.register(Puesto)
 class Contrato(MyModel):
     id_contrato = models.AutoField(primary_key=True)
     fecha_contrato = models.DateTimeField(default=timezone.now)
+
+    TURNO = (
+        ('m', 'Mañana'),
+        ('t', 'Tarde'),
+        ('c', 'Completo'),
+    )
+
+    turno = models.CharField(max_length=1, choices=TURNO, blank=True, default='c', help_text='Turno del Contrato')
     inicio_contrato = models.DateTimeField()
     fin_contrato = models.DateTimeField()
     importe_contrato = models.DecimalField(max_digits=10, decimal_places=3)
@@ -129,7 +143,7 @@ class Contrato(MyModel):
     puesto = models.ForeignKey(Puesto, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return self.fecha_contrato
+        return str(self.fecha_contrato)
 
 admin.site.register(Contrato)
 
@@ -142,6 +156,6 @@ class Pago(MyModel):
     contrato = models.ForeignKey(Contrato, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return self.fecha_pago
+        return str(self.fecha_pago)
 
 admin.site.register(Pago)

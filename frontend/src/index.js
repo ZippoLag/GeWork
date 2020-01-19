@@ -20,17 +20,21 @@ class Index extends Component {
     super();
 
     this.actualizarMapa = this.actualizarMapa.bind(this);
+    this.elegirEspacio = this.elegirEspacio.bind(this);
   }
 
   state = {
     usuario: {},
+    coworks: [],
     espacios: [],
+    puestos: [],
     localidades: [{ id_localidad: 0, nombre_localidad: 'Cargando..' }],
     provincias: [{ id_provincia: 0, nombre_localidad: 'Cargando..' }],
     paises: [{ id_pais: 0, nombre_localidad: 'Cargando..' }],
     id_pais: 0,
     id_provincia: 0,
     id_localidad: 0,
+    id_espacio: 0,
     fechaReserva: moment(new Date())
   };
 
@@ -82,6 +86,44 @@ class Index extends Component {
     }
 
     return localidades;
+  }
+
+  fetchCoworksConVacantes(seleccion = this.state) {
+    if (
+      seleccion.id_pais &&
+      seleccion.id_provincia &&
+      seleccion.id_localidad &&
+      seleccion.fechaReserva
+    ) {
+      httpClient
+        .get(
+          `api/puestos_vacantes/${
+            seleccion.id_localidad
+          }/${seleccion.fechaReserva.year()}/${seleccion.fechaReserva.month() +
+            1}/${seleccion.fechaReserva.date()}/c/`
+        )
+        .then((data) => {
+          let espacios = [...new Set(data.map((puesto) => puesto.espacio))];
+          let coworks = [...new Set(espacios.map((espacio) => espacio.cowork))];
+          this.setState({
+            puestos: [
+              { id_puesto: 0, nombre_puesto: 'Seleccione Puesto..' },
+              ...data
+            ],
+            espacios: [
+              { id_espacio: 0, nombre_espacio: 'Seleccione Espacio..' },
+              ...espacios
+            ],
+            coworks: [
+              { id_cowork: 0, nombre_cowork: 'Seleccione Cowork..' },
+              ...coworks
+            ]
+          });
+        })
+        .catch((error) => console.log(error));
+    } else {
+      this.setState({ puestos: [], espacios: [], coworks: [] });
+    }
   }
 
   fetchInformacionGeografica() {
@@ -157,24 +199,44 @@ class Index extends Component {
   }
 
   actualizarMapa(props) {
+    let seleccion = {
+      fechaReserva: this.state.fechaReserva,
+      id_pais: this.state.id_pais,
+      id_provincia: this.state.id_provincia,
+      id_localidad: this.state.id_localidad
+    };
+
     if (props.fechaReserva) {
       this.setState({ fechaReserva: props.fechaReserva });
+      seleccion.fechaReserva = props.fechaReserva;
     } else if (typeof props.id_pais !== typeof undefined) {
       this.setState({
         id_pais: props.id_pais,
         id_provincia: 0,
         id_localidad: 0
       });
+      seleccion.id_pais = props.id_pais;
+      seleccion.id_provincia = 0;
+      seleccion.id_localidad = 0;
     } else if (typeof props.id_provincia !== typeof undefined) {
       this.setState({
         id_provincia: props.id_provincia,
         id_localidad: 0
       });
+      seleccion.id_provincia = props.id_provincia;
+      seleccion.id_localidad = 0;
     } else if (typeof props.id_localidad !== typeof undefined) {
       this.setState({
         id_localidad: props.id_localidad
       });
+      seleccion.id_localidad = props.id_localidad;
     }
+
+    this.fetchCoworksConVacantes(seleccion);
+  }
+
+  elegirEspacio(props) {
+    this.setState({ id_espacio: props.id_espacio });
   }
 
   render() {
@@ -196,11 +258,16 @@ class Index extends Component {
                 paises={this.state.paises}
                 provincias={this.getProvinciasDelPais()}
                 localidades={this.getLocalidadesDeLaProvincia()}
+                coworks={this.state.coworks}
+                espacios={this.state.espacios}
+                puestos={this.state.puestos}
                 id_pais={this.state.id_pais}
                 id_provincia={this.state.id_provincia}
                 id_localidad={this.state.id_localidad}
+                id_espacio={this.state.id_espacio}
                 actualizarMapa={this.actualizarMapa}
                 fechaReserva={this.state.fechaReserva}
+                elegirEspacio={this.elegirEspacio}
               />
             )}
           />

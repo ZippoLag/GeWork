@@ -4,6 +4,7 @@ import * as momentPropTypes from 'react-moment-proptypes';
 
 import SelectorUbicacion from '../selectorUbicacion/SelectorUbicacion';
 import SelectorFecha from '../selectorFecha/SelectorFecha';
+import SelectorEspacio from '../selectorEspacio/SelectorEspacio';
 
 import './ReservarPuesto.css';
 
@@ -44,6 +45,15 @@ export class ReservarPuesto extends Component {
           actualizarMapa={this.actualizarMapa}
           fechaReserva={this.props.fechaReserva}
         />
+        {this.props.espacios.length > 0 && (
+          <SelectorEspacio
+            coworks={this.props.coworks}
+            espacios={this.props.espacios}
+            puestos={this.props.puestos}
+            id_espacio={this.props.id_espacio}
+            elegirEspacio={this.props.elegirEspacio}
+          />
+        )}
       </div>
     );
   }

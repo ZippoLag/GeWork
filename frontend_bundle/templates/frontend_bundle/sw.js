@@ -13,11 +13,11 @@
 
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
+workbox.core.setCacheNameDetails({prefix: "GeWorkSW"});
+
+workbox.core.skipWaiting();
+
+workbox.core.clientsClaim();
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
@@ -27,27 +27,27 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "asset-manifest.json",
-    "revision": "11c8917a7dcdbff3c18b3a0bcba63fc8"
+    "revision": "b33f6d5d83ea111cb89c562d111378f4"
   },
   {
     "url": "index.html",
-    "revision": "597c4328ad4dcc73123e42c78a01e0c5"
+    "revision": "bdebce42a9e2945056060594b3a56df7"
   },
   {
-    "url": "static/css/main.57e7eda9.chunk.css",
-    "revision": "42e1c1898f58de1307f8a3bd631ddc2d"
+    "url": "static/css/main.a3465b1b.chunk.css",
+    "revision": "299a410db335f3ef5ae2d26b95907f6c"
   },
   {
     "url": "static/favicon.ico",
     "revision": "c92b85a5b907c70211f4ec25e29a8c4a"
   },
   {
-    "url": "static/js/2.35c82e19.chunk.js",
-    "revision": "6f529be8872bd62ebe472efbf70c0df3"
+    "url": "static/js/2.02ce9fea.chunk.js",
+    "revision": "95342a01439a178c65562dd1e327dbfe"
   },
   {
-    "url": "static/js/main.731c3a59.chunk.js",
-    "revision": "ebcdc9b74fd78e8d3fb0aa67f60fdffe"
+    "url": "static/js/main.923d0198.chunk.js",
+    "revision": "ad198da0a2241b526c63582917444ca7"
   },
   {
     "url": "static/js/runtime~main.760faad6.js",
@@ -68,4 +68,6 @@ self.__precacheManifest = [
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerRoute(/api/, new workbox.strategies.StaleWhileRevalidate({ "cacheName":"im-api-cache","fetchOptions":{"mode":"no-cors"},"matchOptions":{"ignoreSearch":true}, plugins: [{ cacheDidUpdate: () => { console.log('WorkBox Cache has been updated.'); } }, new workbox.backgroundSync.Plugin("im-sync-queue", { maxRetentionTime: 3600 }), new workbox.cacheableResponse.Plugin({ statuses: [ 0, 200 ] })] }), 'GET');
+workbox.precaching.cleanupOutdatedCaches();
+
+workbox.routing.registerRoute(/api/, new workbox.strategies.StaleWhileRevalidate({ "cacheName":"gw-api-cache","fetchOptions":{"mode":"no-cors"},"matchOptions":{"ignoreSearch":false}, plugins: [{ cacheDidUpdate: () => { console.log( 'Actualizada cache de llamadas API de GW mediante SW..' ); } }, new workbox.backgroundSync.Plugin("gw-api-sync-queue", { maxRetentionTime: 60 }), new workbox.broadcastUpdate.Plugin({ channelName: 'gw-api-update-channel' }), new workbox.cacheableResponse.Plugin({ statuses: [ 0, 200 ] })] }), 'GET');

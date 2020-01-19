@@ -11,9 +11,9 @@ urlpatterns = [
     path('api/espacios/',
          views.EspacioListCreate.as_view()),
     # Devuelve detalles de Usuario Logueado
-    path('api/get_detalles_usuario',
+    path('api/get_detalles_usuario/',
          login_required(views.get_detalles_usuario),
-         name='get_detalles_usuario'),
+         name='get_detalles_usuario/'),
     # Devuelve un Espacio y sus Prestaciones
     path('api/espacio/<int:id>/', views.espacioDetail),
     # Devuelve lista de Prestaciones
@@ -45,5 +45,5 @@ urlpatterns = [
     # Crea nuevo Pago
     path('api/pagocreate/', login_required(views.PagoCreate.as_view())),
     # Devuelve lista de puestos sin Contrato
-    path('api/sincontrato/<int:id_localidad>/<int:anio>/<int:mes>/<int:dia>/<slug:turno>/', views.coworksEspaciosDisponibles),
+    path('api/puestos_vacantes/<int:id_localidad>/<int:anio>/<int:mes>/<int:dia>/<slug:turno>/', views.puestos_vacantes),
 ]

@@ -126,19 +126,22 @@ class PagoCreate(CreateAPIView):
 #           Contratos con turno Completo para esa fecha.
 # Guardar:  Lista de Puestos sin Contratos.
 # Retornar: Datos de Coworks.
-def coworksEspaciosDisponibles(request, id_localidad, anio, mes, dia, turno):
+def puestos_vacantes(request, id_localidad, anio, mes, dia, turno):
+    # TODO: (SRV) por cómo quedaron armados los serializers, estamos enviando data duplicada, podríamos hacer la llamada más eficiente si para las relaciones enviáramos sólo las FK y re-construyéramos los objetos en el frontend (de la misma forma que se reciben los Paises/Provincias/Localidades - ver código en index.js)
     fecha = datetime(anio, mes, dia, 8, 0, 0)
+    turno = turno or 'c'
     loc = get_object_or_404(Localidad, pk=id_localidad)
+
     coworks = Cowork.objects.filter(localidad=loc)
     espacios = Espacio.objects.filter(cowork__in=coworks.all()).filter(es_sala=False)
     puestos = Puesto.objects.filter(espacio__in=espacios.all())
-    con_contrato = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno=turno).filter(inicio_contrato=fecha)
-    for c_contrato in con_contrato:
-        pue_contratados = Puesto.objects.filter(pk=c_contrato.puesto.pk)
-    for p_contratado in pue_contratados:
-        pue_sincontrato = Puesto.objects.exclude(pk=p_contratado.pk)
-    data = PuestoSerializer(pue_sincontrato, many=True).data
+
+    contratos = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno__in=[turno, 'c']).filter(inicio_contrato=fecha)
+
+    ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
+
+    puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados)
+
+    data = PuestoSerializer(puestos_libres, many=True).data
 
     return JsonResponse(data, safe=False)
-
-# Devuelve lista de Coworks con Salas Disponibles

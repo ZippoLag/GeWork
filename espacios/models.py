@@ -79,7 +79,7 @@ class Prestacion(MyModel):
     id_prestacion = models.AutoField(primary_key=True)
     nombre_prestacion = models.CharField(max_length=50)
     desc_prestacion = models.CharField(max_length=200)
-    icono_prestacion = models.CharField(max_length=200)
+    icono_prestacion = models.CharField(max_length=200, help_text="Usar caracter Unicode. Por ejemplo buscar en: https://emojis.wiki/")
     def __str__(self):
         return self.nombre_prestacion
 
@@ -127,13 +127,13 @@ class Contrato(MyModel):
     id_contrato = models.AutoField(primary_key=True)
     fecha_contrato = models.DateTimeField(default=timezone.now)
 
-    TURNO = (
+    TURNO_CHOICES = (
         ('m', 'Mañana'),
         ('t', 'Tarde'),
         ('c', 'Completo'),
     )
 
-    turno = models.CharField(max_length=1, choices=TURNO, blank=True, default='c', help_text='Turno del Contrato')
+    turno = models.CharField(max_length=1, choices=TURNO_CHOICES, blank=True, default='c', help_text='Turno del Contrato')
     inicio_contrato = models.DateTimeField()
     fin_contrato = models.DateTimeField()
     importe_contrato = models.DecimalField(max_digits=10, decimal_places=3)

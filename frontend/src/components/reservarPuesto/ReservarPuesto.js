@@ -45,7 +45,7 @@ export class ReservarPuesto extends Component {
           actualizarMapa={this.actualizarMapa}
           fechaReserva={this.props.fechaReserva}
         />
-        {this.props.espacios.length > 0 && (
+        {this.props.espacios.length > 0 ? (
           <SelectorEspacio
             coworks={this.props.coworks}
             espacios={this.props.espacios}
@@ -53,6 +53,11 @@ export class ReservarPuesto extends Component {
             id_espacio={this.props.id_espacio}
             elegirEspacio={this.props.elegirEspacio}
           />
+        ) : (
+          <h3>
+            No hay Coworks con Espacios disponibles para mostrar. Seleccione
+            otra ubicación/fecha.
+          </h3>
         )}
       </div>
     );

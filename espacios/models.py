@@ -68,7 +68,8 @@ class Cowork(MyModel):
     finTM_cowork = models.CharField(max_length=8)
     inicioTT_cowork = models.CharField(max_length=8)
     finTT_cowork = models.CharField(max_length=8)
-    urlGoogleMaps = models.URLField()
+    lat = models.FloatField(help_text="Obtener mediante maps.google.com")
+    lng = models.FloatField(help_text="Obtener mediante maps.google.com")
     localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
     def __str__(self):
         return self.nombre_cowork

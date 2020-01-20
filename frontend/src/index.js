@@ -106,18 +106,9 @@ class Index extends Component {
           let espacios = [...new Set(data.map((puesto) => puesto.espacio))];
           let coworks = [...new Set(espacios.map((espacio) => espacio.cowork))];
           this.setState({
-            puestos: [
-              { id_puesto: 0, nombre_puesto: 'Seleccione Puesto..' },
-              ...data
-            ],
-            espacios: [
-              { id_espacio: 0, nombre_espacio: 'Seleccione Espacio..' },
-              ...espacios
-            ],
-            coworks: [
-              { id_cowork: 0, nombre_cowork: 'Seleccione Cowork..' },
-              ...coworks
-            ]
+            puestos: data,
+            espacios: espacios,
+            coworks: coworks
           });
         })
         .catch((error) => console.log(error));

@@ -4,6 +4,12 @@ import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import httpClient from '../../fetchWrapper';
+
+import Mapa from '../mapa/Mapa';
+
+//TODO: convertir en selector de Cowork? (el selector de espacio en realidad va debajo del mapa y muestra los detalles)
+
 import './SelectorEspacio.css';
 
 export class SelectorEspacio extends Component {
@@ -14,10 +20,23 @@ export class SelectorEspacio extends Component {
   }
 
   static propTypes = {
-    espacios: PropTypes.array.isRequired
+    espacios: PropTypes.array.isRequired,
+    coworks: PropTypes.array.isRequired,
+    id_espacio: PropTypes.number.isRequired
   };
 
-  state = {};
+  state = {
+    googleMapsApiKey: ''
+  };
+
+  componentDidMount() {
+    httpClient
+      .get(`api/googlemapsapikey/`)
+      .then((data) =>
+        this.setState({ googleMapsApiKey: data.googleMapsApiKey })
+      )
+      .catch((error) => console.log(error));
+  }
 
   handleCambioEspacio(evento) {
     let nuevaIdSeleccionada =
@@ -49,6 +68,14 @@ export class SelectorEspacio extends Component {
               </option>
             ))}
           </select>
+        </Col>
+        <Col className='form-group col-12' role='group'>
+          {this.state.googleMapsApiKey && (
+            <Mapa
+              googleMapsApiKey={this.state.googleMapsApiKey}
+              coworks={this.props.coworks}
+            />
+          )}
         </Col>
       </Row>
     );

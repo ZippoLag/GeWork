@@ -1,3 +1,4 @@
+
 from django.urls import path
 from . import views
 from django.contrib.auth.decorators import login_required
@@ -7,12 +8,12 @@ def require_login_if_not_debug(view):
     return view if settings.DEBUG else login_required(view)
 
 urlpatterns = [
-    # Devuelve lista de Espacios
-    path('api/espacios/', views.EspacioListCreate.as_view()),
     # Devuelve detalles de Usuario Logueado
     path('api/get_detalles_usuario/',
         require_login_if_not_debug(views.get_detalles_usuario),
         name='get_detalles_usuario/'),
+    # Devuelve lista de Espacios
+    path('api/espacios/', views.EspacioListCreate.as_view()),
     # Devuelve un Espacio y sus Prestaciones
     path('api/espacio/<int:id>/', views.espacioDetail),
     # Devuelve lista de Prestaciones

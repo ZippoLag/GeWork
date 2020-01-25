@@ -128,7 +128,7 @@ class PagoCreate(CreateAPIView):
 # Retornar: Datos de Coworks.
 def puestos_vacantes(request, id_localidad, anio, mes, dia, turno):
     # TODO: (SRV) por cómo quedaron armados los serializers, estamos enviando data duplicada, podríamos hacer la llamada más eficiente si para las relaciones enviáramos sólo las FK y re-construyéramos los objetos en el frontend (de la misma forma que se reciben los Paises/Provincias/Localidades - ver código en index.js)
-    fecha = datetime(anio, mes, dia, 8, 0, 0)
+    fecha = datetime(anio, mes, dia)
     turno = turno or 'c'
     loc = get_object_or_404(Localidad, pk=id_localidad)
 
@@ -158,7 +158,7 @@ def puestos_vacantes(request, id_localidad, anio, mes, dia, turno):
 # Retornar: Datos de Coworks.
 def salas_vacantes(request, id_localidad, anio, mes, dia, turno):
     # TODO: (SRV) por cómo quedaron armados los serializers, estamos enviando data duplicada, podríamos hacer la llamada más eficiente si para las relaciones enviáramos sólo las FK y re-construyéramos los objetos en el frontend (de la misma forma que se reciben los Paises/Provincias/Localidades - ver código en index.js)
-    fecha = datetime(anio, mes, dia, 14, 0, 0)
+    fecha = datetime(anio, mes, dia)
     turno = turno or 'c'
     loc = get_object_or_404(Localidad, pk=id_localidad)
 

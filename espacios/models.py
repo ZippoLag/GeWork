@@ -135,8 +135,8 @@ class Contrato(MyModel):
     )
 
     turno = models.CharField(max_length=1, choices=TURNO_CHOICES, blank=True, default='c', help_text='Turno del Contrato')
-    inicio_contrato = models.DateTimeField()
-    fin_contrato = models.DateTimeField()
+    inicio_contrato = models.DateField()
+    fin_contrato = models.DateField()
     importe_contrato = models.DecimalField(max_digits=10, decimal_places=3)
     estrellas_contrato = models.IntegerField(blank=True, null=True)
     resenia_contrato = models.CharField(max_length=250, blank=True)

@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import CardDeck from 'react-bootstrap/CardDeck';
+import Card from 'react-bootstrap/Card';
+
 import httpClient from '../../fetchWrapper';
 
 import Mapa from '../mapa/Mapa';
@@ -92,15 +95,8 @@ export class SelectorEspacio extends Component {
           </select>
         </Col>
 
-        <Col className='form-group col-12 col-md-3' role='group'>
-          <label htmlFor='espacio-select'>Espacio:</label>
-          <select
-            className='from-control'
-            id='espacio-select'
-            disabled={this.props.espacios.length === 0}
-            value={this.props.id_espacio}
-            onChange={this.handleCambioEspacio}
-          >
+        <Col className='form-group col-12' role='group'>
+          <CardDeck>
             {this.props.espacios
               .filter(
                 (espacio) =>
@@ -108,15 +104,28 @@ export class SelectorEspacio extends Component {
                   this.props.id_cowork === espacio.cowork.id_cowork
               )
               .map((espacio) => (
-                <option
-                  key={espacio.id_espacio}
-                  id_espacio={espacio.id_espacio}
-                  value={espacio.id_espacio}
-                >
-                  {espacio.cowork.nombre_cowork} - {espacio.nombre_espacio}
-                </option>
+                <Card key={espacio.id_espacio}>
+                  <Card.Header>{espacio.nombre_espacio}</Card.Header>
+                  <Card.Body>
+                    <Card.Title>
+                      {espacio.cowork.nombre_cowork} - {espacio.nombre_espacio}
+                    </Card.Title>
+                    <Card.Text>{espacio.ubicacion_espacio}</Card.Text>
+                  </Card.Body>
+                  <Card.Footer>
+                    {espacio.prestaciones.map((prestacion) => (
+                      <span
+                        className='mr-1 cursor-default'
+                        title={prestacion.nombre_prestacion}
+                        key={prestacion.id_prestacion}
+                      >
+                        {prestacion.icono_prestacion}
+                      </span>
+                    ))}
+                  </Card.Footer>
+                </Card>
               ))}
-          </select>
+          </CardDeck>
         </Col>
       </Row>
     );

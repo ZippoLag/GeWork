@@ -140,7 +140,37 @@ def puestos_vacantes(request, id_localidad, anio, mes, dia, turno):
 
     ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
 
-    puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados)
+    puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados).filter(espacio__in=espacios.all())
+
+    data = PuestoSerializer(puestos_libres, many=True).data
+
+    return JsonResponse(data, safe=(not settings.DEBUG))
+
+# Devuelve lista de Coworks con Salas Disponibles
+# Donde:    Espacio.es_sala = true
+#           Espacio.cowork.localidad = localidad
+#           Barrer todos los Contratos de los Coworks
+#           de la localidad, fecha y turno ingresados.
+#           Considerar que si se seleccionó turno Tarde,
+#           por ejemplo, también se deben considerar los
+#           Contratos con turno Completo para esa fecha.
+# Guardar:  Lista de Puestos sin Contratos.
+# Retornar: Datos de Coworks.
+def salas_vacantes(request, id_localidad, anio, mes, dia, turno):
+    # TODO: (SRV) por cómo quedaron armados los serializers, estamos enviando data duplicada, podríamos hacer la llamada más eficiente si para las relaciones enviáramos sólo las FK y re-construyéramos los objetos en el frontend (de la misma forma que se reciben los Paises/Provincias/Localidades - ver código en index.js)
+    fecha = datetime(anio, mes, dia, 14, 0, 0)
+    turno = turno or 'c'
+    loc = get_object_or_404(Localidad, pk=id_localidad)
+
+    coworks = Cowork.objects.filter(localidad=loc)
+    espacios = Espacio.objects.filter(cowork__in=coworks.all()).filter(es_sala=True)
+    puestos = Puesto.objects.filter(espacio__in=espacios.all())
+
+    contratos = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno__in=[turno, 'c']).filter(inicio_contrato=fecha)
+
+    ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
+
+    puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados).filter(espacio__in=espacios.all())
 
     data = PuestoSerializer(puestos_libres, many=True).data
 

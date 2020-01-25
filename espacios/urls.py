@@ -45,6 +45,8 @@ urlpatterns = [
     path('api/pagocreate/', require_login_if_not_debug(views.PagoCreate.as_view())),
     # Devuelve lista de puestos sin Contrato
     path('api/puestos_vacantes/<int:id_localidad>/<int:anio>/<int:mes>/<int:dia>/<slug:turno>/', views.puestos_vacantes),
+    # Devuelve lista de salas sin Contrato
+    path('api/salas_vacantes/<int:id_localidad>/<int:anio>/<int:mes>/<int:dia>/<slug:turno>/', views.salas_vacantes),
     # Devuelve la API Key de Google Maps TODO: cambiar por una cookie seteada en middleware
     path('api/googlemapsapikey/', views.googlemapsapikey),
 ]

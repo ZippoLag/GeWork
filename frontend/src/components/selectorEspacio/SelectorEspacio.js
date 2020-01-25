@@ -19,7 +19,6 @@ export class SelectorEspacio extends Component {
   constructor(props) {
     super();
 
-    this.handleCambioEspacio = this.handleCambioEspacio.bind(this);
     this.handleCambioCowork = this.handleCambioCowork.bind(this);
   }
 
@@ -28,7 +27,7 @@ export class SelectorEspacio extends Component {
     coworks: PropTypes.array.isRequired,
     id_espacio: PropTypes.number.isRequired,
     id_cowork: PropTypes.number.isRequired,
-    elegirEspacio: PropTypes.func.isRequired,
+    irAConfirmacion: PropTypes.func.isRequired,
     elegirCowork: PropTypes.func.isRequired
   };
 
@@ -50,14 +49,6 @@ export class SelectorEspacio extends Component {
       evento.target.selectedOptions[0].attributes.id_cowork.value;
     this.props.elegirCowork({
       id_cowork: Number.parseInt(nuevaIdSeleccionada)
-    });
-  }
-
-  handleCambioEspacio(evento) {
-    let nuevaIdSeleccionada =
-      evento.target.selectedOptions[0].attributes.id_espacio.value;
-    this.props.elegirEspacio({
-      id_espacio: Number.parseInt(nuevaIdSeleccionada)
     });
   }
 
@@ -111,6 +102,46 @@ export class SelectorEspacio extends Component {
                       {espacio.cowork.nombre_cowork} - {espacio.nombre_espacio}
                     </Card.Title>
                     <Card.Text>{espacio.ubicacion_espacio}</Card.Text>
+                    <Row>
+                      <Row className='col-12 col-lg-9 m-0 p-0'>
+                        <Col
+                          className='col-6 col-lg-12 btn btn-primary'
+                          type='button'
+                          onClick={() => {
+                            return this.props.irAConfirmacion({
+                              id_espacio: espacio.id_espacio,
+                              codigo_turno: 'm'
+                            });
+                          }}
+                        >
+                          TURNO MAÑANA (${espacio.precioMJ_espacio}ARS)
+                        </Col>
+                        <Col
+                          className='col-6 col-lg-12 btn btn-primary'
+                          type='button'
+                          onClick={() => {
+                            return this.props.irAConfirmacion({
+                              id_espacio: espacio.id_espacio,
+                              codigo_turno: 't'
+                            });
+                          }}
+                        >
+                          TURNO TARDE (${espacio.precioMJ_espacio}ARS)
+                        </Col>
+                      </Row>
+                      <Col
+                        className='col-12 col-lg-3 h-lg-100 btn btn-primary'
+                        type='button'
+                        onClick={() => {
+                          return this.props.irAConfirmacion({
+                            id_espacio: espacio.id_espacio,
+                            codigo_turno: 'c'
+                          });
+                        }}
+                      >
+                        JORNADA COMPLETA (${espacio.precioJC_espacio}ARS)
+                      </Col>
+                    </Row>
                   </Card.Body>
                   <Card.Footer>
                     {espacio.prestaciones.map((prestacion) => (

@@ -20,7 +20,7 @@ class Index extends Component {
     super();
 
     this.actualizarMapa = this.actualizarMapa.bind(this);
-    this.elegirEspacio = this.elegirEspacio.bind(this);
+    this.irAConfirmacion = this.irAConfirmacion.bind(this);
     this.elegirCowork = this.elegirCowork.bind(this);
   }
 
@@ -37,6 +37,7 @@ class Index extends Component {
     id_localidad: 0,
     id_espacio: 0,
     id_cowork: 0,
+    codigo_turno: '',
     fechaReserva: moment(new Date())
   };
 
@@ -232,8 +233,12 @@ class Index extends Component {
     this.fetchCoworksConVacantes(seleccion);
   }
 
-  elegirEspacio(props) {
-    this.setState({ id_espacio: props.id_espacio });
+  irAConfirmacion(props) {
+    this.setState({
+      id_espacio: props.id_espacio,
+      codigo_turno: props.codigo_turno
+    });
+    //TODO: agregar código del router y redirigir a página de confirmación
   }
 
   elegirCowork(props) {
@@ -269,7 +274,7 @@ class Index extends Component {
                 id_cowork={this.state.id_cowork}
                 actualizarMapa={this.actualizarMapa}
                 fechaReserva={this.state.fechaReserva}
-                elegirEspacio={this.elegirEspacio}
+                irAConfirmacion={this.irAConfirmacion}
                 elegirCowork={this.elegirCowork}
               />
             )}

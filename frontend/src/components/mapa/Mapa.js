@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 class Mapa extends Component {
-  handleMarkerOnClick = (evt) => {};
+  static propTypes = {
+    coworks: PropTypes.array.isRequired,
+    elegirCowork: PropTypes.func.isRequired,
+    googleMapsApiKey: PropTypes.string.isRequired
+  };
 
   getCoworksReales() {
     return this.props.coworks.filter(
@@ -39,7 +44,11 @@ class Mapa extends Component {
             <Marker
               key={index}
               position={{ lat: cowork.lat, lng: cowork.lng }}
-              onClick={this.handleMarkerOnClick}
+              onClick={(evt) => {
+                return this.props.elegirCowork({
+                  id_cowork: cowork.id_cowork
+                });
+              }}
               title={cowork.nombre}
               label={cowork.nombre}
             />

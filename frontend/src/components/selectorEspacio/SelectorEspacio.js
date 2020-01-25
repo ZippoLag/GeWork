@@ -66,6 +66,7 @@ export class SelectorEspacio extends Component {
             <Mapa
               googleMapsApiKey={this.state.googleMapsApiKey}
               coworks={this.props.coworks}
+              elegirCowork={this.props.elegirCowork}
             />
           )}
         </Col>

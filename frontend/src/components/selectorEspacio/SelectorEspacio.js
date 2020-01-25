@@ -17,12 +17,16 @@ export class SelectorEspacio extends Component {
     super();
 
     this.handleCambioEspacio = this.handleCambioEspacio.bind(this);
+    this.handleCambioCowork = this.handleCambioCowork.bind(this);
   }
 
   static propTypes = {
     espacios: PropTypes.array.isRequired,
     coworks: PropTypes.array.isRequired,
-    id_espacio: PropTypes.number.isRequired
+    id_espacio: PropTypes.number.isRequired,
+    id_cowork: PropTypes.number.isRequired,
+    elegirEspacio: PropTypes.func.isRequired,
+    elegirCowork: PropTypes.func.isRequired
   };
 
   state = {
@@ -38,6 +42,14 @@ export class SelectorEspacio extends Component {
       .catch((error) => console.log(error));
   }
 
+  handleCambioCowork(evento) {
+    let nuevaIdSeleccionada =
+      evento.target.selectedOptions[0].attributes.id_cowork.value;
+    this.props.elegirCowork({
+      id_cowork: Number.parseInt(nuevaIdSeleccionada)
+    });
+  }
+
   handleCambioEspacio(evento) {
     let nuevaIdSeleccionada =
       evento.target.selectedOptions[0].attributes.id_espacio.value;
@@ -49,6 +61,36 @@ export class SelectorEspacio extends Component {
   render() {
     return (
       <Row className='d-flex justify-content-around align-items-center'>
+        <Col className='form-group col-12' role='group'>
+          {this.state.googleMapsApiKey && (
+            <Mapa
+              googleMapsApiKey={this.state.googleMapsApiKey}
+              coworks={this.props.coworks}
+            />
+          )}
+        </Col>
+
+        <Col className='form-group col-12 col-md-3' role='group'>
+          <label htmlFor='cowork-select'>CoWork:</label>
+          <select
+            className='from-control'
+            id='cowork-select'
+            disabled={this.props.coworks.length === 0}
+            value={this.props.id_cowork}
+            onChange={this.handleCambioCowork}
+          >
+            {this.props.coworks.map((cowork) => (
+              <option
+                key={cowork.id_cowork}
+                id_cowork={cowork.id_cowork}
+                value={cowork.id_cowork}
+              >
+                {cowork.nombre_cowork}
+              </option>
+            ))}
+          </select>
+        </Col>
+
         <Col className='form-group col-12 col-md-3' role='group'>
           <label htmlFor='espacio-select'>Espacio:</label>
           <select
@@ -58,24 +100,22 @@ export class SelectorEspacio extends Component {
             value={this.props.id_espacio}
             onChange={this.handleCambioEspacio}
           >
-            {this.props.espacios.map((espacio) => (
-              <option
-                key={espacio.id_espacio}
-                id_espacio={espacio.id_espacio}
-                value={espacio.id_espacio}
-              >
-                {espacio.nombre_espacio}
-              </option>
-            ))}
+            {this.props.espacios
+              .filter(
+                (espacio) =>
+                  this.props.id_cowork === 0 ||
+                  this.props.id_cowork === espacio.cowork.id_cowork
+              )
+              .map((espacio) => (
+                <option
+                  key={espacio.id_espacio}
+                  id_espacio={espacio.id_espacio}
+                  value={espacio.id_espacio}
+                >
+                  {espacio.cowork.nombre_cowork} - {espacio.nombre_espacio}
+                </option>
+              ))}
           </select>
-        </Col>
-        <Col className='form-group col-12' role='group'>
-          {this.state.googleMapsApiKey && (
-            <Mapa
-              googleMapsApiKey={this.state.googleMapsApiKey}
-              coworks={this.props.coworks}
-            />
-          )}
         </Col>
       </Row>
     );

@@ -20,7 +20,9 @@ export class ReservarPuesto extends Component {
     provincias: PropTypes.array.isRequired,
     localidades: PropTypes.array.isRequired,
     fechaReserva: momentPropTypes.momentObj.isRequired,
-    actualizarMapa: PropTypes.func.isRequired
+    actualizarMapa: PropTypes.func.isRequired,
+    elegirEspacio: PropTypes.func.isRequired,
+    elegirCowork: PropTypes.func.isRequired
   };
 
   state = {};
@@ -52,6 +54,8 @@ export class ReservarPuesto extends Component {
             puestos={this.props.puestos}
             id_espacio={this.props.id_espacio}
             elegirEspacio={this.props.elegirEspacio}
+            id_cowork={this.props.id_cowork}
+            elegirCowork={this.props.elegirCowork}
           />
         ) : (
           <h3>

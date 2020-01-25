@@ -4,7 +4,14 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 class Mapa extends Component {
   handleMarkerOnClick = (evt) => {};
 
+  getCoworksReales() {
+    return this.props.coworks.filter(
+      (cowork) => cowork.id_cowork !== 0 && cowork.lat && cowork.lng
+    );
+  }
+
   render() {
+    let coworks = this.getCoworksReales();
     return (
       <LoadScript
         id='script-loader'
@@ -19,18 +26,16 @@ class Mapa extends Component {
           zoom={14}
           center={{
             lat:
-              this.props.coworks
+              coworks
                 .map((cowork) => cowork.lat)
-                .reduce((prev, curr) => (curr += prev)) /
-              this.props.coworks.length,
+                .reduce((prev, curr) => (curr += prev)) / coworks.length,
             lng:
-              this.props.coworks
+              coworks
                 .map((cowork) => cowork.lng)
-                .reduce((prev, curr) => (curr += prev)) /
-              this.props.coworks.length
+                .reduce((prev, curr) => (curr += prev)) / coworks.length
           }}
         >
-          {this.props.coworks.map((cowork, index) => (
+          {coworks.map((cowork, index) => (
             <Marker
               key={index}
               position={{ lat: cowork.lat, lng: cowork.lng }}

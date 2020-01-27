@@ -177,5 +177,4 @@ def salas_vacantes(request, id_localidad, anio, mes, dia, turno):
     return JsonResponse(data, safe=(not settings.DEBUG))
 
 def googlemapsapikey(request):
-    print(settings.GOOGLE_MAPS_API_KEY)
     return JsonResponse({'googleMapsApiKey':settings.GOOGLE_MAPS_API_KEY}, safe=(not settings.DEBUG))

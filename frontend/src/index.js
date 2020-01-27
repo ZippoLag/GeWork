@@ -20,7 +20,8 @@ class Index extends Component {
     super();
 
     this.actualizarMapa = this.actualizarMapa.bind(this);
-    this.elegirEspacio = this.elegirEspacio.bind(this);
+    this.irAConfirmacion = this.irAConfirmacion.bind(this);
+    this.elegirCowork = this.elegirCowork.bind(this);
   }
 
   state = {
@@ -35,6 +36,8 @@ class Index extends Component {
     id_provincia: 0,
     id_localidad: 0,
     id_espacio: 0,
+    id_cowork: 0,
+    codigo_turno: '',
     fechaReserva: moment(new Date())
   };
 
@@ -63,6 +66,7 @@ class Index extends Component {
   }
 
   getLocalidadesDeLaProvincia() {
+    //FIXME: ver por qué a veces esto devuelve una lista vacía (cuando no se elije provincia y se intenta elegir localidad demasiado pronto?)
     let localidades = [];
 
     if (this.state.id_provincia === 0) {
@@ -104,7 +108,10 @@ class Index extends Component {
         )
         .then((data) => {
           let espacios = [...new Set(data.map((puesto) => puesto.espacio))];
-          let coworks = [...new Set(espacios.map((espacio) => espacio.cowork))];
+          let coworks = [
+            { id_cowork: 0, nombre_cowork: 'Todos' },
+            ...new Set(espacios.map((espacio) => espacio.cowork))
+          ];
           this.setState({
             puestos: data,
             espacios: espacios,
@@ -226,8 +233,16 @@ class Index extends Component {
     this.fetchCoworksConVacantes(seleccion);
   }
 
-  elegirEspacio(props) {
-    this.setState({ id_espacio: props.id_espacio });
+  irAConfirmacion(props) {
+    this.setState({
+      id_espacio: props.id_espacio,
+      codigo_turno: props.codigo_turno
+    });
+    //TODO: agregar código del router y redirigir a página de confirmación
+  }
+
+  elegirCowork(props) {
+    this.setState({ id_cowork: props.id_cowork, id_espacio: 0 });
   }
 
   render() {
@@ -256,9 +271,11 @@ class Index extends Component {
                 id_provincia={this.state.id_provincia}
                 id_localidad={this.state.id_localidad}
                 id_espacio={this.state.id_espacio}
+                id_cowork={this.state.id_cowork}
                 actualizarMapa={this.actualizarMapa}
                 fechaReserva={this.state.fechaReserva}
-                elegirEspacio={this.elegirEspacio}
+                irAConfirmacion={this.irAConfirmacion}
+                elegirCowork={this.elegirCowork}
               />
             )}
           />

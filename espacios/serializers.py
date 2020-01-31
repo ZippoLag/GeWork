@@ -20,8 +20,9 @@ class EspacioSerializer(serializers.ModelSerializer):
     prestaciones = PrestacionSerializer(read_only=True, many=True)
 
     class Meta:
+        # TODO: ver cómo hacer para que se envíe como número y no haya que hacer un Number.parse en el JS que lo recibe
         model = Espacio
-        fields = ('id_espacio', 'nombre_espacio', 'ubicacion_espacio', 'es_sala', 'cowork', 'prestaciones')
+        fields = ('id_espacio', 'nombre_espacio', 'ubicacion_espacio', 'es_sala', 'cowork', 'prestaciones', 'precioMJ_espacio', 'precioJC_espacio')
 
 class PuestoSerializer(serializers.ModelSerializer):
     espacio = EspacioSerializer(read_only=True, many=False)

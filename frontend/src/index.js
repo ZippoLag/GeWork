@@ -9,6 +9,7 @@ import Pie from './components/pie/Pie';
 
 import ElegirAccion from './components/elegirAccion/ElegirAccion';
 import ReservarPuesto from './components/reservarPuesto/ReservarPuesto';
+import ConfirmarReserva from './components/confirmarReserva/ConfirmarReserva';
 
 import httpClient from './fetchWrapper';
 import getCookie from './utils';
@@ -20,7 +21,7 @@ class Index extends Component {
     super();
 
     this.actualizarMapa = this.actualizarMapa.bind(this);
-    this.irAConfirmacion = this.irAConfirmacion.bind(this);
+    this.elegirEspacio = this.elegirEspacio.bind(this);
     this.elegirCowork = this.elegirCowork.bind(this);
   }
 
@@ -107,7 +108,11 @@ class Index extends Component {
             1}/${seleccion.fechaReserva.date()}/c/`
         )
         .then((data) => {
-          let espacios = [...new Set(data.map((puesto) => puesto.espacio))];
+          let espacios = [
+            ...new Set(
+              data.map((puesto) => this.completarEspacio(puesto.espacio))
+            )
+          ];
           let coworks = [
             { id_cowork: 0, nombre_cowork: 'Todos' },
             ...new Set(espacios.map((espacio) => espacio.cowork))
@@ -184,6 +189,13 @@ class Index extends Component {
     return localidad;
   };
 
+  completarEspacio = (espacio) => {
+    espacio.precioMJ_espacio = Number.parseFloat(espacio.precioMJ_espacio);
+    espacio.precioJC_espacio = Number.parseFloat(espacio.precioJC_espacio);
+
+    return espacio;
+  };
+
   componentDidMount() {
     //Si hay un token de autenticación en las cookies del navegador, significa que ya inició sesión un usuario, por lo que podemos obtener sus detalles desde el backend
     if (getCookie('csrftoken')) {
@@ -233,12 +245,11 @@ class Index extends Component {
     this.fetchCoworksConVacantes(seleccion);
   }
 
-  irAConfirmacion(props) {
+  elegirEspacio(props) {
     this.setState({
       id_espacio: props.id_espacio,
       codigo_turno: props.codigo_turno
     });
-    //TODO: agregar código del router y redirigir a página de confirmación
   }
 
   elegirCowork(props) {
@@ -258,7 +269,7 @@ class Index extends Component {
           <Route
             exact
             path={['/reservar-puesto']}
-            component={() => (
+            component={({ history }) => (
               <ReservarPuesto
                 usuario={this.state.usuario}
                 paises={this.state.paises}
@@ -274,8 +285,27 @@ class Index extends Component {
                 id_cowork={this.state.id_cowork}
                 actualizarMapa={this.actualizarMapa}
                 fechaReserva={this.state.fechaReserva}
-                irAConfirmacion={this.irAConfirmacion}
+                elegirEspacio={(props) => {
+                  this.elegirEspacio(props);
+                  history.push('/confirmar-reserva');
+                }}
                 elegirCowork={this.elegirCowork}
+              />
+            )}
+          />
+          <Route
+            exact
+            path={['/confirmar-reserva']}
+            component={() => (
+              <ConfirmarReserva
+                usuario={this.state.usuario}
+                fechaReserva={this.state.fechaReserva}
+                codigo_turno={this.state.codigo_turno}
+                espacio={
+                  this.state.espacios.filter(
+                    (espacio) => espacio.espacio_id === this.state.espacio_id
+                  )[0]
+                }
               />
             )}
           />

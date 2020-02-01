@@ -27,7 +27,7 @@ export class SelectorEspacio extends Component {
     coworks: PropTypes.array.isRequired,
     id_espacio: PropTypes.number.isRequired,
     id_cowork: PropTypes.number.isRequired,
-    irAConfirmacion: PropTypes.func.isRequired,
+    elegirEspacio: PropTypes.func.isRequired,
     elegirCowork: PropTypes.func.isRequired
   };
 
@@ -108,7 +108,7 @@ export class SelectorEspacio extends Component {
                           className='col-6 col-lg-12 btn btn-primary'
                           type='button'
                           onClick={() => {
-                            return this.props.irAConfirmacion({
+                            return this.props.elegirEspacio({
                               id_espacio: espacio.id_espacio,
                               codigo_turno: 'm'
                             });
@@ -120,7 +120,7 @@ export class SelectorEspacio extends Component {
                           className='col-6 col-lg-12 btn btn-primary'
                           type='button'
                           onClick={() => {
-                            return this.props.irAConfirmacion({
+                            return this.props.elegirEspacio({
                               id_espacio: espacio.id_espacio,
                               codigo_turno: 't'
                             });
@@ -133,7 +133,7 @@ export class SelectorEspacio extends Component {
                         className='col-12 col-lg-3 h-lg-100 btn btn-primary'
                         type='button'
                         onClick={() => {
-                          return this.props.irAConfirmacion({
+                          return this.props.elegirEspacio({
                             id_espacio: espacio.id_espacio,
                             codigo_turno: 'c'
                           });

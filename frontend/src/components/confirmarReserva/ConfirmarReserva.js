@@ -18,7 +18,9 @@ export class ConfirmarReserva extends Component {
 
   state = {};
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.refrescarURL('/confirmar-reserva');
+  }
 
   render() {
     let nombreJornada = 'Jornada Completa';

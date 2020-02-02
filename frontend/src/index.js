@@ -2,6 +2,8 @@ import React, { Suspense, Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
+import { initializeReactUrlState } from 'react-url-state';
+
 import moment from 'moment';
 
 import Cabecera from './components/cabecera/Cabecera';
@@ -16,6 +18,28 @@ import getCookie from './utils';
 
 import './index.css';
 
+let reactUrlStateOptions = {
+  fromIdResolvers: {
+    id_pais: (id_pais) =>
+      new Promise(async (resolve, reject) =>
+        resolve(id_pais ? Number.parseInt(id_pais) : 0)
+      ),
+    id_provincia: (id_provincia) =>
+      new Promise(async (resolve, reject) =>
+        resolve(id_provincia ? Number.parseInt(id_provincia) : 0)
+      ),
+    id_localidad: (id_localidad) =>
+      new Promise(async (resolve, reject) =>
+        resolve(id_localidad ? Number.parseInt(id_localidad) : 0)
+      )
+  },
+  toIdMappers: {
+    id_pais: (id_pais) => id_pais,
+    id_provincia: (id_provincia) => id_provincia,
+    id_localidad: (id_localidad) => id_localidad
+  }
+};
+
 class Index extends Component {
   constructor(props) {
     super();
@@ -23,6 +47,7 @@ class Index extends Component {
     this.actualizarMapa = this.actualizarMapa.bind(this);
     this.elegirEspacio = this.elegirEspacio.bind(this);
     this.elegirCowork = this.elegirCowork.bind(this);
+    this.refrescarURL = this.refrescarURL.bind(this);
   }
 
   state = {
@@ -30,8 +55,10 @@ class Index extends Component {
     coworks: [],
     espacios: [],
     puestos: [],
-    localidades: [{ id_localidad: 0, nombre_localidad: 'Cargando..' }],
-    provincias: [{ id_provincia: 0, nombre_localidad: 'Cargando..' }],
+    localidades: [
+      { id_localidad: 0, nombre_localidad: 'Cargando..', provincia: 0 }
+    ],
+    provincias: [{ id_provincia: 0, nombre_localidad: 'Cargando..', pais: 0 }],
     paises: [{ id_pais: 0, nombre_localidad: 'Cargando..' }],
     id_pais: 0,
     id_provincia: 0,
@@ -39,17 +66,20 @@ class Index extends Component {
     id_espacio: 0,
     id_cowork: 0,
     codigo_turno: '',
-    fechaReserva: moment(new Date())
+    fechaReserva: moment(new Date()),
+    pathnameActual: '/'
   };
 
   getProvinciasDelPais() {
     let provincias = [];
 
     if (this.state.id_pais === 0) {
-      provincias = [{ id_provincia: 0, nombre_provincia: 'Seleccione Pais..' }];
+      provincias = [
+        { id_provincia: 0, nombre_provincia: 'Seleccione Pais..', pais: 0 }
+      ];
     } else {
       provincias = [
-        { id_provincia: 0, nombre_provincia: 'Seleccione Provincia..' }
+        { id_provincia: 0, nombre_provincia: 'Seleccione Provincia..', pais: 0 }
       ];
     }
 
@@ -72,11 +102,19 @@ class Index extends Component {
 
     if (this.state.id_provincia === 0) {
       localidades = [
-        { id_localidad: 0, nombre_localidad: 'Seleccione Provincia..' }
+        {
+          id_localidad: 0,
+          nombre_localidad: 'Seleccione Provincia..',
+          provincia: 0
+        }
       ];
     } else {
       localidades = [
-        { id_localidad: 0, nombre_localidad: 'Seleccione Localidad..' }
+        {
+          id_localidad: 0,
+          nombre_localidad: 'Seleccione Localidad..',
+          provincia: 0
+        }
       ];
     }
 
@@ -162,13 +200,14 @@ class Index extends Component {
   fetchLocalidades() {
     httpClient
       .get(`api/localidades/`)
-      .then((data) =>
+      .then((data) => {
         this.setState({
           localidades: data.map((localidad) =>
             this.completarLocalidad(localidad)
           )
-        })
-      )
+        });
+        this.actualizarMapa({ fechaReserva: this.state.fechaReserva });
+      })
       .catch((error) => console.log(error));
   }
 
@@ -206,6 +245,17 @@ class Index extends Component {
     }
 
     this.fetchInformacionGeografica();
+
+    this.reactUrlState = initializeReactUrlState(this)(reactUrlStateOptions);
+    this.setUrlState = this.reactUrlState.setUrlState;
+  }
+
+  refrescarURL(pathnameActual) {
+    if (this.state.pathnameActual !== pathnameActual) {
+      let { id_pais, id_provincia, id_localidad } = this.state;
+      this.setUrlState({ id_pais, id_provincia, id_localidad });
+      this.setState({ pathnameActual });
+    }
   }
 
   actualizarMapa(props) {
@@ -220,25 +270,28 @@ class Index extends Component {
       this.setState({ fechaReserva: props.fechaReserva });
       seleccion.fechaReserva = props.fechaReserva;
     } else if (typeof props.id_pais !== typeof undefined) {
-      this.setState({
-        id_pais: props.id_pais,
-        id_provincia: 0,
-        id_localidad: 0
-      });
+      if (this.setUrlState)
+        this.setUrlState({
+          id_pais: props.id_pais,
+          id_provincia: 0,
+          id_localidad: 0
+        });
       seleccion.id_pais = props.id_pais;
       seleccion.id_provincia = 0;
       seleccion.id_localidad = 0;
     } else if (typeof props.id_provincia !== typeof undefined) {
-      this.setState({
-        id_provincia: props.id_provincia,
-        id_localidad: 0
-      });
+      if (this.setUrlState)
+        this.setUrlState({
+          id_provincia: props.id_provincia,
+          id_localidad: 0
+        });
       seleccion.id_provincia = props.id_provincia;
       seleccion.id_localidad = 0;
     } else if (typeof props.id_localidad !== typeof undefined) {
-      this.setState({
-        id_localidad: props.id_localidad
-      });
+      if (this.setUrlState)
+        this.setUrlState({
+          id_localidad: props.id_localidad
+        });
       seleccion.id_localidad = props.id_localidad;
     }
 
@@ -299,6 +352,7 @@ class Index extends Component {
             component={() => (
               <ConfirmarReserva
                 usuario={this.state.usuario}
+                refrescarURL={this.refrescarURL}
                 fechaReserva={this.state.fechaReserva}
                 codigo_turno={this.state.codigo_turno}
                 espacio={

@@ -22,9 +22,9 @@ export class Cabecera extends Component {
 
   render() {
     return (
-      <header className="row w-100 m-0 p-0 d-flex justify-content-between align-items-center gework-bg-primario bg-primary">
-        <Col className="col-12 col-md-6 d-flex justify-content-center navbar-brand">
-          <Link to="/">
+      <header className='row w-100 m-0 p-0 d-flex justify-content-between align-items-center gework-bg-primario bg-primary'>
+        <Col className='col-12 col-md-6 d-flex justify-content-center navbar-brand'>
+          <Link to='/'>
             {/* TODO: agregar logo: <img
               src="/static/logo.png"
               width="33px"
@@ -34,42 +34,40 @@ export class Cabecera extends Component {
             <h1>GeWork</h1>
           </Link>
           {/* TODO: mejorar responsividad partiendo título y links en rows */}
-          <Link className="nav-link" to="/reservar-puesto">Reservar puesto</Link>
+          <Link className='nav-link' to='/reservar-puesto'>
+            Reservar puesto
+          </Link>
         </Col>
-        <Col className="col-12 col-md-4 d-flex justify-content-end justify-content-md-center">
-            <Dropdown>
-              <Dropdown.Toggle
-                drop="none"
-                id="menu-usuario"
-                bsPrefix="menu-usuario-style"
-                variant="none"
+        <Col className='col-12 col-md-4 d-flex justify-content-end justify-content-md-center'>
+          <Dropdown>
+            <Dropdown.Toggle
+              drop='none'
+              id='menu-usuario'
+              bsPrefix='menu-usuario-style'
+              variant='none'
+            >
+              <span
+                className='d-flex justify-content-center align-items-center dropdown-toggle username-circle gework-bg-secundario'
+                data-toggle='dropdown-menu'
+                aria-expanded='false'
               >
-                <span
-                  className="d-flex justify-content-center align-items-center dropdown-toggle username-circle gework-bg-secundario"
-                  data-toggle="dropdown-menu"
-                  aria-expanded="false"
-                >
-                  {this.props.usuario.iniciales || (<Spinner
-                                animation="border"
-                                role="status"
-                                size="lg"
-                              />)}
-                </span>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu x-placement="bottom-start">
-                <Dropdown.Item href="/adminlogout/">
-                  {`Cerrar sesión ${this.props.usuario.username || ''}`}
-                </Dropdown.Item>
-                {this.props.usuario.isAdmin ? (
-                  <Dropdown.Item href="/admin">
-                    Administración
-                  </Dropdown.Item>
-                ) : (
-                  ''
+                {this.props.usuario.iniciales || (
+                  <Spinner animation='border' role='status' size='lg' />
                 )}
-              </Dropdown.Menu>
-            </Dropdown>
+              </span>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu x-placement='bottom-start'>
+              <Dropdown.Item href='/adminlogout/'>
+                {`Cerrar sesión ${this.props.usuario.username || ''}`}
+              </Dropdown.Item>
+              {this.props.usuario.isAdmin ? (
+                <Dropdown.Item href='/admin'>Administración</Dropdown.Item>
+              ) : (
+                ''
+              )}
+            </Dropdown.Menu>
+          </Dropdown>
         </Col>
       </header>
     );

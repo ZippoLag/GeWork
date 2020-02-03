@@ -31,12 +31,36 @@ let reactUrlStateOptions = {
     id_localidad: (id_localidad) =>
       new Promise(async (resolve, reject) =>
         resolve(id_localidad ? Number.parseInt(id_localidad) : 0)
+      ),
+    fechaReserva: (fechaReserva) =>
+      new Promise(async (resolve, reject) =>
+        resolve(
+          fechaReserva
+            ? moment(Number.parseInt(fechaReserva))
+            : moment(new Date()).add('day', 1)
+        )
+      ),
+    id_espacio: (id_espacio) =>
+      new Promise(async (resolve, reject) =>
+        resolve(id_espacio ? Number.parseInt(id_espacio) : 0)
+      ),
+    id_cowork: (id_cowork) =>
+      new Promise(async (resolve, reject) =>
+        resolve(id_cowork ? Number.parseInt(id_cowork) : 0)
+      ),
+    codigo_turno: (codigo_turno) =>
+      new Promise(async (resolve, reject) =>
+        resolve(codigo_turno ? codigo_turno : 'c')
       )
   },
   toIdMappers: {
     id_pais: (id_pais) => id_pais,
     id_provincia: (id_provincia) => id_provincia,
-    id_localidad: (id_localidad) => id_localidad
+    id_localidad: (id_localidad) => id_localidad,
+    fechaReserva: (fechaReserva) => fechaReserva.valueOf(), //TODO: hacer letra legible para humanos?
+    id_espacio: (id_espacio) => id_espacio,
+    id_cowork: (id_cowork) => id_cowork,
+    codigo_turno: (codigo_turno) => codigo_turno
   }
 };
 
@@ -66,7 +90,7 @@ class Index extends Component {
     id_espacio: 0,
     id_cowork: 0,
     codigo_turno: '',
-    fechaReserva: moment(new Date()),
+    fechaReserva: moment(new Date()).add('day', 1),
     pathnameActual: '/'
   };
 
@@ -251,7 +275,7 @@ class Index extends Component {
   }
 
   refrescarURL(pathnameActual) {
-    if (this.state.pathnameActual !== pathnameActual) {
+    if (this.state.pathnameActual !== pathnameActual && this.setUrlState) {
       let { id_pais, id_provincia, id_localidad } = this.state;
       this.setUrlState({ id_pais, id_provincia, id_localidad });
       this.setState({ pathnameActual });
@@ -267,31 +291,40 @@ class Index extends Component {
     };
 
     if (props.fechaReserva) {
-      this.setState({ fechaReserva: props.fechaReserva });
+      if (this.setUrlState) {
+        this.setUrlState({ fechaReserva: props.fechaReserva });
+      }
+
       seleccion.fechaReserva = props.fechaReserva;
     } else if (typeof props.id_pais !== typeof undefined) {
-      if (this.setUrlState)
+      if (this.setUrlState) {
         this.setUrlState({
           id_pais: props.id_pais,
           id_provincia: 0,
           id_localidad: 0
         });
+      }
+
       seleccion.id_pais = props.id_pais;
       seleccion.id_provincia = 0;
       seleccion.id_localidad = 0;
     } else if (typeof props.id_provincia !== typeof undefined) {
-      if (this.setUrlState)
+      if (this.setUrlState) {
         this.setUrlState({
           id_provincia: props.id_provincia,
           id_localidad: 0
         });
+      }
+
       seleccion.id_provincia = props.id_provincia;
       seleccion.id_localidad = 0;
     } else if (typeof props.id_localidad !== typeof undefined) {
-      if (this.setUrlState)
+      if (this.setUrlState) {
         this.setUrlState({
           id_localidad: props.id_localidad
         });
+      }
+
       seleccion.id_localidad = props.id_localidad;
     }
 
@@ -299,14 +332,14 @@ class Index extends Component {
   }
 
   elegirEspacio(props) {
-    this.setState({
+    this.setUrlState({
       id_espacio: props.id_espacio,
       codigo_turno: props.codigo_turno
     });
   }
 
   elegirCowork(props) {
-    this.setState({ id_cowork: props.id_cowork, id_espacio: 0 });
+    this.setUrlState({ id_cowork: props.id_cowork, id_espacio: 0 });
   }
 
   render() {

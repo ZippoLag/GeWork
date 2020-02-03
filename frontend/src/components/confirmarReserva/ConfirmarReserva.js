@@ -11,7 +11,7 @@ export class ConfirmarReserva extends Component {
 
   static propTypes = {
     usuario: PropTypes.object.isRequired,
-    espacio: PropTypes.object.isRequired,
+    espacio: PropTypes.object, //Nota: técnicamente sí es requerido, pero si no está mostramos un error y no revienta
     fechaReserva: momentPropTypes.momentObj.isRequired,
     codigo_turno: PropTypes.string.isRequired
   };

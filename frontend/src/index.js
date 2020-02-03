@@ -105,9 +105,7 @@ class Index extends Component {
       provincias = [
         { id_provincia: 0, nombre_provincia: 'Seleccione Provincia..', pais: 0 }
       ];
-    }
 
-    if (this.state.id_pais) {
       provincias.push(
         ...this.state.provincias.filter((provincia) =>
           Number.isInteger(provincia.pais)
@@ -140,9 +138,7 @@ class Index extends Component {
           provincia: 0
         }
       ];
-    }
 
-    if (this.state.id_provincia) {
       localidades.push(
         ...this.state.localidades.filter((localidad) =>
           Number.isInteger(localidad.provincia)

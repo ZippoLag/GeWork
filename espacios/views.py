@@ -50,7 +50,7 @@ def prestacionDetail(request, id):
 
 # Devuelve lista de Coworks
 class CoworkListCreate(generics.ListCreateAPIView):
-    queryset = Cowork.objects.all()
+    queryset = Cowork.objects.filter(estado='h')
     serializer_class = CoworkSerializer
 
 # Devuelve un Cowork
@@ -132,7 +132,7 @@ def puestos_vacantes(request, id_localidad, anio, mes, dia, turno):
     turno = turno or 'c'
     loc = get_object_or_404(Localidad, pk=id_localidad)
 
-    coworks = Cowork.objects.filter(localidad=loc)
+    coworks = Cowork.objects.filter(localidad=loc).filter(estado='h')
     espacios = Espacio.objects.filter(cowork__in=coworks.all()).filter(es_sala=False)
     puestos = Puesto.objects.filter(espacio__in=espacios.all())
 
@@ -162,7 +162,7 @@ def salas_vacantes(request, id_localidad, anio, mes, dia, turno):
     turno = turno or 'c'
     loc = get_object_or_404(Localidad, pk=id_localidad)
 
-    coworks = Cowork.objects.filter(localidad=loc)
+    coworks = Cowork.objects.filter(localidad=loc).filter(estado='h')
     espacios = Espacio.objects.filter(cowork__in=coworks.all()).filter(es_sala=True)
     puestos = Puesto.objects.filter(espacio__in=espacios.all())
 

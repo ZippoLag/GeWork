@@ -71,6 +71,16 @@ class Cowork(MyModel):
     lat = models.FloatField(help_text="Obtener mediante maps.google.com")
     lng = models.FloatField(help_text="Obtener mediante maps.google.com")
     localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
+
+    # CLM: Usuario que ofrece puesto o sala lo hace quedando el mismo en 'p' y Usuario admin lo tiene que cambiar a 'h' para que se habilite.
+    ESTADO_CHOICES = (
+        ('h', 'Habilitado'),
+        ('i', 'Inhabilitado'),
+        ('p', 'Pendiente de Aprobacion'),
+    )
+
+    estado = models.CharField(max_length=1, choices=ESTADO_CHOICES, blank=True, default='p', help_text='Estado de Cowork')
+
     def __str__(self):
         return self.nombre_cowork
 

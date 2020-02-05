@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
 from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer
+from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer, CoworkCreateSerializer, EspacioCreateSerializer, PuestoCreateSerializer
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from rest_framework.generics import CreateAPIView
@@ -176,5 +176,21 @@ def salas_vacantes(request, id_localidad, anio, mes, dia, turno):
 
     return JsonResponse(data, safe=(not settings.DEBUG))
 
+# Devuelve google maps api key
 def googlemapsapikey(request):
     return JsonResponse({'googleMapsApiKey':settings.GOOGLE_MAPS_API_KEY}, safe=(not settings.DEBUG))
+
+# Crea nuevo Cowork
+class CoworkCreate(CreateAPIView):
+    queryset = Cowork.objects.all()
+    serializer_class = CoworkCreateSerializer
+
+# Crea nuevo Espacio
+class EspacioCreate(CreateAPIView):
+    queryset = Espacio.objects.all()
+    serializer_class = EspacioCreateSerializer
+
+# Crea nuevo Puesto
+class PuestoCreate(CreateAPIView):
+    queryset = Puesto.objects.all()
+    serializer_class = PuestoCreateSerializer

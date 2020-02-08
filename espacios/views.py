@@ -44,7 +44,7 @@ def get_detalles_usuario(request):
 def espacioDetail(request, id):
     espacio = Espacio.objects.filter(pk=id)
     data = EspacioSerializer(espacio, many=True).data
-    return JsonResponse(data, safe=(not settings.DEBUG))
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Prestaciones
 class PrestacionListCreate(generics.ListCreateAPIView):
@@ -55,7 +55,7 @@ class PrestacionListCreate(generics.ListCreateAPIView):
 def prestacionDetail(request, id):
     prestacion = Prestacion.objects.filter(pk=id)
     data = PrestacionSerializer(prestacion, many=True).data
-    return JsonResponse(data, safe=(not settings.DEBUG))
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Coworks
 class CoworkListCreate(generics.ListCreateAPIView):
@@ -66,7 +66,7 @@ class CoworkListCreate(generics.ListCreateAPIView):
 def coworkDetail(request, id):
     cowork = Cowork.objects.filter(pk=id)
     data = CoworkSerializer(cowork, many=True).data
-    return JsonResponse(data, safe=(not settings.DEBUG))
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Paises
 class PaisListCreate(generics.ListCreateAPIView):
@@ -93,14 +93,14 @@ class LocalidadDetail(generics.RetrieveUpdateDestroyAPIView):
 def puestoDetail(request, id):
     puesto = Puesto.objects.filter(pk=id)
     data = PuestoSerializer(puesto, many=True).data
-    return JsonResponse(data, safe=(not settings.DEBUG))
+    return JsonResponse(data, safe=False)
 
 # Devuelve lista de Contratos de un Usuario
 def contratosUsuario(request):
     usr = request.user.pk
     contratos = Contrato.objects.filter(usuario_id=usr)
     data = ContratoSerializer(contratos, many=True).data
-    return JsonResponse(data, safe=(not settings.DEBUG))
+    return JsonResponse(data, safe=False)
 
 # Devuelve Pago de un Contrato de un Usuario
 def contratoUsuario(request, id):
@@ -108,7 +108,7 @@ def contratoUsuario(request, id):
     cont = Contrato.objects.filter(usuario_id=usr, pk=id)
     pagos = Pago.objects.filter(contrato=cont[0])
     data = PagoSerializer(pagos, many=True).data
-    return JsonResponse(data, safe=(not settings.DEBUG))
+    return JsonResponse(data, safe=False)
 
 # Graba puntuacion y reseña de Contrato
 class ContratoEvaluacion(generics.UpdateAPIView):
@@ -153,7 +153,7 @@ def puestos_vacantes(request, id_localidad, anio, mes, dia, turno):
 
     data = PuestoSerializer(puestos_libres, many=True).data
 
-    return JsonResponse(data, safe=(not settings.DEBUG))
+    return JsonResponse(data, safe=False)
 
 def googlemapsapikey(request):
-    return JsonResponse({'googleMapsApiKey':settings.GOOGLE_MAPS_API_KEY}, safe=(not settings.DEBUG))
+    return JsonResponse({'googleMapsApiKey':settings.GOOGLE_MAPS_API_KEY}, safe=False)

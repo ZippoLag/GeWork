@@ -75,7 +75,7 @@ class Index extends Component {
   }
 
   state = {
-    usuario: {},
+    usuario: null,
     coworks: [],
     espacios: [],
     puestos: [],

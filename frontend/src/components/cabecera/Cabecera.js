@@ -51,17 +51,21 @@ export class Cabecera extends Component {
                 data-toggle='dropdown-menu'
                 aria-expanded='false'
               >
-                {this.props.usuario.iniciales || (
+                {(this.props.usuario && this.props.usuario.iniciales) || (
                   <Spinner animation='border' role='status' size='lg' />
                 )}
               </span>
             </Dropdown.Toggle>
 
             <Dropdown.Menu x-placement='bottom-start'>
-              <Dropdown.Item href='/adminlogout/'>
-                {`Cerrar sesión ${this.props.usuario.username || ''}`}
-              </Dropdown.Item>
-              {this.props.usuario.isAdmin ? (
+              {this.props.usuario ? (
+                <Dropdown.Item href='/adminlogout/'>
+                  {`Cerrar sesión ${this.props.usuario.username || ''}`}
+                </Dropdown.Item>
+              ) : (
+                ''
+              )}
+              {this.props.usuario && this.props.usuario.isAdmin ? (
                 <Dropdown.Item href='/admin'>Administración</Dropdown.Item>
               ) : (
                 ''

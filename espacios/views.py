@@ -3,6 +3,7 @@ import json
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from rest_framework import generics
+from django.contrib.auth.models import User
 from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
 from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer
 from django.shortcuts import get_object_or_404, render
@@ -22,11 +23,19 @@ def get_detalles_usuario(request):
     # TODO: obtener la instancia de Usuario (o Perfil, o como le llamemos) relacionada al usuario autenticado por django y enviar _sólo_ los datos que necesitemos en el frontend
 
     user = request.user
-    if settings.DEBUG and not request.user:
-        user = {username:"N/A"}
+    if settings.DEBUG and ((not request.user) or request.user.is_anonymous or not request.user.is_authenticated):
+        user = User()
+        user.username = 'N/A'
+        user.nombres = 'N/A'
+        user.iniciales = 'N/A'
+    else:
+        user.nombres = f'{user.first_name} {user.last_name}' if user.first_name or user.last_name else user.username
+        user.iniciales = ''.join(nombre[:1] for nombre in user.nombres.upper().split(' '))
 
     response = JsonResponse({
-        'username': user.username
+        'username': user.username,
+        'iniciales': user.iniciales,
+        'nombres': user.nombres
     })
 
     return response

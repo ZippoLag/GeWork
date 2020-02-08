@@ -14,7 +14,6 @@ import ReservarPuesto from './components/reservarPuesto/ReservarPuesto';
 import ConfirmarReserva from './components/confirmarReserva/ConfirmarReserva';
 
 import httpClient from './fetchWrapper';
-import getCookie from './utils';
 
 import './index.css';
 
@@ -256,13 +255,10 @@ class Index extends Component {
   };
 
   componentDidMount() {
-    //Si hay un token de autenticación en las cookies del navegador, significa que ya inició sesión un usuario, por lo que podemos obtener sus detalles desde el backend
-    if (getCookie('csrftoken')) {
-      httpClient
-        .get(`api/get_detalles_usuario/`)
-        .then((data) => this.setState({ usuario: data }))
-        .catch((error) => console.log(error));
-    }
+    httpClient
+      .get(`api/get_detalles_usuario/`)
+      .then((data) => this.setState({ usuario: data }))
+      .catch((error) => console.log(error));
 
     this.fetchInformacionGeografica();
 

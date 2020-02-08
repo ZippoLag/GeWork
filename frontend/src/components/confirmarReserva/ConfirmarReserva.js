@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as momentPropTypes from 'react-moment-proptypes';
 
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 import './ConfirmarReserva.css';
 
 export class ConfirmarReserva extends Component {
@@ -10,7 +13,7 @@ export class ConfirmarReserva extends Component {
   }
 
   static propTypes = {
-    usuario: PropTypes.object.isRequired,
+    usuario: PropTypes.object,
     espacio: PropTypes.object, //Nota: técnicamente sí es requerido, pero si no está mostramos un error y no revienta
     fechaReserva: momentPropTypes.momentObj.isRequired,
     codigo_turno: PropTypes.string.isRequired
@@ -75,6 +78,13 @@ export class ConfirmarReserva extends Component {
             página de inicio y recomience el proceso
           </p>
         ) /* TODO: mejorar este proceso, agregar link a '/reservar-pusto' */}
+        {this.props.espacio && this.props.usuario ? (
+          <Row>
+            <Col>Reservar a nombre de {this.props.usuario.username}</Col>
+          </Row>
+        ) : (
+          <p>Debe iniciar sesión para continuar</p>
+        )}
       </div>
     );
   }

@@ -56,4 +56,8 @@ urlpatterns = [
     path('api/espaciocreate/', require_login_if_not_debug(views.EspacioCreate.as_view())),
     # Crea nuevo Puesto
     path('api/puestocreate/', require_login_if_not_debug(views.PuestoCreate.as_view())),
+    # Registro de usuario Administrador de Cowork
+    path('api/signup/coadmin/', views.CoadminSignUpView.as_view()),
+    # Registro de usuario Cliente
+    path('api/signup/client/', views.ClientSignUpView.as_view()),
 ]

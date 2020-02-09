@@ -1,14 +1,17 @@
 import io
 import json
 from django.http import HttpResponse, JsonResponse
-from django.views.generic import View
-from rest_framework import generics
-from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
-from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer, CoworkCreateSerializer, EspacioCreateSerializer, PuestoCreateSerializer
-from django.shortcuts import get_object_or_404, render
+from django.views.generic import View, CreateView
+from django.shortcuts import get_object_or_404, render, redirect
 from django.conf import settings
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+from rest_framework import generics
+from .models import User, UserProfile, Pais, Provincia, Localidad, Pago, Prestacion, Cowork, Contrato, Espacio, Puesto
+from .serializers import CoworkSerializer, PrestacionSerializer, EspacioSerializer, PuestoSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer, CoworkCreateSerializer, EspacioCreateSerializer, PuestoCreateSerializer, CoadminSignUpViewSerializer, ClientSignUpViewSerializer
 from rest_framework.generics import CreateAPIView
 from datetime import datetime
+
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
 
@@ -194,3 +197,13 @@ class EspacioCreate(CreateAPIView):
 class PuestoCreate(CreateAPIView):
     queryset = Puesto.objects.all()
     serializer_class = PuestoCreateSerializer
+
+# Registro de usuario Administrador de Cowork
+class CoadminSignUpView(CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = CoadminSignUpViewSerializer
+
+# Registro de usuario Cliente de Gework
+class ClientSignUpView(CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = ClientSignUpViewSerializer

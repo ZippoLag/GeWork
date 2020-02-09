@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
+from .models import User, UserProfile, Pais, Provincia, Localidad, Pago, Prestacion, Cowork, Contrato, Espacio, Puesto
+from django.contrib.auth.models import Group
 
 # TODO: crear serializers para servir los modelos mediante la API REST:
 
@@ -81,7 +82,7 @@ class CoworkCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cowork
-        fields = ('nombre_cowork', 'direccion_cowork', 'inicioTM_cowork', 'finTM_cowork', 'inicioTT_cowork', 'finTT_cowork', 'lat', 'lng', 'localidad')
+        fields = ('nombre_cowork', 'direccion_cowork', 'inicioTM_cowork', 'finTM_cowork', 'inicioTT_cowork', 'finTT_cowork', 'lat', 'lng', 'localidad', 'estado')
 
 class EspacioCreateSerializer(serializers.ModelSerializer):
 
@@ -94,3 +95,41 @@ class PuestoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Puesto
         fields = ('ubicacion_puesto', 'espacio', 'capacidad')
+
+class UserProfileSignUpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserProfile
+        fields = ('dni_usuario', 'linkedin_usuario')
+
+class CoadminSignUpViewSerializer(serializers.ModelSerializer):
+    userprofile = UserProfileSignUpSerializer(read_only=False, many=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'userprofile')
+
+    def create(self, validated_data):
+        userprofile_data = validated_data.pop('userprofile')
+        user = User.objects.create(**validated_data)
+        UserProfile.objects.create(user=user,    **userprofile_data)
+        group = Group.objects.get(name='Administradores de Coworks')
+        user.groups.add(group)
+
+        return user
+
+class ClientSignUpViewSerializer(serializers.ModelSerializer):
+    userprofile = UserProfileSignUpSerializer(read_only=False, many=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'userprofile')
+
+    def create(self, validated_data):
+        userprofile_data = validated_data.pop('userprofile')
+        user = User.objects.create(**validated_data)
+        UserProfile.objects.create(user=user,    **userprofile_data)
+        group = Group.objects.get(name='Clientes  de GeWork')
+        user.groups.add(group)
+
+        return user

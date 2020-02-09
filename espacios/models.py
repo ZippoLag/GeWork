@@ -20,7 +20,8 @@ class UserProfile(MyModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     id_usuario = models.AutoField(primary_key=True)
     dni_usuario = models.IntegerField(unique=True)
-    linkedin_usuario = models.URLField()
+    linkedin_usuario = models.URLField(blank=True)
+
     def __str__(self):
         return self.user.username
 

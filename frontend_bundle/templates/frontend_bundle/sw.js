@@ -27,11 +27,15 @@ workbox.core.clientsClaim();
 self.__precacheManifest = [
   {
     "url": "asset-manifest.json",
-    "revision": "1b7f17fa351ef83e7001825d07fce6d6"
+    "revision": "728fbd23c2f9180eda3fbbaa5a3b4d4f"
   },
   {
     "url": "index.html",
-    "revision": "0bebf73d1f1d7b2f1d5c9283e52a3f8d"
+    "revision": "8e2d95251179188f8389229ec67d72e3"
+  },
+  {
+    "url": "static/css/2.0f801562.chunk.css",
+    "revision": "e6edf6c688779eedde81fa7747974bf3"
   },
   {
     "url": "static/css/main.773572c0.chunk.css",
@@ -42,12 +46,12 @@ self.__precacheManifest = [
     "revision": "c92b85a5b907c70211f4ec25e29a8c4a"
   },
   {
-    "url": "static/js/2.30cd546b.chunk.js",
-    "revision": "997a40ffa8aec271106b03422123784a"
+    "url": "static/js/2.d5c59483.chunk.js",
+    "revision": "9f8e05bac6582585465d62ec5e028861"
   },
   {
-    "url": "static/js/main.cb0f2de2.chunk.js",
-    "revision": "2c578cd48bf278b740fbe7bf3cf2316a"
+    "url": "static/js/main.2f3bcf20.chunk.js",
+    "revision": "a9bc27a9a339a48cfc202c27e3ffa34b"
   },
   {
     "url": "static/js/runtime-main.bf0ae59e.js",
@@ -64,6 +68,10 @@ self.__precacheManifest = [
   {
     "url": "static/manifest.json",
     "revision": "197a58822bbfeb45c1dfc668e9d6fe26"
+  },
+  {
+    "url": "static/media/notification.5bee74ca.svg",
+    "revision": "5bee74caefdf9d0a834915f6c8eeb259"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});

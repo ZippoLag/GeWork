@@ -387,16 +387,17 @@ class Index extends Component {
                   history.push('/confirmar-reserva');
                 }}
                 elegirCowork={this.elegirCowork}
+                history={history}
+                refrescarURL={this.refrescarURL}
               />
             )}
           />
           <Route
             exact
             path={['/confirmar-reserva']}
-            component={() => (
+            component={({ history }) => (
               <ConfirmarReserva
                 usuario={this.state.usuario}
-                refrescarURL={this.refrescarURL}
                 fechaReserva={this.state.fechaReserva}
                 codigo_turno={this.state.codigo_turno}
                 espacio={
@@ -404,6 +405,8 @@ class Index extends Component {
                     (espacio) => espacio.espacio_id === this.state.espacio_id
                   )[0]
                 }
+                history={history}
+                refrescarURL={this.refrescarURL}
               />
             )}
           />

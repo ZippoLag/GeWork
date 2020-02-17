@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as momentPropTypes from 'react-moment-proptypes';
 
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 import SelectorUbicacion from '../selectorUbicacion/SelectorUbicacion';
 import SelectorFecha from '../selectorFecha/SelectorFecha';
 import SelectorEspacio from '../selectorEspacio/SelectorEspacio';
@@ -22,13 +25,19 @@ export class ReservarPuesto extends Component {
     fechaReserva: momentPropTypes.momentObj.isRequired,
     actualizarMapa: PropTypes.func.isRequired,
     elegirEspacio: PropTypes.func.isRequired,
-    elegirCowork: PropTypes.func.isRequired
+    elegirCowork: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    refrescarURL: PropTypes.func.isRequired
   };
 
   state = {};
 
   actualizarMapa(props) {
     this.props.actualizarMapa(props);
+  }
+
+  componentDidMount() {
+    this.props.refrescarURL('/reservar-puesto');
   }
 
   render() {
@@ -63,6 +72,19 @@ export class ReservarPuesto extends Component {
             otra ubicación/fecha.
           </h3>
         )}
+        <Row
+          className='form-group col-6 d-flex justify-content-between'
+          role='group'
+        >
+          <Col className='col-5'>
+            <input
+              className='btn btn-secondary'
+              type='button'
+              value='< Volver'
+              onClick={() => this.props.history.push('/')}
+            />
+          </Col>
+        </Row>
       </div>
     );
   }

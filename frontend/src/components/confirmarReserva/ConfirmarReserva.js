@@ -22,11 +22,14 @@ export class ConfirmarReserva extends Component {
     usuario: PropTypes.object,
     espacio: PropTypes.object, //Nota: técnicamente sí es requerido, pero si no está mostramos un error y no revienta
     fechaReserva: momentPropTypes.momentObj.isRequired,
-    codigo_turno: PropTypes.string.isRequired
+    codigo_turno: PropTypes.string.isRequired,
+    history: PropTypes.object.isRequired,
+    refrescarURL: PropTypes.func.isRequired
   };
 
   state = {
-    medioDePago: 'MercadoPago'
+    medioDePago: 'MercadoPago',
+    reserva_confirmada: false
   };
 
   componentDidMount() {
@@ -44,10 +47,10 @@ export class ConfirmarReserva extends Component {
         medioDePago: this.state.medioDePago
       })
       .then((data) => {
+        this.setState({ reserva_confirmada: true });
         NotificationManager.success('Reserva creada con éxito!');
       })
       .catch((error) => {
-        console.log(error);
         NotificationManager.error('No se pudo confirmar la reserva.');
       });
 
@@ -188,13 +191,36 @@ export class ConfirmarReserva extends Component {
                 </select>
               </Col>
             </Row>
-            <Row>
-              <input
-                type='submit'
-                className='btn btn-primary'
-                value='Confirmar'
-                onClick={this.handleConfirmacion}
-              />
+            <Row
+              className='form-group col-6 d-flex justify-content-between'
+              role='group'
+            >
+              <Col className='col-5'>
+                <input
+                  className='btn btn-secondary'
+                  type='button'
+                  value='< Volver'
+                  onClick={() => {
+                    if (this.state.reserva_confirmada) {
+                      this.props.history.push('/');
+                    } else {
+                      //TODO: cuando se puedan resevar salas va a haber que mejorar esto
+                      this.props.history.push('/reservar-puesto');
+                    }
+                  }}
+                />
+              </Col>
+              <Col className='col-5'>
+                <input
+                  type='submit'
+                  className={`btn btn-primary ${
+                    this.state.reserva_confirmada ? 'btn-disabled' : ''
+                  }`}
+                  disabled={this.state.reserva_confirmada}
+                  value='Confirmar'
+                  onClick={this.handleConfirmacion}
+                />
+              </Col>
             </Row>
           </form>
         ) : (

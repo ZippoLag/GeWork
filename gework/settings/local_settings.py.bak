@@ -45,4 +45,5 @@ DATABASES = {
 ALLOWED_HOSTS = []  # TODO: define
 
 GOOGLE_MAPS_API_KEY = 'XXXXX'
-'
+
+PERMITIR_LOGIN_FALSO = False  # Permite bypassear autenticación para poder testear endpoints (sólo funciona si DEBUG=True)

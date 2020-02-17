@@ -1,6 +1,7 @@
 import React, { Suspense, Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 import { initializeReactUrlState } from 'react-url-state';
 
@@ -341,7 +342,7 @@ class Index extends Component {
           <Cabecera usuario={this.state.usuario} />
           <Route
             exact
-            path={['/', '/elegir-accion']}
+            path={['/elegir-accion']}
             component={() => <ElegirAccion usuario={this.state.usuario} />}
           />
           <Route
@@ -387,6 +388,11 @@ class Index extends Component {
                 }
               />
             )}
+          />
+          <Route
+            exact
+            path='/'
+            component={() => <Redirect to='/elegir-accion' />}
           />
           <Pie />
         </Router>

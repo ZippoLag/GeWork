@@ -16,15 +16,21 @@ class MyModel(models.Model):
 
 # DONE CLM: enlazar a la clase User interna de django (los campos comentados deberían obtenerse de instancias de ésa, hay diversos tutoriales sobre cómo hacer esto, la mayoría recomiendan nombrar a la clase custom "Profile", pero llamarle "Usuario" o "Perfil" en español sería igual de válido)
 
-class UserProfile(MyModel):
+class PerfilDeUsuario(MyModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     id_usuario = models.AutoField(primary_key=True)
-    dni_usuario = models.IntegerField(unique=True)
-    linkedin_usuario = models.URLField()
+    dni_usuario = models.IntegerField(unique=True, blank=True, default='')
+    linkedin_usuario = models.URLField(blank=True, default='')
+
     def __str__(self):
         return self.user.username
 
-admin.site.register(UserProfile)
+    @classmethod
+    def get_perfil(cls, usuario):
+        return cls.objects.get_or_create(user=usuario)
+
+
+admin.site.register(PerfilDeUsuario)
 
 # TODO: definir manejo de permisos
 # CLM: los niveles dentro de la clase Permiso, deberían estar tipificados?
@@ -71,6 +77,7 @@ class Cowork(MyModel):
     lat = models.FloatField(help_text="Obtener mediante maps.google.com")
     lng = models.FloatField(help_text="Obtener mediante maps.google.com")
     localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.nombre_cowork
 
@@ -81,6 +88,7 @@ class Prestacion(MyModel):
     nombre_prestacion = models.CharField(max_length=50)
     desc_prestacion = models.CharField(max_length=200)
     icono_prestacion = models.CharField(max_length=200, help_text="Usar caracter Unicode. Por ejemplo buscar en: https://emojis.wiki/")
+
     def __str__(self):
         return self.nombre_prestacion
 
@@ -110,8 +118,36 @@ class Puesto(MyModel):
     """
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
     capacidad = models.IntegerField(blank=False)
+
     def __str__(self):
         return self.ubicacion_puesto
+
+    @classmethod
+    def get_puestos_libres_por_localidad(cls, fecha, turno, localidad):
+        # FIXME: ver por qué está devolviendo puestos que en realidad están reservados
+        coworks = Cowork.objects.filter(localidad=localidad)
+        espacios = Espacio.objects.filter(cowork__in=coworks.all()).filter(es_sala=False)
+        puestos = Puesto.objects.filter(espacio__in=espacios.all())
+
+        contratos = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno__in=[turno, 'c']).filter(inicio_contrato=fecha)
+
+        ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
+        puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados)
+
+        return puestos_libres
+
+    @classmethod
+    def get_puestos_libres_por_espacio(cls, fecha, turno, espacio):
+        # TODO: verificar lógica (idem get_puestos_libres_por_localidad)
+        puestos = Puesto.objects.filter(espacio=espacio)
+
+        contratos = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno__in=[turno, 'c']).filter(inicio_contrato=fecha)
+
+        ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
+        puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados)
+
+        return puestos_libres
+
 
 admin.site.register(Puesto)
 
@@ -125,26 +161,25 @@ admin.site.register(Puesto)
         return self.desc_permiso"""
 
 class Contrato(MyModel):
-    id_contrato = models.AutoField(primary_key=True)
-    fecha_contrato = models.DateTimeField(default=timezone.now)
-
     TURNO_CHOICES = (
         ('m', 'Mañana'),
         ('t', 'Tarde'),
         ('c', 'Completo'),
     )
 
+    id_contrato = models.AutoField(primary_key=True)
+    fecha_contrato = models.DateTimeField(default=timezone.now)
     turno = models.CharField(max_length=1, choices=TURNO_CHOICES, blank=True, default='c', help_text='Turno del Contrato')
     inicio_contrato = models.DateTimeField()
     fin_contrato = models.DateTimeField()
     importe_contrato = models.DecimalField(max_digits=10, decimal_places=3)
     estrellas_contrato = models.IntegerField(blank=True, null=True)
     resenia_contrato = models.CharField(max_length=250, blank=True)
-    usuario = models.ForeignKey(UserProfile, on_delete=models.DO_NOTHING)
+    usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     puesto = models.ForeignKey(Puesto, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return str(self.fecha_contrato)
+        return f"{self.inicio_contrato} - {self.puesto.espacio.cowork}"
 
 admin.site.register(Contrato)
 
@@ -152,11 +187,11 @@ class Pago(MyModel):
     id_pago = models.AutoField(primary_key=True)
     fecha_pago = models.DateTimeField(default=timezone.now)
     medio_pago = models.CharField(max_length=100)
-    idext_pago = models.CharField(max_length=100)  # TODO: que es esto?
+    idext_pago = models.CharField(max_length=100, blank=True, default='')  # TODO: que es esto?
     importe_pago = models.DecimalField(max_digits=10, decimal_places=3)
     contrato = models.ForeignKey(Contrato, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return str(self.fecha_pago)
+        return f"{self.contrato} - ${self.importe_pago}"
 
 admin.site.register(Pago)

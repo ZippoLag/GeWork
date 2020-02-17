@@ -13,29 +13,35 @@ from datetime import datetime
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
 
+def obtener_usuario_loggeado(request):
+    user = request.user
+    if (settings.DEBUG and settings.PERMITIR_LOGIN_FALSO) and ((not user) or user.is_anonymous or not user.is_authenticated):
+        user = User.objects.get(username='admin')
+    return user
+
+
 # Devuelve lista de Espacios
 class EspacioListCreate(generics.ListCreateAPIView):
     queryset = Espacio.objects.all()
     serializer_class = EspacioSerializer
 
+
 # Devuelve detalles de Usuario Logueado
 def get_detalles_usuario(request):
     # TODO: obtener la instancia de Usuario (o Perfil, o como le llamemos) relacionada al usuario autenticado por django y enviar _sólo_ los datos que necesitemos en el frontend
 
-    user = request.user
-    if settings.DEBUG and ((not request.user) or request.user.is_anonymous or not request.user.is_authenticated):
-        user = User()
-        user.username = 'N/A'
-        user.nombres = 'N/A'
-        user.iniciales = 'N/A'
-    else:
-        user.nombres = f'{user.first_name} {user.last_name}' if user.first_name or user.last_name else user.username
-        user.iniciales = ''.join(nombre[:1] for nombre in user.nombres.upper().split(' '))
+    user = obtener_usuario_loggeado(request)
+
+    user.nombres = f'{user.first_name} {user.last_name}' if user.first_name or user.last_name else user.username
+    user.iniciales = ''.join(nombre[:1] for nombre in user.nombres.upper().split(' '))
 
     response = JsonResponse({
         'username': user.username,
         'iniciales': user.iniciales,
-        'nombres': user.nombres
+        'nombres': user.nombres,
+        'firstName': user.first_name,
+        'lastName': user.last_name,
+        'email': user.email
     })
 
     return response
@@ -116,9 +122,37 @@ class ContratoEvaluacion(generics.UpdateAPIView):
     serializer_class = ContratoEvaluacionSerializer
 
 # Crea nuevo Contrato
-class ContratoCreate(CreateAPIView):
-    queryset = Contrato.objects.all()
-    serializer_class = ContratoCreateSerializer
+def crear_contrato(request):
+    request_data = json.loads(request.body)
+
+    id_espacio = request_data.get('idEspacio')
+    fecha_reserva = datetime.strptime(request_data.get('fechaReserva'), "%d/%m/%Y")
+    codigo_turno = request_data.get('codigoTurno')
+    medio_de_pago = request_data.get('medioDePago')
+
+    # TODO: la mayor parte de esta lógica de creación de contrato habría que moverla al Contrato en models.py
+
+    espacio = Espacio.objects.get(id_espacio=id_espacio)
+
+    user = obtener_usuario_loggeado(request)
+
+    if codigo_turno not in [turno[0] for turno in Contrato.TURNO_CHOICES]:
+        raise Exception(f"'{codigo_turno}' no es un código de turno válido. Debería ser: {Contrato.TURNO_CHOICES}")
+
+    # TODO: permitir seleccionar el puesto (en ConfirmarReserva.js?) en lugar de sólo el espacio?
+    puesto=Puesto.get_puestos_libres_por_espacio(fecha_reserva, codigo_turno, espacio)[0]
+
+    importe_contrato=espacio.precioJC_espacio if codigo_turno == 'c' else espacio.precioMJ_espacio
+
+    contrato = Contrato.objects.create(puesto=puesto, usuario=user, importe_contrato=importe_contrato, inicio_contrato=fecha_reserva, fin_contrato=fecha_reserva)
+
+    pago = Pago.objects.create(contrato=contrato, medio_pago=medio_de_pago, importe_pago=importe_contrato)
+
+    # TODO: manejar pago real en endpoint aparte (+simular algo que parezca un pago real?)
+
+    details= "Contrato creado con éxito"
+
+    return JsonResponse({'exito': True}, safe=False)
 
 # Crea nuevo Pago
 class PagoCreate(CreateAPIView):
@@ -139,21 +173,14 @@ def puestos_vacantes(request, id_localidad, anio, mes, dia, turno):
     # TODO: (SRV) por cómo quedaron armados los serializers, estamos enviando data duplicada, podríamos hacer la llamada más eficiente si para las relaciones enviáramos sólo las FK y re-construyéramos los objetos en el frontend (de la misma forma que se reciben los Paises/Provincias/Localidades - ver código en index.js)
     fecha = datetime(anio, mes, dia, 8, 0, 0)
     turno = turno or 'c'
-    loc = get_object_or_404(Localidad, pk=id_localidad)
+    localidad = get_object_or_404(Localidad, pk=id_localidad)
 
-    coworks = Cowork.objects.filter(localidad=loc)
-    espacios = Espacio.objects.filter(cowork__in=coworks.all()).filter(es_sala=False)
-    puestos = Puesto.objects.filter(espacio__in=espacios.all())
-
-    contratos = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno__in=[turno, 'c']).filter(inicio_contrato=fecha)
-
-    ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
-
-    puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados)
+    puestos_libres = Puesto.get_puestos_libres_por_localidad(fecha, turno, localidad)
 
     data = PuestoSerializer(puestos_libres, many=True).data
 
     return JsonResponse(data, safe=False)
+
 
 def googlemapsapikey(request):
     return JsonResponse({'googleMapsApiKey':settings.GOOGLE_MAPS_API_KEY}, safe=False)

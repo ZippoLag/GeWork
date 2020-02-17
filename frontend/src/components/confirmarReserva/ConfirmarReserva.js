@@ -5,11 +5,15 @@ import * as momentPropTypes from 'react-moment-proptypes';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import httpClient from '../../fetchWrapper';
+
 import './ConfirmarReserva.css';
 
 export class ConfirmarReserva extends Component {
   constructor(props) {
     super();
+
+    this.handleConfirmacion = this.handleConfirmacion.bind(this);
   }
 
   static propTypes = {
@@ -19,10 +23,31 @@ export class ConfirmarReserva extends Component {
     codigo_turno: PropTypes.string.isRequired
   };
 
-  state = {};
+  state = {
+    medioDePago: 'MercadoPago'
+  };
 
   componentDidMount() {
     this.props.refrescarURL('/confirmar-reserva');
+  }
+
+  handleConfirmacion(evento) {
+    evento.preventDefault();
+
+    httpClient
+      .post(`api/crear_contrato/`, {
+        idEspacio: this.props.espacio.id_espacio,
+        fechaReserva: this.props.fechaReserva.format('DD/MM/YYYY'),
+        codigoTurno: this.props.codigo_turno,
+        medioDePago: this.state.medioDePago
+      })
+      .then((data) => {
+        //TODO: mostrar mensaje de éxito o fracaso
+        console.log('éxito!');
+      })
+      .catch((error) => console.log(error));
+
+    return false;
   }
 
   render() {
@@ -54,8 +79,7 @@ export class ConfirmarReserva extends Component {
           .replace(/, ([^, ]*)$/, ' y $1')
       : [];
 
-    //TODO: mostrar detalles del usuario o login si no está loggeado
-    //TODO: hacer fetch (POST) de la reserva y mostrar resultado
+    //TODO: mostrar login si no está loggeado
 
     return (
       <div>
@@ -79,9 +103,96 @@ export class ConfirmarReserva extends Component {
           </p>
         ) /* TODO: mejorar este proceso, agregar link a '/reservar-pusto' */}
         {this.props.espacio && this.props.usuario ? (
-          <Row>
-            <Col>Reservar a nombre de {this.props.usuario.username}</Col>
-          </Row>
+          <form method='post'>
+            <Row className='form-group col-12' role='group'>
+              <legend>Datos del Cliente</legend>
+            </Row>
+
+            <Row className='form-group col-12' role='group'>
+              <Col className='col-12 col-lg-6'>
+                <span className='help-block text-muted small-font'>
+                  Apellido
+                </span>
+                <input
+                  id='apellido'
+                  type='text'
+                  className='form-control disabled'
+                  placeholder='Apellido'
+                  value={this.props.usuario.lastName}
+                  readOnly
+                />
+              </Col>
+              <Col className='col-12 col-lg-6'>
+                <span className='help-block text-muted small-font'>Nombre</span>
+                <input
+                  id='nombre'
+                  type='text'
+                  className='form-control disabled'
+                  placeholder='Nombre'
+                  value={this.props.usuario.firstName}
+                  readOnly
+                />
+              </Col>
+            </Row>
+
+            <Row className='form-group col-12' role='group'>
+              <Col className='col-12'>
+                <span className='help-block text-muted small-font'>e-mail</span>
+                <input
+                  id='email'
+                  type='text'
+                  className='form-control disabled'
+                  placeholder='e-mail'
+                  value={this.props.usuario.email}
+                  readOnly
+                />
+              </Col>
+            </Row>
+
+            <Row className='form-group col-12' role='group'>
+              <legend>Información de Pago</legend>
+            </Row>
+
+            <Row className='form-group col-12' role='group'>
+              <Col className='col-12'>
+                <span className='help-block text-muted small-font'>Monto</span>
+                <input
+                  id='monto'
+                  type='text'
+                  className='form-control disabled'
+                  value={`${precio} (ARS)`}
+                  readOnly
+                />
+              </Col>
+            </Row>
+
+            <Row className='form-group col-12' role='group'>
+              <Col className='col-12'>
+                <span className='help-block text-muted small-font'>
+                  Medio de Pago
+                </span>
+                <select
+                  className='from-control'
+                  id='localidad-select'
+                  value={this.state.medioDePago}
+                  onChange={(evento) => {
+                    this.setState({ medioDePago: evento.target.value });
+                  }}
+                >
+                  <option value='MercadoPago'>MercadoPago</option>
+                  <option value='Efectivo'>Efectivo</option>
+                </select>
+              </Col>
+            </Row>
+            <Row>
+              <input
+                type='submit'
+                className='btn btn-primary'
+                value='Confirmar'
+                onClick={this.handleConfirmacion}
+              />
+            </Row>
+          </form>
         ) : (
           <p>Debe iniciar sesión para continuar</p>
         )}

@@ -67,6 +67,13 @@ class Localidad(MyModel):
 admin.site.register(Localidad)
 
 class Cowork(MyModel):
+        # CLM: Usuario que ofrece puesto o sala lo hace quedando el mismo en 'p' y Usuario admin lo tiene que cambiar a 'h' para que se habilite.
+    ESTADO_CHOICES = (
+        ('h', 'Habilitado'),
+        ('i', 'Inhabilitado'),
+        ('p', 'Pendiente de Aprobacion'),
+    )
+
     id_cowork = models.AutoField(primary_key=True)
     nombre_cowork = models.CharField(max_length=50)
     direccion_cowork = models.CharField(max_length=50)
@@ -77,6 +84,7 @@ class Cowork(MyModel):
     lat = models.FloatField(help_text="Obtener mediante maps.google.com")
     lng = models.FloatField(help_text="Obtener mediante maps.google.com")
     localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=1, choices=ESTADO_CHOICES, blank=True, default='p', help_text='Estado de Cowork')
 
     def __str__(self):
         return self.nombre_cowork
@@ -124,12 +132,12 @@ class Puesto(MyModel):
 
     @classmethod
     def get_puestos_libres_por_localidad(cls, fecha, turno, localidad):
-        # FIXME: ver por qué está devolviendo puestos que en realidad están reservados
-        coworks = Cowork.objects.filter(localidad=localidad)
-        espacios = Espacio.objects.filter(cowork__in=coworks.all()).filter(es_sala=False)
+        # FIXME: ver por qué está devolviendo puestos que en realidad están reservados - puede que el problema sea la comparación de fechas: inicio_contrato=fecha al filtrar Contrato?
+        coworks = Cowork.objects.filter(localidad=localidad, estado='h')
+        espacios = Espacio.objects.filter(cowork__in=coworks.all(), es_sala=False)
         puestos = Puesto.objects.filter(espacio__in=espacios.all())
 
-        contratos = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno__in=[turno, 'c']).filter(inicio_contrato=fecha)
+        contratos = Contrato.objects.filter(puesto__in=puestos.all(), turno__in=[turno, 'c'], inicio_contrato=fecha)
 
         ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
         puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados)
@@ -141,7 +149,7 @@ class Puesto(MyModel):
         # TODO: verificar lógica (idem get_puestos_libres_por_localidad)
         puestos = Puesto.objects.filter(espacio=espacio)
 
-        contratos = Contrato.objects.filter(puesto__in=puestos.all()).filter(turno__in=[turno, 'c']).filter(inicio_contrato=fecha)
+        contratos = Contrato.objects.filter(puesto__in=puestos.all(), turno__in=[turno, 'c'], inicio_contrato=fecha)
 
         ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
         puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados)
@@ -170,8 +178,8 @@ class Contrato(MyModel):
     id_contrato = models.AutoField(primary_key=True)
     fecha_contrato = models.DateTimeField(default=timezone.now)
     turno = models.CharField(max_length=1, choices=TURNO_CHOICES, blank=True, default='c', help_text='Turno del Contrato')
-    inicio_contrato = models.DateTimeField()
-    fin_contrato = models.DateTimeField()
+    inicio_contrato = models.DateField()
+    fin_contrato = models.DateField()
     importe_contrato = models.DecimalField(max_digits=10, decimal_places=3)
     estrellas_contrato = models.IntegerField(blank=True, null=True)
     resenia_contrato = models.CharField(max_length=250, blank=True)

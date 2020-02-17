@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
+from .models import User, PerfilDeUsuario, Pais, Provincia, Localidad, Pago, Prestacion, Cowork, Contrato, Espacio, Puesto
+from django.contrib.auth.models import Group
 
 # TODO: crear serializers para servir los modelos mediante la API REST:
 
@@ -76,3 +77,59 @@ class PagoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pago
         fields = ('fecha_pago', 'medio_pago', 'idext_pago', 'importe_pago', 'contrato')
+
+class CoworkCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Cowork
+        fields = ('nombre_cowork', 'direccion_cowork', 'inicioTM_cowork', 'finTM_cowork', 'inicioTT_cowork', 'finTT_cowork', 'lat', 'lng', 'localidad', 'estado')
+
+class EspacioCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Espacio
+        fields = ('nombre_espacio', 'precioMJ_espacio', 'precioJC_espacio', 'ubicacion_espacio', 'es_sala', 'cowork', 'prestaciones')
+
+class PuestoCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Puesto
+        fields = ('ubicacion_puesto', 'espacio', 'capacidad')
+
+class PerfilDeUsuarioSignUpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PerfilDeUsuario
+        fields = ('dni_usuario', 'linkedin_usuario')
+
+class CoadminSignUpViewSerializer(serializers.ModelSerializer):
+    PerfilDeUsuario = PerfilDeUsuarioSignUpSerializer(read_only=False, many=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'PerfilDeUsuario')
+
+    def create(self, validated_data):
+        PerfilDeUsuario_data = validated_data.pop('PerfilDeUsuario')
+        user = User.objects.create(**validated_data)
+        PerfilDeUsuario.objects.create(user=user,    **PerfilDeUsuario_data)
+        group = Group.objects.get(name='Administradores de Coworks')
+        user.groups.add(group)
+
+        return user
+
+class ClientSignUpViewSerializer(serializers.ModelSerializer):
+    PerfilDeUsuario = PerfilDeUsuarioSignUpSerializer(read_only=False, many=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'PerfilDeUsuario')
+
+    def create(self, validated_data):
+        PerfilDeUsuario_data = validated_data.pop('PerfilDeUsuario')
+        user = User.objects.create(**validated_data)
+        PerfilDeUsuario.objects.create(user=user,    **PerfilDeUsuario_data)
+        group = Group.objects.get(name='Clientes  de GeWork')
+        user.groups.add(group)
+
+        return user

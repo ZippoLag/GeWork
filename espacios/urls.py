@@ -1,3 +1,4 @@
+
 from django.urls import path
 from . import views
 from django.contrib.auth.decorators import login_required
@@ -7,12 +8,12 @@ def require_login_if_not_debug(view):
     return view if settings.DEBUG else login_required(view)
 
 urlpatterns = [
-    # Devuelve lista de Espacios
-    path('api/espacios/', views.EspacioListCreate.as_view()),
     # Devuelve detalles de Usuario Logueado
     path('api/get_detalles_usuario/',
         require_login_if_not_debug(views.get_detalles_usuario),
         name='get_detalles_usuario/'),
+    # Devuelve lista de Espacios
+    path('api/espacios/', views.EspacioListCreate.as_view()),
     # Devuelve un Espacio y sus Prestaciones
     path('api/espacio/<int:id>/', views.espacioDetail),
     # Devuelve lista de Prestaciones
@@ -45,6 +46,18 @@ urlpatterns = [
     path('api/pagocreate/', require_login_if_not_debug(views.PagoCreate.as_view())),
     # Devuelve lista de puestos sin Contrato
     path('api/puestos_vacantes/<int:id_localidad>/<int:anio>/<int:mes>/<int:dia>/<slug:turno>/', views.puestos_vacantes),
+    # Devuelve lista de salas sin Contrato
+    path('api/salas_vacantes/<int:id_localidad>/<int:anio>/<int:mes>/<int:dia>/<slug:turno>/', views.salas_vacantes),
     # Devuelve la API Key de Google Maps TODO: cambiar por una cookie seteada en middleware
     path('api/googlemapsapikey/', views.googlemapsapikey),
+    # Crea nuevo Cowork
+    path('api/coworkcreate/', require_login_if_not_debug(views.CoworkCreate.as_view())),
+    # Crea nuevo Espacio
+    path('api/espaciocreate/', require_login_if_not_debug(views.EspacioCreate.as_view())),
+    # Crea nuevo Puesto
+    path('api/puestocreate/', require_login_if_not_debug(views.PuestoCreate.as_view())),
+    # Registro de usuario Administrador de Cowork
+    path('api/signup/coadmin/', views.CoadminSignUpView.as_view()),
+    # Registro de usuario Cliente
+    path('api/signup/client/', views.ClientSignUpView.as_view()),
 ]

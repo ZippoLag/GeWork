@@ -22,8 +22,8 @@ const readUrl = (url = '') =>
  * Maneja todas las respuestas que no son 200 (OK) como errores
  * @param {*} response
  */
-function handleErrors(response) {
-  if (!response.ok) {
+function treatErrorsAsExceptions(response) {
+  if (!response.ok || response.status !== 200) {
     throw Error(response.statusText);
   }
   return response;
@@ -39,7 +39,11 @@ const get = (url = '', headers = {}) =>
       'X-CSRFToken': getCookie('csrftoken')
     }
   })
-    .then(handleErrors)
+    .then(treatErrorsAsExceptions)
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    })
     .then((response) => response.json());
 
 const post = (url = '', body = {}, headers = {}) =>
@@ -53,7 +57,11 @@ const post = (url = '', body = {}, headers = {}) =>
       'X-CSRFToken': getCookie('csrftoken')
     }
   })
-    .then(handleErrors)
+    .then(treatErrorsAsExceptions)
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    })
     .then((response) => response.json());
 
 const put = (url = '', body = {}, headers = {}) =>
@@ -67,7 +75,11 @@ const put = (url = '', body = {}, headers = {}) =>
       'X-CSRFToken': getCookie('csrftoken')
     }
   })
-    .then(handleErrors)
+    .then(treatErrorsAsExceptions)
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    })
     .then((response) => response.json());
 
 const del = (url = '', headers = {}) =>
@@ -80,7 +92,11 @@ const del = (url = '', headers = {}) =>
       'X-CSRFToken': getCookie('csrftoken')
     }
   })
-    .then(handleErrors)
+    .then(treatErrorsAsExceptions)
+    .catch((error) => {
+      console.log(error);
+      throw error;
+    })
     .then((response) => response.json());
 
 export default {

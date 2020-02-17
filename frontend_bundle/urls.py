@@ -9,20 +9,16 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = [
     path(
         "asset-manifest.json",
-        login_required(
-            TemplateView.as_view(
-                template_name="frontend_bundle/asset-manifest.json",
-                content_type="application/manifest+json",
-            )
+        TemplateView.as_view(
+            template_name="frontend_bundle/asset-manifest.json",
+            content_type="application/manifest+json",
         ),
     ),
     path(
         "sw.js",
-        login_required(
-            TemplateView.as_view(
-                template_name="frontend_bundle/sw.js",
-                content_type="application/javascript",
-            )
+        TemplateView.as_view(
+            template_name="frontend_bundle/sw.js",
+            content_type="application/javascript",
         ),
     ),
     path(
@@ -38,10 +34,12 @@ urlpatterns = [
             permanent=False),
         name='favicon'
     ),
-    path(
-        "",
-        login_required(
-            TemplateView.as_view(template_name="frontend_bundle/index.html")
-        ),
+    re_path(
+        r'/',
+        TemplateView.as_view(template_name="frontend_bundle/index.html"),
+    ),
+    re_path(
+        r'^(?:.*)/?$',
+        TemplateView.as_view(template_name="frontend_bundle/index.html"),
     ),
 ]

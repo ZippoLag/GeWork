@@ -4,29 +4,30 @@ const { generateSW } = require('workbox-build');
 
 const swDest = 'build/sw.js';
 
-//TODO: can we avoid pulluting the console with error messages when a fetch fails? (if it's handled by the SW cache anyway?)
-//TODO: investigate channelName
-//TODO: keep in mind we may need to revert back to injectManifest approach for working with push notifications
-
 generateSW({
   swDest,
   globDirectory: 'build',
   globPatterns: [
     '**/*.{json,xml,webmanifest,html,js,css,png,gif,jpg,jpeg,webp,svg,ico}'
   ],
+  skipWaiting: true,
+  clientsClaim: true,
+  cacheId: 'GeWorkSW',
+  cleanupOutdatedCaches: true,
   runtimeCaching: [
     {
-      // Match any same-origin request that contains 'api'.
       urlPattern: /api/,
-      // Apply a network-first strategy.
       handler: 'StaleWhileRevalidate',
       options: {
-        cacheName: 'im-api-cache',
+        cacheName: 'gw-api-cache',
         backgroundSync: {
-          name: 'im-sync-queue',
+          name: 'gw-api-sync-queue',
           options: {
-            maxRetentionTime: 60 * 60
+            maxRetentionTime: 60
           }
+        },
+        broadcastUpdate: {
+          channelName: 'gw-api-update-channel'
         },
         cacheableResponse: {
           statuses: [0, 200]
@@ -34,7 +35,9 @@ generateSW({
         plugins: [
           {
             cacheDidUpdate: () => {
-              console.log('WorkBox Cache has been updated.');
+              console.log(
+                'Actualizada cache de llamadas API de GW mediante SW..'
+              );
             }
           }
         ],
@@ -42,15 +45,14 @@ generateSW({
           mode: 'no-cors'
         },
         matchOptions: {
-          ignoreSearch: true
+          ignoreSearch: false
         }
       }
     }
   ]
 }).then(({ count, size, warnings }) => {
-  // Optionally, log any warnings and details.
   warnings.forEach(console.warn);
   console.log(
-    `Generated ${swDest}, which will precache ${count} files, totaling ${size} bytes.`
+    `Se generó ${swDest}, la cual pre-cacheará ${count} archivos, de ${size}bytes.`
   );
 });

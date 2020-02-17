@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 import { Redirect } from 'react-router';
 
+import 'react-notifications/lib/notifications.css';
+import {
+  NotificationContainer,
+  NotificationManager
+} from 'react-notifications';
+
 import { initializeReactUrlState } from 'react-url-state';
 
 import moment from 'moment';
@@ -181,7 +187,9 @@ class Index extends Component {
             coworks: coworks
           });
         })
-        .catch((error) => console.log(error));
+        .catch((error) =>
+          NotificationManager.error('No se pudieron obtener Puestos Vacantes')
+        );
     } else {
       this.setState({ puestos: [], espacios: [], coworks: [] });
     }
@@ -200,7 +208,9 @@ class Index extends Component {
         })
       )
       .then(this.fetchProvincias())
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        NotificationManager.error('No se pudieron obtener Países')
+      );
   }
 
   fetchProvincias() {
@@ -214,7 +224,9 @@ class Index extends Component {
         })
       )
       .then(this.fetchLocalidades())
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        NotificationManager.error('No se pudieron obtener Provincias')
+      );
   }
 
   fetchLocalidades() {
@@ -228,7 +240,9 @@ class Index extends Component {
         });
         this.actualizarMapa({ fechaReserva: this.state.fechaReserva });
       })
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        NotificationManager.error('No se pudieron obtener Localidades')
+      );
   }
 
   completarProvincia = (provincia) => {
@@ -259,7 +273,11 @@ class Index extends Component {
     httpClient
       .get(`api/get_detalles_usuario/`)
       .then((data) => this.setState({ usuario: data }))
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        NotificationManager.error(
+          'No se pudieron obtener las preferencias de Usuario'
+        )
+      );
 
     this.fetchInformacionGeografica();
 
@@ -396,6 +414,7 @@ class Index extends Component {
           />
           <Pie />
         </Router>
+        <NotificationContainer />
       </div>
     );
   }

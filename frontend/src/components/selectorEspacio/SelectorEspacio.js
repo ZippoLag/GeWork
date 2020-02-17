@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { NotificationManager } from 'react-notifications';
+
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
@@ -41,7 +43,9 @@ export class SelectorEspacio extends Component {
       .then((data) =>
         this.setState({ googleMapsApiKey: data.googleMapsApiKey })
       )
-      .catch((error) => console.log(error));
+      .catch((error) =>
+        NotificationManager.error('No se pudo inicializar Google Maps')
+      );
   }
 
   handleCambioCowork(evento) {

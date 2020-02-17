@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as momentPropTypes from 'react-moment-proptypes';
 
+import { NotificationManager } from 'react-notifications';
+
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
@@ -42,10 +44,12 @@ export class ConfirmarReserva extends Component {
         medioDePago: this.state.medioDePago
       })
       .then((data) => {
-        //TODO: mostrar mensaje de éxito o fracaso
-        console.log('éxito!');
+        NotificationManager.success('Reserva creada con éxito!');
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        NotificationManager.error('No se pudo confirmar la reserva.');
+      });
 
     return false;
   }

@@ -132,15 +132,17 @@ class Puesto(MyModel):
 
     @classmethod
     def get_puestos_libres_por_localidad(cls, fecha, turno, localidad):
-        # FIXME: ver por qué está devolviendo puestos que en realidad están reservados - puede que el problema sea la comparación de fechas: inicio_contrato=fecha al filtrar Contrato?
         coworks = Cowork.objects.filter(localidad=localidad, estado='h')
         espacios = Espacio.objects.filter(cowork__in=coworks.all(), es_sala=False)
         puestos = Puesto.objects.filter(espacio__in=espacios.all())
 
         contratos = Contrato.objects.filter(puesto__in=puestos.all(), turno__in=[turno, 'c'], inicio_contrato=fecha)
 
+        if turno is 'c':
+            contratos = Contrato.objects.filter(puesto__in=puestos.all(), turno__in=['m','t','c'], inicio_contrato=fecha)
+
         ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
-        puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados)
+        puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados).filter(espacio__in=espacios.all())
 
         return puestos_libres
 
@@ -152,7 +154,7 @@ class Puesto(MyModel):
         contratos = Contrato.objects.filter(puesto__in=puestos.all(), turno__in=[turno, 'c'], inicio_contrato=fecha)
 
         ids_puestos_contratados = list(set([c.puesto.pk for c in contratos]))
-        puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados)
+        puestos_libres = Puesto.objects.exclude(id_puesto__in=ids_puestos_contratados).filter(espacio=espacio)
 
         return puestos_libres
 

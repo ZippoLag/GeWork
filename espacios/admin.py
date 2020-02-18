@@ -30,10 +30,10 @@ class PerfilDeUsuarioInLine(admin.StackedInline):
 class CustomUserAdmin(UserAdmin):
     inlines = (PerfilDeUsuarioInLine, )
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'get_dni')
-    list_select_related = ('PerfilDeUsuario', )
+    list_select_related = ('perfildeusuario', )
 
     def get_dni(self, instance):
-        return instance.PerfilDeUsuario.dni_usuario
+        return instance.perfildeusuario.dni_usuario
     get_dni.short_description = 'DNI'
 
     def get_inline_instances(self, request, obj=None):

@@ -15,10 +15,12 @@ from .models import User, PerfilDeUsuario, Pais, Provincia, Localidad, Pago, Pre
 from .serializers import CoworkSerializer, PrestacionSerializer, EspacioSerializer, PuestoSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer, CoworkCreateSerializer, EspacioCreateSerializer, PuestoCreateSerializer, CoadminSignUpViewSerializer, ClientSignUpViewSerializer
 from rest_framework.generics import CreateAPIView
 from datetime import datetime
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
 
+@login_required
 def obtener_usuario_loggeado(request):
     user = request.user
     if (settings.DEBUG and settings.PERMITIR_LOGIN_FALSO) and ((not user) or user.is_anonymous or not user.is_authenticated):
@@ -33,6 +35,7 @@ class EspacioListCreate(generics.ListCreateAPIView):
 
 
 # Devuelve detalles de Usuario Logueado
+@login_required
 def get_detalles_usuario(request):
     # TODO: obtener la instancia de Usuario (o Perfil, o como le llamemos) relacionada al usuario autenticado por django y enviar _sólo_ los datos que necesitemos en el frontend
 
@@ -108,6 +111,7 @@ def puestoDetail(request, id):
     return JsonResponse(data, safe=False)
 
 # Devuelve lista de Contratos de un Usuario
+@login_required
 def contratosUsuario(request):
     usr = request.user.pk
     contratos = Contrato.objects.filter(usuario_id=usr)
@@ -115,6 +119,7 @@ def contratosUsuario(request):
     return JsonResponse(data, safe=False)
 
 # Devuelve Pago de un Contrato de un Usuario
+@login_required
 def contratoUsuario(request, id):
     usr = request.user.pk
     cont = Contrato.objects.filter(usuario_id=usr, pk=id)
@@ -123,11 +128,12 @@ def contratoUsuario(request, id):
     return JsonResponse(data, safe=False)
 
 # Graba puntuacion y reseña de Contrato
-class ContratoEvaluacion(generics.UpdateAPIView):
+class ContratoEvaluacion(LoginRequiredMixin,generics.UpdateAPIView):
     queryset = Contrato.objects.all()
     serializer_class = ContratoEvaluacionSerializer
 
 # Crea nuevo Contrato
+@login_required
 def crear_contrato(request):
     request_data = json.loads(request.body)
 

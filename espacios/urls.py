@@ -39,7 +39,7 @@ urlpatterns = [
     # Devuelve Pago de un Contrato de un Usuario
     path('api/contrato/<int:id>/', require_login_if_not_debug(views.contratoUsuario)),
     # Graba puntuacion y reseña de Contrato
-    path('api/contratoevaluacion/<int:pk>/', require_login_if_not_debug(views.ContratoEvaluacion.as_view())),
+    path('api/evaluar_contrato/<int:pk>/', require_login_if_not_debug(views.evaluar_contrato)),
     # Crea nuevo Contrato
     path('api/crear_contrato/', require_login_if_not_debug(views.crear_contrato)),
     # Crea nuevo Pago

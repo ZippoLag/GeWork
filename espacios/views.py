@@ -127,10 +127,26 @@ def contratoUsuario(request, id):
     data = PagoSerializer(pagos, many=True).data
     return JsonResponse(data, safe=False)
 
-# Graba puntuacion y reseña de Contrato
-class ContratoEvaluacion(LoginRequiredMixin,generics.UpdateAPIView):
+# Graba puntuacion y reseña de Contrato con clase
+"""class ContratoEvaluacion(LoginRequiredMixin,generics.UpdateAPIView):
     queryset = Contrato.objects.all()
     serializer_class = ContratoEvaluacionSerializer
+"""
+# Graba puntuacion y reseña de Contrato con metodo
+@login_required
+def evaluar_contrato(request, id):
+    request_data = json.loads(request.body)
+
+    estrellas = request_data.get('estrellas')
+    resenia = request_data.get('resenia')
+
+    user = obtener_usuario_loggeado(request)
+
+    contrato = Contrato.objects.get(usuario=user, pk=id).update(estrellas_contrato=estrellas, resenia_contrato=resenia)
+
+    details= "Evaluacion registrada con éxito"
+
+    return JsonResponse({'exito': True}, safe=False)
 
 # Crea nuevo Contrato
 @login_required

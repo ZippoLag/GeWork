@@ -12,11 +12,12 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from rest_framework import generics
 from .models import User, PerfilDeUsuario, Pais, Provincia, Localidad, Pago, Prestacion, Cowork, Contrato, Espacio, Puesto
-from .serializers import CoworkSerializer, PrestacionSerializer, EspacioSerializer, PuestoSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer, CoworkCreateSerializer, EspacioCreateSerializer, PuestoCreateSerializer, CoadminSignUpViewSerializer, ClientSignUpViewSerializer
+from .serializers import CoworkSerializer, PrestacionSerializer, EspacioSerializer, PuestoSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer, CoworkCreateSerializer, EspacioCreateSerializer, PuestoCreateSerializer
 from rest_framework.generics import CreateAPIView
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
 
@@ -259,6 +260,37 @@ class PuestoCreate(CreateAPIView):
     queryset = Puesto.objects.all()
     serializer_class = PuestoCreateSerializer
 
+# Registro de usuario
+def registrar_usuario(request, num):
+    request_data = json.loads(request.body)
+
+    user_name = request_data.get('username')
+    firstname = request_data.get('first_name')
+    lastname = request_data.get('last_name')
+    email = request_data.get('email')
+    password = request_data.get('password')
+    password2 = request_data.get('password2')
+    dni = request_data.get('dni_usuario')
+    linkedin = request_data.get('linkedin_usuario')
+
+    if not (password == password2):
+        raise Exception(f"Las claves ingresadas no coinciden.")
+
+    if num == 1:
+        group = Group.objects.get(name='Administradores de Coworks')
+    else:
+        group = Group.objects.get(name='Clientes  de GeWork')
+
+    usuario = User.objects.create(username=user_name, first_name=firstname, last_name=lastname, email=email, password=password)
+
+    usuario.groups.add(group)
+
+    perfildeusuario = PerfilDeUsuario.objects.create(user=usuario, dni_usuario=dni, linkedin_usuario=linkedin)
+
+    details= "Usuario creado con éxito"
+
+    return JsonResponse({'exito': True}, safe=False)
+"""
 # Registro de usuario Administrador de Cowork
 class CoadminSignUpView(CreateAPIView):
     queryset = User.objects.all()
@@ -268,3 +300,4 @@ class CoadminSignUpView(CreateAPIView):
 class ClientSignUpView(CreateAPIView):
     queryset = User.objects.all()
     serializer_class = ClientSignUpViewSerializer
+"""

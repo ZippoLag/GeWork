@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import User, PerfilDeUsuario, Pais, Provincia, Localidad, Pago, Prestacion, Cowork, Contrato, Espacio, Puesto
-from django.contrib.auth.models import Group
+#from django.contrib.auth.models import Group
 
 # TODO: crear serializers para servir los modelos mediante la API REST:
 
@@ -101,7 +101,7 @@ class PerfilDeUsuarioSignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = PerfilDeUsuario
         fields = ('dni_usuario', 'linkedin_usuario')
-
+"""
 class CoadminSignUpViewSerializer(serializers.ModelSerializer):
     PerfilDeUsuario = PerfilDeUsuarioSignUpSerializer(read_only=False, many=False)
 
@@ -133,3 +133,4 @@ class ClientSignUpViewSerializer(serializers.ModelSerializer):
         user.groups.add(group)
 
         return user
+"""

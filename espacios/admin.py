@@ -16,10 +16,11 @@ class MyModelAdmin(admin.ModelAdmin):
 
     # TODO: no está funcionando. Por que no?
     def save_model(self, request, obj, form, change):
-        if obj.created_by is None:
+        if not change:
             obj.created_by = request.user.username
         obj.modified_by = request.user.username
-        super(MyModelAdmin, self).save_model(request, obj, form, change)
+        obj.save()
+        #super(MyModelAdmin, self).save_model(request, obj, form, change)
 
 class PerfilDeUsuarioInLine(admin.StackedInline):
     model = PerfilDeUsuario

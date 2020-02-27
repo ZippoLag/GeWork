@@ -2,9 +2,7 @@ import io
 import json
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View, CreateView
-from rest_framework import generics
 from django.contrib.auth.models import User
-from .models import Espacio, Prestacion, Cowork, Puesto, Pais, Provincia, Localidad, Contrato, Pago
 from .serializers import EspacioSerializer, PrestacionSerializer, CoworkSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, PuestoSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer
 from django.shortcuts import get_object_or_404, render, redirect
 from django.conf import settings
@@ -15,13 +13,10 @@ from .models import User, PerfilDeUsuario, Pais, Provincia, Localidad, Pago, Pre
 from .serializers import CoworkSerializer, PrestacionSerializer, EspacioSerializer, PuestoSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer, CoworkCreateSerializer, EspacioCreateSerializer, PuestoCreateSerializer
 from rest_framework.generics import CreateAPIView
 from datetime import datetime
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 
 # TODO: crear vistas para servir los objetos serializados (y demás)
 
-@login_required
 def obtener_usuario_loggeado(request):
     user = request.user
     if (settings.DEBUG and settings.PERMITIR_LOGIN_FALSO) and ((not user) or user.is_anonymous or not user.is_authenticated):
@@ -36,7 +31,6 @@ class EspacioListCreate(generics.ListCreateAPIView):
 
 
 # Devuelve detalles de Usuario Logueado
-@login_required
 def get_detalles_usuario(request):
     # TODO: obtener la instancia de Usuario (o Perfil, o como le llamemos) relacionada al usuario autenticado por django y enviar _sólo_ los datos que necesitemos en el frontend
 
@@ -112,7 +106,6 @@ def puestoDetail(request, id):
     return JsonResponse(data, safe=False)
 
 # Devuelve lista de Contratos de un Usuario
-@login_required
 def contratosUsuario(request):
     usr = request.user.pk
     contratos = Contrato.objects.filter(usuario_id=usr)
@@ -120,7 +113,6 @@ def contratosUsuario(request):
     return JsonResponse(data, safe=False)
 
 # Devuelve Pago de un Contrato de un Usuario
-@login_required
 def contratoUsuario(request, id):
     usr = request.user.pk
     cont = Contrato.objects.filter(usuario_id=usr, pk=id)
@@ -128,13 +120,9 @@ def contratoUsuario(request, id):
     data = PagoSerializer(pagos, many=True).data
     return JsonResponse(data, safe=False)
 
-# Graba puntuacion y reseña de Contrato con clase
-"""class ContratoEvaluacion(LoginRequiredMixin,generics.UpdateAPIView):
-    queryset = Contrato.objects.all()
-    serializer_class = ContratoEvaluacionSerializer
-"""
-# Graba puntuacion y reseña de Contrato con metodo
-@login_required
+# Graba puntuacion y reseña de Contrato
+# Donde: id es el contrato en el que se van a actualizar los datos.
+# Guardar: datos de puntuacion de Contrato.
 def evaluar_contrato(request, id):
     request_data = json.loads(request.body)
 
@@ -150,7 +138,6 @@ def evaluar_contrato(request, id):
     return JsonResponse({'exito': True}, safe=False)
 
 # Crea nuevo Contrato
-@login_required
 def crear_contrato(request):
     request_data = json.loads(request.body)
 
@@ -261,6 +248,9 @@ class PuestoCreate(CreateAPIView):
     serializer_class = PuestoCreateSerializer
 
 # Registro de usuario
+# Donde:    num indica si es usuario administrador (1)
+# o usuario cliente (2).
+# Guardar:  Nuevo registro de usuario.
 def registrar_usuario(request, num):
     request_data = json.loads(request.body)
 
@@ -290,14 +280,23 @@ def registrar_usuario(request, num):
     details= "Usuario creado con éxito"
 
     return JsonResponse({'exito': True}, safe=False)
-"""
-# Registro de usuario Administrador de Cowork
-class CoadminSignUpView(CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = CoadminSignUpViewSerializer
 
-# Registro de usuario Cliente de Gework
-class ClientSignUpView(CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = ClientSignUpViewSerializer
-"""
+# Actualizacion de datos de Usuario.
+def editar_usuario(request):
+    request_data = json.loads(request.body)
+
+    nombre = request_data.get('nombre')
+    apellido = request_data.get('apellido')
+    email = request_data.get('email')
+    dni = request_data.get('dni')
+    linkedin = request_data.get('linkedin')
+
+    user = obtener_usuario_loggeado(request)
+
+    usuario = user.update(first_name=nombre, last_name=apellido, email=email)
+
+    perfil = PerfilDeUsuario.objects.get(user=user).update(dni_usuario=dni, linkedin_usuario=linkedin)
+
+    details= "Modificacion registrada con exito."
+
+    return JsonResponse({'exito': True}, safe=False)

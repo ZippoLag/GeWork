@@ -58,5 +58,11 @@ urlpatterns = [
     path('api/puestocreate/', require_login_if_not_debug(views.PuestoCreate.as_view())),
     # Registro de usuario. (1- Admin, 2- Cliente)
     path('api/signup/<int:num>/', require_login_if_not_debug(views.registrar_usuario)),
-
+    # Actualizacion de datos de Usuario.
+    path('api/userupdate/', require_login_if_not_debug(views.editar_usuario)),
+    # AMC de Cowork
+    # AMC de Espacio
+    # AMC de Puesto
+    # Listado de Coworks
+    # Listado de Reservas para una fecha determinada
 ]

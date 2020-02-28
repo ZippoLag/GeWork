@@ -59,7 +59,9 @@ urlpatterns = [
     # Modificacion de Cowork
     path('api/coworkupdate/', require_login_if_not_debug(views.editar_cowork)),
     # Alta de Espacio
+    path('api/espaciocreate/', require_login_if_not_debug(views.registrar_espacio)),
     # Modificacion de Espacio
+    path('api/espacioupdate/', require_login_if_not_debug(views.editar_espacio)),
     # Alta de Puesto
     # Modificacion de Puesto
     # Listado de Coworks

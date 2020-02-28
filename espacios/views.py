@@ -345,3 +345,65 @@ def editar_cowork(request, id):
     details= "Modificacion registrada con éxito"
 
     return JsonResponse({'exito': True}, safe=False)
+
+# Alta de Espacio
+def registrar_espacio(request):
+    request_data = json.loads(request.body)
+
+    prestaciones = []
+
+    nombre = request_data.get('nombre')
+    precioMJ = request_data.get('preciomj')
+    precioJC = request_data.get('preciojc')
+    ubicacion = request_data.get('ubicacion')
+    id_cowork = request_data.get('id_cowork')
+    ids_prestaciones = request_data.get('prestaciones')
+    es_sala = request_data.get('es_sala')
+
+    cowork = Cowork.objects.get(id_cowork=id_cowork)
+
+    for p in ids_prestaciones:
+        prestacion = Prestacion.objects.get(id_prestacion=p)
+        prestaciones.append(prestacion)
+
+    espacio = Espacio.objects.create(nombre_espacio=nombre, precioMJ_espacio=precioMJ, precioJC_espacio=precioJC, ubicacion_espacio=ubicacion, cowork=cowork, es_sala=es_sala)
+
+    espacio.prestaciones.set(prestaciones)
+
+    details= "Espacio creado con éxito"
+
+    return JsonResponse({'exito': True}, safe=False)
+
+# Modificacion de Espacio
+def editar_espacio(request, id):
+    request_data = json.loads(request.body)
+
+    prestaciones = []
+
+    nombre = request_data.get('nombre')
+    precioMJ = request_data.get('preciomj')
+    precioJC = request_data.get('preciojc')
+    ubicacion = request_data.get('ubicacion')
+    id_cowork = request_data.get('id_cowork')
+    ids_prestaciones = request_data.get('prestaciones')
+    es_sala = request_data.get('es_sala')
+
+    cowork = Cowork.objects.get(id_cowork=id_cowork)
+
+    for p in ids_prestaciones:
+        prestacion = Prestacion.objects.get(id_prestacion=p)
+        prestaciones.append(prestacion)
+
+    espacio = Espacio.objects.get(pk=id)
+    espacio.nombre_espacio = nombre
+    espacio.precioMJ_espacio = precioMJ
+    espacio.precioJC_espacio = precioJC
+    espacio.ubicacion_espacio = ubicacion
+    espacio.cowork = cowork
+    espacio.prestaciones.set(prestaciones)
+    espacio.es_sala = es_sala
+    espacio.save()
+
+    details= "Modificacion registrada con éxito"
+
+    return JsonResponse({'exito': True}, safe=False)

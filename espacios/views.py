@@ -407,3 +407,39 @@ def editar_espacio(request, id):
     details= "Modificacion registrada con éxito"
 
     return JsonResponse({'exito': True}, safe=False)
+
+# Alta de Puesto
+def registrar_puesto(request):
+    request_data = json.loads(request.body)
+
+    ubicacion = request_data.get('ubicacion')
+    id_espacio = request_data.get('id_espacio')
+    capacidad = request_data.get('capacidad')
+
+    espacio = Espacio.objects.get(id_espacio=id_espacio)
+
+    puesto = Puesto.objects.create(ubicacion_puesto=ubicacion, espacio=espacio, capacidad=capacidad)
+
+    details= "Puesto creado con éxito"
+
+    return JsonResponse({'exito': True}, safe=False)
+
+# Modificacion de Puesto
+def editar_puesto(request, id):
+    request_data = json.loads(request.body)
+
+    ubicacion = request_data.get('ubicacion')
+    id_espacio = request_data.get('id_espacio')
+    capacidad = request_data.get('capacidad')
+
+    espacio = Espacio.objects.get(id_espacio=id_espacio)
+
+    puesto = Puesto.objects.get(pk=id)
+    puesto.ubicacion_puesto = ubicacion
+    puesto.espacio = espacio
+    puesto.capacidad = capacidad
+    puesto.save()
+
+    details= "Modificacion registrada con éxito"
+
+    return JsonResponse({'exito': True}, safe=False)

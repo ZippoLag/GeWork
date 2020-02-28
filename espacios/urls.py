@@ -63,7 +63,9 @@ urlpatterns = [
     # Modificacion de Espacio
     path('api/espacioupdate/', require_login_if_not_debug(views.editar_espacio)),
     # Alta de Puesto
+    path('api/puestocreate/', require_login_if_not_debug(views.registrar_puesto)),
     # Modificacion de Puesto
+    path('api/puestoupdate/', require_login_if_not_debug(views.editar_puesto)),
     # Listado de Coworks
     # Listado de Reservas para una fecha determinada
 ]

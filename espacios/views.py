@@ -10,7 +10,7 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from rest_framework import generics
 from .models import User, PerfilDeUsuario, Pais, Provincia, Localidad, Pago, Prestacion, Cowork, Contrato, Espacio, Puesto
-from .serializers import CoworkSerializer, PrestacionSerializer, EspacioSerializer, PuestoSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer, CoworkCreateSerializer, EspacioCreateSerializer, PuestoCreateSerializer
+from .serializers import CoworkSerializer, PrestacionSerializer, EspacioSerializer, PuestoSerializer, PaisSerializer, ProvinciaSerializer, LocalidadSerializer, ContratoSerializer, PagoSerializer, ContratoEvaluacionSerializer, ContratoCreateSerializer, PagoCreateSerializer
 from rest_framework.generics import CreateAPIView
 from datetime import datetime
 from django.contrib.auth.models import Group
@@ -235,21 +235,6 @@ def salas_vacantes(request, id_localidad, anio, mes, dia, turno):
 def googlemapsapikey(request):
     return JsonResponse({'googleMapsApiKey':settings.GOOGLE_MAPS_API_KEY}, safe=False)
 
-# Crea nuevo Cowork
-class CoworkCreate(CreateAPIView):
-    queryset = Cowork.objects.all()
-    serializer_class = CoworkCreateSerializer
-
-# Crea nuevo Espacio
-class EspacioCreate(CreateAPIView):
-    queryset = Espacio.objects.all()
-    serializer_class = EspacioCreateSerializer
-
-# Crea nuevo Puesto
-class PuestoCreate(CreateAPIView):
-    queryset = Puesto.objects.all()
-    serializer_class = PuestoCreateSerializer
-
 # Registro de usuario
 # Donde:    num indica si es usuario administrador (1)
 # o usuario cliente (2).
@@ -307,5 +292,56 @@ def editar_usuario(request):
     perfil.save()
 
     details= "Modificacion registrada con exito."
+
+    return JsonResponse({'exito': True}, safe=False)
+
+# Alta de Cowork
+def registrar_cowork(request):
+    request_data = json.loads(request.body)
+
+    nombre = request_data.get('nombre')
+    direccion = request_data.get('direccion')
+    itm = request_data.get('itm')
+    ftm = request_data.get('ftm')
+    itt = request_data.get('itt')
+    ftt = request_data.get('ftt')
+    lat = request_data.get('lat')
+    lng = request_data.get('lng')
+    loc = request_data.get('loc')
+    estado = 'p'
+
+    cowork = Cowork.objects.create(nombre_cowork=nombre, direccion_cowork=direccion, inicioTM_cowork=itm, finTM_cowork=ftm, inicioTT_cowork=itt, finTT_cowork=ftt, lat=lat, lng=lng, localidad=loc, estado=estado)
+
+    details= "Cowork creado con éxito"
+
+    return JsonResponse({'exito': True}, safe=False)
+
+# Modificacion de Cowork
+def editar_cowork(request, id):
+    request_data = json.loads(request.body)
+
+    nombre = request_data.get('nombre')
+    direccion = request_data.get('direccion')
+    itm = request_data.get('itm')
+    ftm = request_data.get('ftm')
+    itt = request_data.get('itt')
+    ftt = request_data.get('ftt')
+    lat = request_data.get('lat')
+    lng = request_data.get('lng')
+    loc = request_data.get('loc')
+
+    cowork = Cowork.objects.get(pk=id)
+    cowork.nombre_cowork = nombre
+    cowork.direccion_cowork = direccion
+    cowork.inicioTM_cowork = itm
+    cowork.finTM_cowork = ftm
+    cowork.inicioTT_cowork = itt
+    cowork.finTT_cowork = ftt
+    cowork.lat = lat
+    cowork.lng = lng
+    cowork.localidad = loc
+    cowork.save()
+
+    details= "Modificacion registrada con éxito"
 
     return JsonResponse({'exito': True}, safe=False)

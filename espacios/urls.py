@@ -50,19 +50,18 @@ urlpatterns = [
     path('api/salas_vacantes/<int:id_localidad>/<int:anio>/<int:mes>/<int:dia>/<slug:turno>/', views.salas_vacantes),
     # Devuelve la API Key de Google Maps TODO: cambiar por una cookie seteada en middleware
     path('api/googlemapsapikey/', views.googlemapsapikey),
-    # Crea nuevo Cowork
-    path('api/coworkcreate/', require_login_if_not_debug(views.CoworkCreate.as_view())),
-    # Crea nuevo Espacio
-    path('api/espaciocreate/', require_login_if_not_debug(views.EspacioCreate.as_view())),
-    # Crea nuevo Puesto
-    path('api/puestocreate/', require_login_if_not_debug(views.PuestoCreate.as_view())),
     # Registro de usuario. (1- Admin, 2- Cliente)
     path('api/signup/<int:num>/', require_login_if_not_debug(views.registrar_usuario)),
     # Actualizacion de datos de Usuario.
     path('api/userupdate/', require_login_if_not_debug(views.editar_usuario)),
-    # AMC de Cowork
-    # AMC de Espacio
-    # AMC de Puesto
+    # Alta de Cowork
+    path('api/coworkcreate/', require_login_if_not_debug(views.registrar_cowork)),
+    # Modificacion de Cowork
+    path('api/coworkupdate/', require_login_if_not_debug(views.editar_cowork)),
+    # Alta de Espacio
+    # Modificacion de Espacio
+    # Alta de Puesto
+    # Modificacion de Puesto
     # Listado de Coworks
     # Listado de Reservas para una fecha determinada
 ]

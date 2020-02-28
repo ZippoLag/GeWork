@@ -78,24 +78,6 @@ class PagoCreateSerializer(serializers.ModelSerializer):
         model = Pago
         fields = ('fecha_pago', 'medio_pago', 'idext_pago', 'importe_pago', 'contrato')
 
-class CoworkCreateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Cowork
-        fields = ('nombre_cowork', 'direccion_cowork', 'inicioTM_cowork', 'finTM_cowork', 'inicioTT_cowork', 'finTT_cowork', 'lat', 'lng', 'localidad', 'estado')
-
-class EspacioCreateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Espacio
-        fields = ('nombre_espacio', 'precioMJ_espacio', 'precioJC_espacio', 'ubicacion_espacio', 'es_sala', 'cowork', 'prestaciones')
-
-class PuestoCreateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Puesto
-        fields = ('ubicacion_puesto', 'espacio', 'capacidad')
-
 class PerfilDeUsuarioSignUpSerializer(serializers.ModelSerializer):
 
     class Meta:

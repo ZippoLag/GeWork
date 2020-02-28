@@ -131,7 +131,10 @@ def evaluar_contrato(request, id):
 
     user = obtener_usuario_loggeado(request)
 
-    contrato = Contrato.objects.get(usuario=user, pk=id).update(estrellas_contrato=estrellas, resenia_contrato=resenia)
+    contrato = Contrato.objects.get(usuario=user, pk=id)
+    contrato.estrellas_contrato = estrellas
+    contrato.resenia_contrato = resenia
+    contrato.save()
 
     details= "Evaluacion registrada con éxito"
 
@@ -293,9 +296,15 @@ def editar_usuario(request):
 
     user = obtener_usuario_loggeado(request)
 
-    usuario = user.update(first_name=nombre, last_name=apellido, email=email)
+    user.first_name = nombre
+    user.last_name = apellido
+    user.email = email
+    user.save()
 
-    perfil = PerfilDeUsuario.objects.get(user=user).update(dni_usuario=dni, linkedin_usuario=linkedin)
+    perfil = PerfilDeUsuario.objects.get(user=user)
+    perfil.dni_usuario = dni
+    perfil.linkedin_usuario = linkedin
+    perfil.save()
 
     details= "Modificacion registrada con exito."
 

@@ -21,4 +21,3 @@ gework/static/
 *.py[cod]
 *$py.class
 frontend/package-lock.json
-gework/settings/base.py

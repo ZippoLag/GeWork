@@ -112,3 +112,4 @@ STATIC_ROOT = os.path.join(DATA_DIR, "static")
 # TODO: create react login page and use that instead
 LOGIN_URL = "/admin/login/"
 LOGIN_REDIRECT_URL = "/"
+PERMITIR_LOGIN_FALSO = True

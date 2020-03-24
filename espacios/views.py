@@ -310,7 +310,9 @@ def registrar_cowork(request):
     loc = request_data.get('loc')
     estado = 'p'
 
-    cowork = Cowork.objects.create(nombre_cowork=nombre, direccion_cowork=direccion, inicioTM_cowork=itm, finTM_cowork=ftm, inicioTT_cowork=itt, finTT_cowork=ftt, lat=lat, lng=lng, localidad=loc, estado=estado)
+    user = obtener_usuario_loggeado(request)
+
+    cowork = Cowork.objects.create(nombre_cowork=nombre, direccion_cowork=direccion, inicioTM_cowork=itm, finTM_cowork=ftm, inicioTT_cowork=itt, finTT_cowork=ftt, lat=lat, lng=lng, localidad=loc, estado=estado, created_by=user.username)
 
     details= "Cowork creado con éxito"
 
@@ -330,6 +332,8 @@ def editar_cowork(request, id):
     lng = request_data.get('lng')
     loc = request_data.get('loc')
 
+    user = obtener_usuario_loggeado(request)
+
     cowork = Cowork.objects.get(pk=id)
     cowork.nombre_cowork = nombre
     cowork.direccion_cowork = direccion
@@ -340,6 +344,7 @@ def editar_cowork(request, id):
     cowork.lat = lat
     cowork.lng = lng
     cowork.localidad = loc
+    cowork.modified_by = user.username
     cowork.save()
 
     details= "Modificacion registrada con éxito"
@@ -362,11 +367,13 @@ def registrar_espacio(request):
 
     cowork = Cowork.objects.get(id_cowork=id_cowork)
 
+    user = obtener_usuario_loggeado(request)
+
     for p in ids_prestaciones:
         prestacion = Prestacion.objects.get(id_prestacion=p)
         prestaciones.append(prestacion)
 
-    espacio = Espacio.objects.create(nombre_espacio=nombre, precioMJ_espacio=precioMJ, precioJC_espacio=precioJC, ubicacion_espacio=ubicacion, cowork=cowork, es_sala=es_sala)
+    espacio = Espacio.objects.create(nombre_espacio=nombre, precioMJ_espacio=precioMJ, precioJC_espacio=precioJC, ubicacion_espacio=ubicacion, cowork=cowork, es_sala=es_sala, created_by=user.username)
 
     espacio.prestaciones.set(prestaciones)
 
@@ -390,6 +397,8 @@ def editar_espacio(request, id):
 
     cowork = Cowork.objects.get(id_cowork=id_cowork)
 
+    user = obtener_usuario_loggeado(request)
+
     for p in ids_prestaciones:
         prestacion = Prestacion.objects.get(id_prestacion=p)
         prestaciones.append(prestacion)
@@ -402,6 +411,7 @@ def editar_espacio(request, id):
     espacio.cowork = cowork
     espacio.prestaciones.set(prestaciones)
     espacio.es_sala = es_sala
+    espacio.modified_by = user.username
     espacio.save()
 
     details= "Modificacion registrada con éxito"
@@ -418,7 +428,9 @@ def registrar_puesto(request):
 
     espacio = Espacio.objects.get(id_espacio=id_espacio)
 
-    puesto = Puesto.objects.create(ubicacion_puesto=ubicacion, espacio=espacio, capacidad=capacidad)
+    user = obtener_usuario_loggeado(request)
+
+    puesto = Puesto.objects.create(ubicacion_puesto=ubicacion, espacio=espacio, capacidad=capacidad, created_by=user.username)
 
     details= "Puesto creado con éxito"
 
@@ -432,14 +444,19 @@ def editar_puesto(request, id):
     id_espacio = request_data.get('id_espacio')
     capacidad = request_data.get('capacidad')
 
+    user = obtener_usuario_loggeado(request)
+
     espacio = Espacio.objects.get(id_espacio=id_espacio)
 
     puesto = Puesto.objects.get(pk=id)
     puesto.ubicacion_puesto = ubicacion
     puesto.espacio = espacio
     puesto.capacidad = capacidad
+    puesto.modified_by = user.username
     puesto.save()
 
     details= "Modificacion registrada con éxito"
 
     return JsonResponse({'exito': True}, safe=False)
+
+# Listado de Coworks

@@ -61,6 +61,7 @@ class PrestacionListCreate(generics.ListCreateAPIView):
     queryset = Prestacion.objects.all()
     serializer_class = PrestacionSerializer
 
+
 # Devuelve una Prestacion
 def prestacionDetail(request, id):
     prestacion = Prestacion.objects.filter(pk=id)
@@ -257,7 +258,7 @@ def registrar_usuario(request, num):
     if num == 1:
         group = Group.objects.get(name='Administradores de Coworks')
     else:
-        group = Group.objects.get(name='Clientes  de GeWork')
+        group = Group.objects.get(name='Clientes de GeWork')
 
     usuario = User.objects.create(username=user_name, first_name=firstname, last_name=lastname, email=email, password=password)
 
